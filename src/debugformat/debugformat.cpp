@@ -35,7 +35,7 @@ DebugFormat::DebugFormat(
 		_inFile(inFile),
 		_demangler(demangler)
 {
-	_pdbFile = new retdec::pdbparser::PDBFile();
+	_pdbFile = std::make_unique<retdec::pdbparser::PDBFile>();
 	auto s = _pdbFile->load_pdb_file(pdbFile.c_str());
 
 	if (s == retdec::pdbparser::PDB_STATE_OK)

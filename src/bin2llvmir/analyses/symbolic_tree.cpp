@@ -104,9 +104,11 @@ SymbolicTree& SymbolicTree::operator=(SymbolicTree&& other)
 	{
 		value = other.value;
 		user = other.user;
-		// Do NOT use `ops = std::move(other.ops);` to allow use like
-		// `*this = ops[0];`. Use std::swap() instead.
-		std::swap(ops, other.ops);
+		// Move other's children out before destroying old ops, so that
+		// self-referential patterns like `*this = std::move(ops[0])` do
+		// not create an unreachable ownership cycle.
+		auto tmp = std::move(other.ops);
+		ops = std::move(tmp);
 	}
 	return *this;
 }

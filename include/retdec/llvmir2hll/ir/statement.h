@@ -8,8 +8,10 @@
 #define RETDEC_LLVMIR2HLL_IR_STATEMENT_H
 
 #include <cstddef>
+#include <iterator>
 #include <set>
 #include <string>
+#include <vector>
 
 #include "retdec/llvmir2hll/ir/value.h"
 #include "retdec/llvmir2hll/support/smart_ptr.h"
@@ -37,9 +39,31 @@ class GotoStmt;
 * Utils/IR.h.
 */
 class Statement: public Value {
+private:
+	/// Weak-pointer storage for predecessors to avoid shared_ptr cycles.
+	using WeakStmtVec = std::vector<WkPtr<Statement>>;
+
 public:
-	/// Predecessor iterator.
-	using predecessor_iterator = StmtSet::const_iterator;
+	/// Iterator that locks weak predecessor pointers on dereference.
+	class predecessor_iterator {
+		using base_iter = WeakStmtVec::const_iterator;
+		base_iter it_;
+	public:
+		using iterator_category = std::forward_iterator_tag;
+		using value_type = ShPtr<Statement>;
+		using difference_type = std::ptrdiff_t;
+		using pointer = void;
+		using reference = ShPtr<Statement>;
+
+		predecessor_iterator() = default;
+		explicit predecessor_iterator(base_iter it) : it_(it) {}
+
+		ShPtr<Statement> operator*() const { return it_->lock(); }
+		predecessor_iterator& operator++() { ++it_; return *this; }
+		predecessor_iterator operator++(int) { auto tmp = *this; ++it_; return tmp; }
+		bool operator==(const predecessor_iterator& o) const { return it_ == o.it_; }
+		bool operator!=(const predecessor_iterator& o) const { return it_ != o.it_; }
+	};
 
 public:
 	/**
@@ -140,8 +164,8 @@ protected:
 	/// Successor statement.
 	ShPtr<Statement> succ;
 
-	/// Predecessor statements.
-	StmtSet preds;
+	/// Predecessor statements (weak pointers to break shared_ptr cycles).
+	WeakStmtVec preds;
 
 	/// Label.
 	std::string label;
@@ -151,7 +175,7 @@ protected:
 
 private:
 	bool targetIsCurrentStatement(ShPtr<GotoStmt> gotoStmt) const;
-	bool containsJustGotosToCurrentStatement(const StmtSet &stmts) const;
+	bool containsJustGotosToCurrentStatement(const WeakStmtVec &stmts) const;
 };
 
 } // namespace llvmir2hll

@@ -4,6 +4,8 @@
 * @copyright (c) 2017 Avast Software, licensed under the MIT license
 */
 
+#include <algorithm>
+
 #include "retdec/llvmir2hll/ir/empty_stmt.h"
 #include "retdec/llvmir2hll/ir/goto_stmt.h"
 #include "retdec/llvmir2hll/ir/return_stmt.h"
@@ -23,6 +25,31 @@ void preserveLabel(ShPtr<Statement> origStmt, ShPtr<Statement> newStmt) {
 	if (origStmt->hasLabel()) {
 		newStmt->setLabel(origStmt->getLabel());
 	}
+}
+
+/// @brief Erase all entries from a weak-pointer vector whose locked value
+///        matches @a target (or that have expired).
+void eraseWeakPred(std::vector<WkPtr<Statement>> &vec,
+		const ShPtr<Statement> &target) {
+	vec.erase(
+		std::remove_if(vec.begin(), vec.end(),
+			[&](const WkPtr<Statement> &w) {
+				auto sp = w.lock();
+				return !sp || sp == target;
+			}),
+		vec.end());
+}
+
+/// @brief Lock all weak predecessors into a vector of shared_ptrs.
+StmtVector lockPreds(const std::vector<WkPtr<Statement>> &vec) {
+	StmtVector result;
+	result.reserve(vec.size());
+	for (auto &w : vec) {
+		if (auto sp = w.lock()) {
+			result.push_back(sp);
+		}
+	}
+	return result;
 }
 
 } // anonymous namespace
@@ -57,7 +84,7 @@ Statement::Statement(Address a):
 void Statement::setSuccessor(ShPtr<Statement> newSucc) {
 	if (succ) {
 		// Update the predecessors of the old successor.
-		succ->preds.erase(succ);
+		eraseWeakPred(succ->preds, succ);
 	}
 
 	if (newSucc) {
@@ -130,11 +157,11 @@ void Statement::prependStatement(ShPtr<Statement> stmt) {
 	PRECONDITION_NON_NULL(stmt);
 
 	// Point direct (e.g. not via goto) predecessors of the current statement
-	// to stmt. Since we may modify the predecessors set of the current
-	// statement in the following loop, we have to create a copy of it and
-	// iterate over this copy rather than over preds.
+	// to stmt. Since we may modify the predecessors vector of the current
+	// statement in the following loop, we have to create a locked copy and
+	// iterate over it rather than over preds.
 	auto thisStmt = shared_from_this();
-	for (auto &pred : StmtSet(preds)) {
+	for (auto &pred : lockPreds(preds)) {
 		if (pred->getSuccessor() == thisStmt) {
 			pred->setSuccessor(stmt);
 		}
@@ -235,7 +262,7 @@ bool Statement::hasPredecessors() const {
 * comes handy in terms of goto statements.
 */
 void Statement::addPredecessor(ShPtr<Statement> stmt) {
-	preds.insert(stmt);
+	preds.push_back(WkPtr<Statement>(stmt));
 }
 
 /**
@@ -258,21 +285,21 @@ ShPtr<Statement> Statement::getUniquePredecessor() const {
 	if (preds.size() != 1) {
 		return ShPtr<Statement>();
 	}
-	return *(preds.begin());
+	return preds.front().lock();
 }
 
 /**
 * @brief Returns an iterator to the first predecessor (if any).
 */
 Statement::predecessor_iterator Statement::predecessor_begin() const {
-	return preds.begin();
+	return predecessor_iterator(preds.begin());
 }
 
 /**
 * @brief Returns an iterator past the last predecessor.
 */
 Statement::predecessor_iterator Statement::predecessor_end() const {
-	return preds.end();
+	return predecessor_iterator(preds.end());
 }
 
 /**
@@ -312,9 +339,9 @@ void Statement::removeStatement(ShPtr<Statement> stmt) {
 	}
 
 	// Replace the successors/targets of all predecessors. Since we may
-	// modify the predecessors set of stmt in the following loop, we have
-	// to create a copy of it and iterate over this copy.
-	for (auto &pred : StmtSet(stmt->preds)) {
+	// modify the predecessors vector of stmt in the following loop, we have
+	// to create a locked copy and iterate over it.
+	for (auto &pred : lockPreds(stmt->preds)) {
 		if (pred->getSuccessor() == stmt) {
 			pred->setSuccessor(stmt->getSuccessor());
 		}
@@ -329,7 +356,7 @@ void Statement::removeStatement(ShPtr<Statement> stmt) {
 
 	// Update the stmt's successor (if any).
 	if (stmt->succ) {
-		stmt->succ->preds.erase(stmt);
+		eraseWeakPred(stmt->succ->preds, stmt);
 		preserveLabel(stmt, stmt->succ);
 	}
 
@@ -471,9 +498,9 @@ void Statement::replaceStatement(ShPtr<Statement> oldStmt,
 	}
 
 	// Update all predecessors of oldStmt.
-	// Since we may modify the predecessors set of oldStmt in the following
-	// loop, we have to create a copy of it and iterate over this copy.
-	StmtSet oldStmtPreds(oldStmt->preds);
+	// Since we may modify the predecessors vector of oldStmt in the following
+	// loop, we have to create a locked copy and iterate over it.
+	StmtVector oldStmtPreds(lockPreds(oldStmt->preds));
 	for (auto &pred : oldStmtPreds) {
 		if (pred->getSuccessor() == oldStmt) {
 			pred->setSuccessor(newStmt);
@@ -587,7 +614,7 @@ ShPtr<Statement> Statement::getLastStatement(ShPtr<Statement> stmts) {
 * nothing.
 */
 void Statement::removePredecessor(ShPtr<Statement> stmt) {
-	preds.erase(stmt);
+	eraseWeakPred(preds, stmt);
 }
 
 /**
@@ -604,22 +631,16 @@ void Statement::removePredecessors(bool onlyNonGoto) {
 		return;
 	}
 
-	// We remove only non-goto statements.
-	// Since iterators and references to the erased elements of a std::set are
-	// invalidated, we cannot erase statements while iterating over them. To
-	// circumvent this limitation, we store them into a separate set and erase
-	// them afterwards.
-	StmtSet toRemoveStmts;
+	// We remove only non-goto statements (i.e. predecessors whose successor
+	// is this statement, as opposed to goto predecessors that jump here).
 	auto thisStmt = shared_from_this();
-	for (const auto &pred : preds) {
-		if (pred->getSuccessor() == thisStmt) {
-			toRemoveStmts.insert(pred);
-		}
-	}
-	// For each node to be removed...
-	for (const auto &stmt : toRemoveStmts) {
-		preds.erase(stmt);
-	}
+	preds.erase(
+		std::remove_if(preds.begin(), preds.end(),
+			[&](const WkPtr<Statement> &w) {
+				auto sp = w.lock();
+				return !sp || sp->getSuccessor() == thisStmt;
+			}),
+		preds.end());
 }
 
 /**
@@ -657,7 +678,9 @@ ShPtr<Statement> Statement::getParent() const {
 		}
 	} else {
 		// For each predecessor...
-		for (auto &pred : preds) {
+		for (auto &wp : preds) {
+			auto pred = wp.lock();
+			if (!pred) continue;
 			// Skip goto predecessors that jump to the current statement.
 			if (ShPtr<GotoStmt> gotoPred = cast<GotoStmt>(pred)) {
 				if (targetIsCurrentStatement(gotoPred)) {
@@ -685,7 +708,9 @@ Address Statement::getAddress() const {
 *        @c false otherwise.
 */
 bool Statement::isGotoTarget() const {
-	for (auto pred : preds) {
+	for (auto &wp : preds) {
+		auto pred = wp.lock();
+		if (!pred) continue;
 		if (auto gotoStmt = cast<GotoStmt>(pred)) {
 			if (targetIsCurrentStatement(gotoStmt)) {
 				return true;
@@ -708,13 +733,14 @@ bool Statement::isGotoTarget() const {
 void Statement::redirectGotosTo(ShPtr<Statement> stmt) {
 	PRECONDITION_NON_NULL(stmt);
 
-	// We need to iterate over a copy of predecessors because we may need to
-	// modify them during the iteration.
-	for (auto pred : StmtSet(preds)) {
+	// We need to iterate over a locked copy of predecessors because we may
+	// need to modify them during the iteration.
+	auto lockedPreds = lockPreds(preds);
+	for (auto &pred : lockedPreds) {
 		if (auto gotoStmt = cast<GotoStmt>(pred)) {
 			if (targetIsCurrentStatement(gotoStmt)) {
 				gotoStmt->setTarget(stmt);
-				preds.erase(pred);
+				eraseWeakPred(preds, pred);
 			}
 		}
 	}
@@ -789,9 +815,11 @@ bool Statement::targetIsCurrentStatement(ShPtr<GotoStmt> gotoStmt) const {
 * @brief Returns @c true if @a stmts contains just goto statements to the
 *        current statement (or it is empty), @c false otherwise.
 */
-bool Statement::containsJustGotosToCurrentStatement(const StmtSet &stmts) const {
+bool Statement::containsJustGotosToCurrentStatement(const WeakStmtVec &stmts) const {
 	// For each statement in stmts...
-	for (const auto &stmt : stmts) {
+	for (const auto &wp : stmts) {
+		auto stmt = wp.lock();
+		if (!stmt) continue;
 		if (auto gotoStmt = cast<GotoStmt>(stmt)) {
 			if (targetIsCurrentStatement(gotoStmt)) {
 				continue;

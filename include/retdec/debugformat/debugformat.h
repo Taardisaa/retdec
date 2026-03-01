@@ -7,6 +7,8 @@
 #ifndef RETDEC_DEBUGFORMAT_DEBUGFORMAT_H
 #define RETDEC_DEBUGFORMAT_DEBUGFORMAT_H
 
+#include <memory>
+
 #include <llvm/DebugInfo/DIContext.h>
 #include <llvm/DebugInfo/DWARF/DWARFContext.h>
 #include <llvm/Object/ObjectFile.h>
@@ -75,7 +77,7 @@ class DebugFormat
 		/// Underlying binary file representation.
 		retdec::loader::Image* _inFile = nullptr;
 		/// Underlying PDB representation.
-		retdec::pdbparser::PDBFile* _pdbFile = nullptr;
+		std::unique_ptr<retdec::pdbparser::PDBFile> _pdbFile;
 		/// Demangler.
 		retdec::demangler::Demangler* _demangler = nullptr;
 

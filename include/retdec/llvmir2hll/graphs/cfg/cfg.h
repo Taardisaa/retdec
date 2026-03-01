@@ -158,14 +158,14 @@ public:
 		ShPtr<Node> getDst() const;
 
 	private:
-		/// Edge source.
-		ShPtr<Node> src;
+		/// Edge source (weak to break Node->Edge->Node cycle).
+		WkPtr<Node> src;
 
 		/// Edge label.
 		ShPtr<Expression> label;
 
-		/// Edge destination.
-		ShPtr<Node> dst;
+		/// Edge destination (weak to break Node->Edge->Node cycle).
+		WkPtr<Node> dst;
 	};
 
 public:

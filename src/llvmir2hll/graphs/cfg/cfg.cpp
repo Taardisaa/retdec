@@ -306,13 +306,13 @@ CFG::pred_iterator CFG::Node::pred_end() const {
 * @param[in] label Optional edge label.
 */
 CFG::Edge::Edge(ShPtr<Node> src, ShPtr<Node> dst, ShPtr<Expression> label):
-	src(src), label(label), dst(dst) {}
+	src(WkPtr<Node>(src)), label(label), dst(WkPtr<Node>(dst)) {}
 
 /**
 * @brief Returns the source node of the edge.
 */
 ShPtr<CFG::Node> CFG::Edge::getSrc() const {
-	return src;
+	return src.lock();
 }
 
 /**
@@ -328,7 +328,7 @@ ShPtr<Expression> CFG::Edge::getLabel() const {
 * @brief Returns the destination node of the edge.
 */
 ShPtr<CFG::Node> CFG::Edge::getDst() const {
-	return dst;
+	return dst.lock();
 }
 
 /**
