@@ -76,132 +76,132 @@ unsigned StatementsCounter::countInternal(ShPtr<Statement> block, bool recursive
 	return numOfStmts;
 }
 
-void StatementsCounter::visit(ShPtr<GlobalVarDef> varDef) {
+void StatementsCounter::visit(const ShPtr<GlobalVarDef>& varDef) {
 	FAIL("this function should never be called");
 }
 
-void StatementsCounter::visit(ShPtr<Function> func) {
+void StatementsCounter::visit(const ShPtr<Function>& func) {
 	FAIL("this function should never be called");
 }
 
-void StatementsCounter::visit(ShPtr<Variable> var) {}
+void StatementsCounter::visit(const ShPtr<Variable>& var) {}
 
-void StatementsCounter::visit(ShPtr<AddressOpExpr> expr) {}
+void StatementsCounter::visit(const ShPtr<AddressOpExpr>& expr) {}
 
-void StatementsCounter::visit(ShPtr<AssignOpExpr> expr) {}
+void StatementsCounter::visit(const ShPtr<AssignOpExpr>& expr) {}
 
-void StatementsCounter::visit(ShPtr<ArrayIndexOpExpr> expr) {}
+void StatementsCounter::visit(const ShPtr<ArrayIndexOpExpr>& expr) {}
 
-void StatementsCounter::visit(ShPtr<StructIndexOpExpr> expr) {}
+void StatementsCounter::visit(const ShPtr<StructIndexOpExpr>& expr) {}
 
-void StatementsCounter::visit(ShPtr<DerefOpExpr> expr) {}
+void StatementsCounter::visit(const ShPtr<DerefOpExpr>& expr) {}
 
-void StatementsCounter::visit(ShPtr<NotOpExpr> expr) {}
+void StatementsCounter::visit(const ShPtr<NotOpExpr>& expr) {}
 
-void StatementsCounter::visit(ShPtr<NegOpExpr> expr) {}
+void StatementsCounter::visit(const ShPtr<NegOpExpr>& expr) {}
 
-void StatementsCounter::visit(ShPtr<EqOpExpr> expr) {}
+void StatementsCounter::visit(const ShPtr<EqOpExpr>& expr) {}
 
-void StatementsCounter::visit(ShPtr<NeqOpExpr> expr) {}
+void StatementsCounter::visit(const ShPtr<NeqOpExpr>& expr) {}
 
-void StatementsCounter::visit(ShPtr<LtEqOpExpr> expr) {}
+void StatementsCounter::visit(const ShPtr<LtEqOpExpr>& expr) {}
 
-void StatementsCounter::visit(ShPtr<GtEqOpExpr> expr) {}
+void StatementsCounter::visit(const ShPtr<GtEqOpExpr>& expr) {}
 
-void StatementsCounter::visit(ShPtr<LtOpExpr> expr) {}
+void StatementsCounter::visit(const ShPtr<LtOpExpr>& expr) {}
 
-void StatementsCounter::visit(ShPtr<GtOpExpr> expr) {}
+void StatementsCounter::visit(const ShPtr<GtOpExpr>& expr) {}
 
-void StatementsCounter::visit(ShPtr<AddOpExpr> expr) {}
+void StatementsCounter::visit(const ShPtr<AddOpExpr>& expr) {}
 
-void StatementsCounter::visit(ShPtr<SubOpExpr> expr) {}
+void StatementsCounter::visit(const ShPtr<SubOpExpr>& expr) {}
 
-void StatementsCounter::visit(ShPtr<MulOpExpr> expr) {}
+void StatementsCounter::visit(const ShPtr<MulOpExpr>& expr) {}
 
-void StatementsCounter::visit(ShPtr<ModOpExpr> expr) {}
+void StatementsCounter::visit(const ShPtr<ModOpExpr>& expr) {}
 
-void StatementsCounter::visit(ShPtr<DivOpExpr> expr) {}
+void StatementsCounter::visit(const ShPtr<DivOpExpr>& expr) {}
 
-void StatementsCounter::visit(ShPtr<AndOpExpr> expr) {}
+void StatementsCounter::visit(const ShPtr<AndOpExpr>& expr) {}
 
-void StatementsCounter::visit(ShPtr<OrOpExpr> expr) {}
+void StatementsCounter::visit(const ShPtr<OrOpExpr>& expr) {}
 
-void StatementsCounter::visit(ShPtr<BitAndOpExpr> expr) {}
+void StatementsCounter::visit(const ShPtr<BitAndOpExpr>& expr) {}
 
-void StatementsCounter::visit(ShPtr<BitOrOpExpr> expr) {}
+void StatementsCounter::visit(const ShPtr<BitOrOpExpr>& expr) {}
 
-void StatementsCounter::visit(ShPtr<BitXorOpExpr> expr) {}
+void StatementsCounter::visit(const ShPtr<BitXorOpExpr>& expr) {}
 
-void StatementsCounter::visit(ShPtr<BitShlOpExpr> expr) {}
+void StatementsCounter::visit(const ShPtr<BitShlOpExpr>& expr) {}
 
-void StatementsCounter::visit(ShPtr<BitShrOpExpr> expr) {}
+void StatementsCounter::visit(const ShPtr<BitShrOpExpr>& expr) {}
 
-void StatementsCounter::visit(ShPtr<TernaryOpExpr> expr) {}
+void StatementsCounter::visit(const ShPtr<TernaryOpExpr>& expr) {}
 
-void StatementsCounter::visit(ShPtr<CallExpr> expr) {}
+void StatementsCounter::visit(const ShPtr<CallExpr>& expr) {}
 
-void StatementsCounter::visit(ShPtr<CommaOpExpr> expr) {}
+void StatementsCounter::visit(const ShPtr<CommaOpExpr>& expr) {}
 
 // Casts.
-void StatementsCounter::visit(ShPtr<BitCastExpr> expr) { }
+void StatementsCounter::visit(const ShPtr<BitCastExpr>& expr) { }
 
-void StatementsCounter::visit(ShPtr<ExtCastExpr> expr) { }
+void StatementsCounter::visit(const ShPtr<ExtCastExpr>& expr) { }
 
-void StatementsCounter::visit(ShPtr<TruncCastExpr> expr) { }
+void StatementsCounter::visit(const ShPtr<TruncCastExpr>& expr) { }
 
-void StatementsCounter::visit(ShPtr<FPToIntCastExpr> expr) { }
+void StatementsCounter::visit(const ShPtr<FPToIntCastExpr>& expr) { }
 
-void StatementsCounter::visit(ShPtr<IntToFPCastExpr> expr) { }
+void StatementsCounter::visit(const ShPtr<IntToFPCastExpr>& expr) { }
 
-void StatementsCounter::visit(ShPtr<IntToPtrCastExpr> expr) { }
+void StatementsCounter::visit(const ShPtr<IntToPtrCastExpr>& expr) { }
 
-void StatementsCounter::visit(ShPtr<PtrToIntCastExpr> expr) { }
+void StatementsCounter::visit(const ShPtr<PtrToIntCastExpr>& expr) { }
 // End of casts
 
-void StatementsCounter::visit(ShPtr<ConstBool> constant) {}
+void StatementsCounter::visit(const ShPtr<ConstBool>& constant) {}
 
-void StatementsCounter::visit(ShPtr<ConstFloat> constant) {}
+void StatementsCounter::visit(const ShPtr<ConstFloat>& constant) {}
 
-void StatementsCounter::visit(ShPtr<ConstInt> constant) {}
+void StatementsCounter::visit(const ShPtr<ConstInt>& constant) {}
 
-void StatementsCounter::visit(ShPtr<ConstNullPointer> constant) {}
+void StatementsCounter::visit(const ShPtr<ConstNullPointer>& constant) {}
 
-void StatementsCounter::visit(ShPtr<ConstString> constant) {}
+void StatementsCounter::visit(const ShPtr<ConstString>& constant) {}
 
-void StatementsCounter::visit(ShPtr<ConstArray> constant) {}
+void StatementsCounter::visit(const ShPtr<ConstArray>& constant) {}
 
-void StatementsCounter::visit(ShPtr<ConstStruct> constant) {}
+void StatementsCounter::visit(const ShPtr<ConstStruct>& constant) {}
 
-void StatementsCounter::visit(ShPtr<ConstSymbol> constant) {}
+void StatementsCounter::visit(const ShPtr<ConstSymbol>& constant) {}
 
-void StatementsCounter::visit(ShPtr<AssignStmt> stmt) {
+void StatementsCounter::visit(const ShPtr<AssignStmt>& stmt) {
 	numOfStmts++;
 	visitStmt(stmt->getSuccessor());
 }
 
-void StatementsCounter::visit(ShPtr<VarDefStmt> stmt) {
+void StatementsCounter::visit(const ShPtr<VarDefStmt>& stmt) {
 	numOfStmts++;
 	visitStmt(stmt->getSuccessor());
 }
 
-void StatementsCounter::visit(ShPtr<CallStmt> stmt) {
+void StatementsCounter::visit(const ShPtr<CallStmt>& stmt) {
 	numOfStmts++;
 	visitStmt(stmt->getSuccessor());
 }
 
-void StatementsCounter::visit(ShPtr<ReturnStmt> stmt) {
+void StatementsCounter::visit(const ShPtr<ReturnStmt>& stmt) {
 	numOfStmts++;
 	visitStmt(stmt->getSuccessor());
 }
 
-void StatementsCounter::visit(ShPtr<EmptyStmt> stmt) {
+void StatementsCounter::visit(const ShPtr<EmptyStmt>& stmt) {
 	if (includeEmptyStmts) {
 		numOfStmts++;
 	}
 	visitStmt(stmt->getSuccessor());
 }
 
-void StatementsCounter::visit(ShPtr<IfStmt> stmt) {
+void StatementsCounter::visit(const ShPtr<IfStmt>& stmt) {
 	numOfStmts++;
 
 	if (recursive) {
@@ -215,7 +215,7 @@ void StatementsCounter::visit(ShPtr<IfStmt> stmt) {
 	visitStmt(stmt->getSuccessor());
 }
 
-void StatementsCounter::visit(ShPtr<SwitchStmt> stmt) {
+void StatementsCounter::visit(const ShPtr<SwitchStmt>& stmt) {
 	numOfStmts++;
 
 	if (recursive) {
@@ -228,7 +228,7 @@ void StatementsCounter::visit(ShPtr<SwitchStmt> stmt) {
 	visitStmt(stmt->getSuccessor());
 }
 
-void StatementsCounter::visit(ShPtr<WhileLoopStmt> stmt) {
+void StatementsCounter::visit(const ShPtr<WhileLoopStmt>& stmt) {
 	numOfStmts++;
 
 	if (recursive) {
@@ -238,7 +238,7 @@ void StatementsCounter::visit(ShPtr<WhileLoopStmt> stmt) {
 	visitStmt(stmt->getSuccessor());
 }
 
-void StatementsCounter::visit(ShPtr<ForLoopStmt> stmt) {
+void StatementsCounter::visit(const ShPtr<ForLoopStmt>& stmt) {
 	numOfStmts++;
 
 	if (recursive) {
@@ -248,7 +248,7 @@ void StatementsCounter::visit(ShPtr<ForLoopStmt> stmt) {
 	visitStmt(stmt->getSuccessor());
 }
 
-void StatementsCounter::visit(ShPtr<UForLoopStmt> stmt) {
+void StatementsCounter::visit(const ShPtr<UForLoopStmt>& stmt) {
 	numOfStmts++;
 
 	if (recursive) {
@@ -258,41 +258,41 @@ void StatementsCounter::visit(ShPtr<UForLoopStmt> stmt) {
 	visitStmt(stmt->getSuccessor());
 }
 
-void StatementsCounter::visit(ShPtr<BreakStmt> stmt) {
+void StatementsCounter::visit(const ShPtr<BreakStmt>& stmt) {
 	numOfStmts++;
 	visitStmt(stmt->getSuccessor());
 }
 
-void StatementsCounter::visit(ShPtr<ContinueStmt> stmt) {
+void StatementsCounter::visit(const ShPtr<ContinueStmt>& stmt) {
 	numOfStmts++;
 	visitStmt(stmt->getSuccessor());
 }
 
-void StatementsCounter::visit(ShPtr<GotoStmt> stmt) {
+void StatementsCounter::visit(const ShPtr<GotoStmt>& stmt) {
 	numOfStmts++;
 	visitStmt(stmt->getSuccessor());
 }
 
-void StatementsCounter::visit(ShPtr<UnreachableStmt> stmt) {
+void StatementsCounter::visit(const ShPtr<UnreachableStmt>& stmt) {
 	numOfStmts++;
 	visitStmt(stmt->getSuccessor());
 }
 
-void StatementsCounter::visit(ShPtr<FloatType> type) {}
+void StatementsCounter::visit(const ShPtr<FloatType>& type) {}
 
-void StatementsCounter::visit(ShPtr<IntType> type) {}
+void StatementsCounter::visit(const ShPtr<IntType>& type) {}
 
-void StatementsCounter::visit(ShPtr<PointerType> type) {}
+void StatementsCounter::visit(const ShPtr<PointerType>& type) {}
 
-void StatementsCounter::visit(ShPtr<StringType> type) {}
+void StatementsCounter::visit(const ShPtr<StringType>& type) {}
 
-void StatementsCounter::visit(ShPtr<ArrayType> type) {}
+void StatementsCounter::visit(const ShPtr<ArrayType>& type) {}
 
-void StatementsCounter::visit(ShPtr<StructType> type) {}
+void StatementsCounter::visit(const ShPtr<StructType>& type) {}
 
-void StatementsCounter::visit(ShPtr<VoidType> type) {}
+void StatementsCounter::visit(const ShPtr<VoidType>& type) {}
 
-void StatementsCounter::visit(ShPtr<UnknownType> type) {}
+void StatementsCounter::visit(const ShPtr<UnknownType>& type) {}
 
 } // namespace llvmir2hll
 } // namespace retdec

@@ -36,7 +36,7 @@ private:
 	/// @name Visitor Interface
 	/// @{
 	using OrderedAllVisitor::visit;
-	virtual void visit(ShPtr<ConstFloat> constant) override;
+	virtual void visit(const ShPtr<ConstFloat>& constant) override;
 	/// @}
 
 private:

@@ -26,7 +26,7 @@ VarDefStmtSet NoInitVarDefAnalysis::getNoInitVarDefStmts(ShPtr<Function> func) {
 	return noInitVarDefs;
 }
 
-void NoInitVarDefAnalysis::visit(ShPtr<VarDefStmt> varDefStmt) {
+void NoInitVarDefAnalysis::visit(const ShPtr<VarDefStmt>& varDefStmt) {
 	if (!varDefStmt->hasInitializer()) {
 		noInitVarDefs.insert(varDefStmt);
 	}

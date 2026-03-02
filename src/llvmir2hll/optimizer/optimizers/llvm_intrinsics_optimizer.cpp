@@ -66,7 +66,7 @@ ShPtr<Function> LLVMIntrinsicsOptimizer::getCalledFunc(ShPtr<CallExpr> expr) con
 	return calledFunc;
 }
 
-void LLVMIntrinsicsOptimizer::visit(ShPtr<CallExpr> expr) {
+void LLVMIntrinsicsOptimizer::visit(const ShPtr<CallExpr>& expr) {
 	// When we got here, we know that such a call should not be removed. Hence,
 	// we just check that the call is a function call (not some indirect call)
 	// and insert the call into doNotRemoveFuncs.
@@ -78,7 +78,7 @@ void LLVMIntrinsicsOptimizer::visit(ShPtr<CallExpr> expr) {
 	FuncOptimizer::visit(expr);
 }
 
-void LLVMIntrinsicsOptimizer::visit(ShPtr<CallStmt> stmt) {
+void LLVMIntrinsicsOptimizer::visit(const ShPtr<CallStmt>& stmt) {
 	ShPtr<Function> calledFunc(getCalledFunc(stmt->getCall()));
 	if (!calledFunc || calledFunc->isDefinition() ||
 			!startsWith(calledFunc->getInitialName(), "llvm.ctpop.")) {

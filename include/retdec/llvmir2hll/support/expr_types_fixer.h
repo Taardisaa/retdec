@@ -66,18 +66,18 @@ private:
 	/// @name Visitor Interface
 	/// @{
 	using OrderedAllVisitor::visit;
-	virtual void visit(ShPtr<ExtCastExpr> expr) override;
-	virtual void visit(ShPtr<IntToFPCastExpr> expr) override;
-	virtual void visit(ShPtr<DivOpExpr> expr) override;
-	virtual void visit(ShPtr<ModOpExpr> expr) override;
-	virtual void visit(ShPtr<AssignStmt> stmt) override;
-	virtual void visit(ShPtr<VarDefStmt> stmt) override;
-	virtual void visit(ShPtr<LtEqOpExpr> expr) override;
-	virtual void visit(ShPtr<GtEqOpExpr> expr) override;
-	virtual void visit(ShPtr<LtOpExpr> expr) override;
-	virtual void visit(ShPtr<GtOpExpr> expr) override;
-	virtual void visit(ShPtr<BitShlOpExpr> expr) override;
-	virtual void visit(ShPtr<BitShrOpExpr> expr) override;
+	virtual void visit(const ShPtr<ExtCastExpr>& expr) override;
+	virtual void visit(const ShPtr<IntToFPCastExpr>& expr) override;
+	virtual void visit(const ShPtr<DivOpExpr>& expr) override;
+	virtual void visit(const ShPtr<ModOpExpr>& expr) override;
+	virtual void visit(const ShPtr<AssignStmt>& stmt) override;
+	virtual void visit(const ShPtr<VarDefStmt>& stmt) override;
+	virtual void visit(const ShPtr<LtEqOpExpr>& expr) override;
+	virtual void visit(const ShPtr<GtEqOpExpr>& expr) override;
+	virtual void visit(const ShPtr<LtOpExpr>& expr) override;
+	virtual void visit(const ShPtr<GtOpExpr>& expr) override;
+	virtual void visit(const ShPtr<BitShlOpExpr>& expr) override;
+	virtual void visit(const ShPtr<BitShrOpExpr>& expr) override;
 	/// @}
 };
 

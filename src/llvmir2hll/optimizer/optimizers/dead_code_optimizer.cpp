@@ -41,7 +41,7 @@ DeadCodeOptimizer::DeadCodeOptimizer(ShPtr<Module> module,
 	PRECONDITION_NON_NULL(arithmExprEvaluator);
 }
 
-void DeadCodeOptimizer::visit(ShPtr<IfStmt> stmt) {
+void DeadCodeOptimizer::visit(const ShPtr<IfStmt>& stmt) {
 	FuncOptimizer::visit(stmt);
 
 	tryToOptimizeIfStmt(stmt);
@@ -222,7 +222,7 @@ void DeadCodeOptimizer::correctIfStmtDueToPresenceOfFalseClauses(
 	}
 }
 
-void DeadCodeOptimizer::visit(ShPtr<SwitchStmt> stmt) {
+void DeadCodeOptimizer::visit(const ShPtr<SwitchStmt>& stmt) {
 	FuncOptimizer::visit(stmt);
 
 	tryToOptimizeSwitchStmt(stmt);
@@ -383,7 +383,7 @@ void DeadCodeOptimizer::optimizeSwitchStmt(ShPtr<SwitchStmt> stmt,
 	}
 }
 
-void DeadCodeOptimizer::visit(ShPtr<WhileLoopStmt> stmt) {
+void DeadCodeOptimizer::visit(const ShPtr<WhileLoopStmt>& stmt) {
 	FuncOptimizer::visit(stmt);
 
 	tryToOptimizeWhileLoopStmt(stmt);
@@ -413,7 +413,7 @@ void DeadCodeOptimizer::tryToOptimizeWhileLoopStmt(ShPtr<WhileLoopStmt> stmt) {
 	}
 }
 
-void DeadCodeOptimizer::visit(ShPtr<ForLoopStmt> stmt) {
+void DeadCodeOptimizer::visit(const ShPtr<ForLoopStmt>& stmt) {
 	FuncOptimizer::visit(stmt);
 
 	tryToOptimizeForLoopStmt(stmt);

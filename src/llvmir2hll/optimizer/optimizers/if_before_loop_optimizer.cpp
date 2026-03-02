@@ -49,7 +49,7 @@ void IfBeforeLoopOptimizer::doOptimization() {
 	va->invalidateState();
 }
 
-void IfBeforeLoopOptimizer::visit(ShPtr<IfStmt> stmt) {
+void IfBeforeLoopOptimizer::visit(const ShPtr<IfStmt>& stmt) {
 	// First of all, visit nested and subsequent statements.
 	FuncOptimizer::visit(stmt);
 

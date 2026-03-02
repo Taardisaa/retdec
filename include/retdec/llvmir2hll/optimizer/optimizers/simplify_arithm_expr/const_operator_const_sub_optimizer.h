@@ -123,21 +123,21 @@ private:
 	/// @name Visitor Interface
 	/// @{
 	using SubOptimizer::visit;
-	virtual void visit(ShPtr<AddOpExpr> expr) override;
-	virtual void visit(ShPtr<SubOpExpr> expr) override;
-	virtual void visit(ShPtr<MulOpExpr> expr) override;
-	virtual void visit(ShPtr<DivOpExpr> expr) override;
-	virtual void visit(ShPtr<BitAndOpExpr> expr) override;
-	virtual void visit(ShPtr<BitOrOpExpr> expr) override;
-	virtual void visit(ShPtr<BitXorOpExpr> expr) override;
-	virtual void visit(ShPtr<LtOpExpr> expr) override;
-	virtual void visit(ShPtr<LtEqOpExpr> expr) override;
-	virtual void visit(ShPtr<GtOpExpr> expr) override;
-	virtual void visit(ShPtr<GtEqOpExpr> expr) override;
-	virtual void visit(ShPtr<EqOpExpr> expr) override;
-	virtual void visit(ShPtr<NeqOpExpr> expr) override;
-	virtual void visit(ShPtr<AndOpExpr> expr) override;
-	virtual void visit(ShPtr<OrOpExpr> expr) override;
+	virtual void visit(const ShPtr<AddOpExpr>& expr) override;
+	virtual void visit(const ShPtr<SubOpExpr>& expr) override;
+	virtual void visit(const ShPtr<MulOpExpr>& expr) override;
+	virtual void visit(const ShPtr<DivOpExpr>& expr) override;
+	virtual void visit(const ShPtr<BitAndOpExpr>& expr) override;
+	virtual void visit(const ShPtr<BitOrOpExpr>& expr) override;
+	virtual void visit(const ShPtr<BitXorOpExpr>& expr) override;
+	virtual void visit(const ShPtr<LtOpExpr>& expr) override;
+	virtual void visit(const ShPtr<LtEqOpExpr>& expr) override;
+	virtual void visit(const ShPtr<GtOpExpr>& expr) override;
+	virtual void visit(const ShPtr<GtEqOpExpr>& expr) override;
+	virtual void visit(const ShPtr<EqOpExpr>& expr) override;
+	virtual void visit(const ShPtr<NeqOpExpr>& expr) override;
+	virtual void visit(const ShPtr<AndOpExpr>& expr) override;
+	virtual void visit(const ShPtr<OrOpExpr>& expr) override;
 	/// @}
 
 	void tryOptimizeConstConstOperand(ShPtr<BinaryOpExpr> expr);

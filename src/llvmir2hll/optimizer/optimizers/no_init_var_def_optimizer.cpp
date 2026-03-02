@@ -24,7 +24,7 @@ NoInitVarDefOptimizer::NoInitVarDefOptimizer(ShPtr<Module> module):
 		PRECONDITION_NON_NULL(module);
 	}
 
-void NoInitVarDefOptimizer::visit(ShPtr<VarDefStmt> stmt) {
+void NoInitVarDefOptimizer::visit(const ShPtr<VarDefStmt>& stmt) {
 	if (stmt->hasInitializer()) {
 		// There is an initializer, so keep traversing.
 		visitStmt(stmt->getSuccessor());

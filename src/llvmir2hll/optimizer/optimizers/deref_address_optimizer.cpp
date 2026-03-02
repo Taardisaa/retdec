@@ -25,7 +25,7 @@ DerefAddressOptimizer::DerefAddressOptimizer(ShPtr<Module> module):
 		PRECONDITION_NON_NULL(module);
 	}
 
-void DerefAddressOptimizer::visit(ShPtr<DerefOpExpr> expr) {
+void DerefAddressOptimizer::visit(const ShPtr<DerefOpExpr>& expr) {
 	expr->getOperand()->accept(this);
 
 	// Check whether we're dereferencing an address operator. If so, then

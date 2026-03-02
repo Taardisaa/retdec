@@ -473,7 +473,7 @@ void VarRenamer::renameFuncLocalVar(ShPtr<Variable> var, ShPtr<Function> func) {
 	assignName(var, varNameGen->getNextVarName(), func);
 }
 
-void VarRenamer::visit(ShPtr<Variable> var) {
+void VarRenamer::visit(const ShPtr<Variable>& var) {
 	// Do not rename already renamed variables.
 	if (hasBeenRenamed(var)) {
 		return;

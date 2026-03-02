@@ -77,7 +77,7 @@ void NullPointerAnalysis::analyzeAllFunctions() {
 	}
 }
 
-void NullPointerAnalysis::visit(ShPtr<ConstNullPointer> constant) {
+void NullPointerAnalysis::visit(const ShPtr<ConstNullPointer>& constant) {
 	foundNullPointer = true;
 }
 

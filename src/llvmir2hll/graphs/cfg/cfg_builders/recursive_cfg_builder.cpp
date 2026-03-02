@@ -180,7 +180,7 @@ ShPtr<RecursiveCFGBuilder> RecursiveCFGBuilder::create() {
 	return ShPtr<RecursiveCFGBuilder>(new RecursiveCFGBuilder());
 }
 
-void RecursiveCFGBuilder::visit(ShPtr<Function> func) {
+void RecursiveCFGBuilder::visit(const ShPtr<Function>& func) {
 	//
 	// Create the entry node.
 	//
@@ -209,29 +209,29 @@ void RecursiveCFGBuilder::visit(ShPtr<Function> func) {
 	cfg->addEdge(cfg->getEntryNode(), afterEntryNode);
 }
 
-void RecursiveCFGBuilder::visit(ShPtr<AssignStmt> stmt) {
+void RecursiveCFGBuilder::visit(const ShPtr<AssignStmt>& stmt) {
 	addStatement(stmt);
 }
 
-void RecursiveCFGBuilder::visit(ShPtr<VarDefStmt> stmt) {
+void RecursiveCFGBuilder::visit(const ShPtr<VarDefStmt>& stmt) {
 	addStatement(stmt);
 }
 
-void RecursiveCFGBuilder::visit(ShPtr<CallStmt> stmt) {
+void RecursiveCFGBuilder::visit(const ShPtr<CallStmt>& stmt) {
 	addStatement(stmt);
 }
 
-void RecursiveCFGBuilder::visit(ShPtr<ReturnStmt> stmt) {
+void RecursiveCFGBuilder::visit(const ShPtr<ReturnStmt>& stmt) {
 	cfg->stmtNodeMapping[stmt] = currNode;
 	currNode->stmts.push_back(stmt);
 	cfg->addEdge(currNode, cfg->exitNode);
 }
 
-void RecursiveCFGBuilder::visit(ShPtr<EmptyStmt> stmt) {
+void RecursiveCFGBuilder::visit(const ShPtr<EmptyStmt>& stmt) {
 	addStatement(stmt);
 }
 
-void RecursiveCFGBuilder::visit(ShPtr<IfStmt> stmt) {
+void RecursiveCFGBuilder::visit(const ShPtr<IfStmt>& stmt) {
 	ShPtr<CFG::Node> beforeIfNode(currNode);
 
 	// Create a node for the if statement.
@@ -271,7 +271,7 @@ void RecursiveCFGBuilder::visit(ShPtr<IfStmt> stmt) {
 	addForwardOrBackwardEdge(stmt, edgeCond);
 }
 
-void RecursiveCFGBuilder::visit(ShPtr<SwitchStmt> stmt) {
+void RecursiveCFGBuilder::visit(const ShPtr<SwitchStmt>& stmt) {
 	ShPtr<CFG::Node> beforeSwitchNode(currNode);
 
 	// Create a node for the switch statement.
@@ -315,7 +315,7 @@ void RecursiveCFGBuilder::visit(ShPtr<SwitchStmt> stmt) {
 	addForwardOrBackwardEdge(stmt);
 }
 
-void RecursiveCFGBuilder::visit(ShPtr<WhileLoopStmt> stmt) {
+void RecursiveCFGBuilder::visit(const ShPtr<WhileLoopStmt>& stmt) {
 	ShPtr<CFG::Node> beforeLoopNode(currNode);
 
 	// Create a node for the loop.
@@ -345,15 +345,15 @@ void RecursiveCFGBuilder::visit(ShPtr<WhileLoopStmt> stmt) {
 	}
 }
 
-void RecursiveCFGBuilder::visit(ShPtr<ForLoopStmt> stmt) {
+void RecursiveCFGBuilder::visit(const ShPtr<ForLoopStmt>& stmt) {
 	visitForOrUForLoop(stmt, stmt->getBody());
 }
 
-void RecursiveCFGBuilder::visit(ShPtr<UForLoopStmt> stmt) {
+void RecursiveCFGBuilder::visit(const ShPtr<UForLoopStmt>& stmt) {
 	visitForOrUForLoop(stmt, stmt->getBody());
 }
 
-void RecursiveCFGBuilder::visit(ShPtr<BreakStmt> stmt) {
+void RecursiveCFGBuilder::visit(const ShPtr<BreakStmt>& stmt) {
 	cfg->stmtNodeMapping[stmt] = currNode;
 	currNode->stmts.push_back(stmt);
 
@@ -362,7 +362,7 @@ void RecursiveCFGBuilder::visit(ShPtr<BreakStmt> stmt) {
 	cfg->addEdge(currNodeBackup, getIndirectSuccessor(stmt));
 }
 
-void RecursiveCFGBuilder::visit(ShPtr<ContinueStmt> stmt) {
+void RecursiveCFGBuilder::visit(const ShPtr<ContinueStmt>& stmt) {
 	cfg->stmtNodeMapping[stmt] = currNode;
 	currNode->stmts.push_back(stmt);
 
@@ -371,7 +371,7 @@ void RecursiveCFGBuilder::visit(ShPtr<ContinueStmt> stmt) {
 	cfg->addEdge(currNodeBackup, getIndirectSuccessor(stmt));
 }
 
-void RecursiveCFGBuilder::visit(ShPtr<GotoStmt> stmt) {
+void RecursiveCFGBuilder::visit(const ShPtr<GotoStmt>& stmt) {
 	cfg->stmtNodeMapping[stmt] = currNode;
 	currNode->stmts.push_back(stmt);
 
@@ -382,7 +382,7 @@ void RecursiveCFGBuilder::visit(ShPtr<GotoStmt> stmt) {
 	}
 }
 
-void RecursiveCFGBuilder::visit(ShPtr<UnreachableStmt> stmt) {
+void RecursiveCFGBuilder::visit(const ShPtr<UnreachableStmt>& stmt) {
 	cfg->stmtNodeMapping[stmt] = currNode;
 	currNode->stmts.push_back(stmt);
 	cfg->addEdge(currNode, cfg->exitNode);

@@ -40,7 +40,7 @@ private:
 	/// @name Visitor Interface
 	/// @{
 	using OrderedAllVisitor::visit;
-	virtual void visit(ShPtr<AssignStmt> stmt) override;
+	virtual void visit(const ShPtr<AssignStmt>& stmt) override;
 	/// @}
 };
 

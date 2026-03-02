@@ -26,13 +26,13 @@ LoopLastContinueOptimizer::LoopLastContinueOptimizer(ShPtr<Module> module):
 		PRECONDITION_NON_NULL(module);
 	}
 
-void LoopLastContinueOptimizer::visit(ShPtr<ForLoopStmt> stmt) {
+void LoopLastContinueOptimizer::visit(const ShPtr<ForLoopStmt>& stmt) {
 	tryToOptimize(stmt);
 
 	FuncOptimizer::visit(stmt);
 }
 
-void LoopLastContinueOptimizer::visit(ShPtr<WhileLoopStmt> stmt) {
+void LoopLastContinueOptimizer::visit(const ShPtr<WhileLoopStmt>& stmt) {
 	tryToOptimize(stmt);
 
 	FuncOptimizer::visit(stmt);

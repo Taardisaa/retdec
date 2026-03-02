@@ -125,27 +125,27 @@ private:
 	/// @name Visitor Interface
 	/// @{
 	using OrderedAllVisitor::visit;
-	virtual void visit(ShPtr<Function> func) override;
-	virtual void visit(ShPtr<Variable> var) override;
-	virtual void visit(ShPtr<ConstBool> constant) override;
+	virtual void visit(const ShPtr<Function>& func) override;
+	virtual void visit(const ShPtr<Variable>& var) override;
+	virtual void visit(const ShPtr<ConstBool>& constant) override;
 	// Casts
-	virtual void visit(ShPtr<BitCastExpr> expr) override;
-	virtual void visit(ShPtr<ExtCastExpr> expr) override;
-	virtual void visit(ShPtr<FPToIntCastExpr> expr) override;
-	virtual void visit(ShPtr<IntToFPCastExpr> expr) override;
-	virtual void visit(ShPtr<IntToPtrCastExpr> expr) override;
-	virtual void visit(ShPtr<PtrToIntCastExpr> expr) override;
-	virtual void visit(ShPtr<TruncCastExpr> expr) override;
+	virtual void visit(const ShPtr<BitCastExpr>& expr) override;
+	virtual void visit(const ShPtr<ExtCastExpr>& expr) override;
+	virtual void visit(const ShPtr<FPToIntCastExpr>& expr) override;
+	virtual void visit(const ShPtr<IntToFPCastExpr>& expr) override;
+	virtual void visit(const ShPtr<IntToPtrCastExpr>& expr) override;
+	virtual void visit(const ShPtr<PtrToIntCastExpr>& expr) override;
+	virtual void visit(const ShPtr<TruncCastExpr>& expr) override;
 	// Types
-	virtual void visit(ShPtr<FloatType> type) override;
-	virtual void visit(ShPtr<IntType> type) override;
-	virtual void visit(ShPtr<PointerType> type) override;
-	virtual void visit(ShPtr<StringType> type) override;
-	virtual void visit(ShPtr<ArrayType> type) override;
-	virtual void visit(ShPtr<StructType> type) override;
-	virtual void visit(ShPtr<FunctionType> type) override;
-	virtual void visit(ShPtr<VoidType> type) override;
-	virtual void visit(ShPtr<UnknownType> type) override;
+	virtual void visit(const ShPtr<FloatType>& type) override;
+	virtual void visit(const ShPtr<IntType>& type) override;
+	virtual void visit(const ShPtr<PointerType>& type) override;
+	virtual void visit(const ShPtr<StringType>& type) override;
+	virtual void visit(const ShPtr<ArrayType>& type) override;
+	virtual void visit(const ShPtr<StructType>& type) override;
+	virtual void visit(const ShPtr<FunctionType>& type) override;
+	virtual void visit(const ShPtr<VoidType>& type) override;
+	virtual void visit(const ShPtr<UnknownType>& type) override;
 	/// @}
 
 private:

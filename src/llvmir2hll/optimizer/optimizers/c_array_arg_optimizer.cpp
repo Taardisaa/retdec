@@ -67,7 +67,7 @@ CArrayArgOptimizer::CArrayArgOptimizer(ShPtr<Module> module):
 		PRECONDITION_NON_NULL(module);
 	}
 
-void CArrayArgOptimizer::visit(ShPtr<CallExpr> expr) {
+void CArrayArgOptimizer::visit(const ShPtr<CallExpr>& expr) {
 	OrderedAllVisitor::visit(expr);
 
 	// Check each argument whether it can be optimized, and if so, do it.

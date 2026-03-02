@@ -452,72 +452,72 @@ void VarUsesVisitor::dumpCache() {
 	llvm::errs() << "\n";
 }
 
-void VarUsesVisitor::visit(ShPtr<AssignStmt> stmt) {
+void VarUsesVisitor::visit(const ShPtr<AssignStmt>& stmt) {
 	findAndStoreUses(stmt);
 	OrderedAllVisitor::visit(stmt);
 }
 
-void VarUsesVisitor::visit(ShPtr<VarDefStmt> stmt) {
+void VarUsesVisitor::visit(const ShPtr<VarDefStmt>& stmt) {
 	findAndStoreUses(stmt);
 	OrderedAllVisitor::visit(stmt);
 }
 
-void VarUsesVisitor::visit(ShPtr<CallStmt> stmt) {
+void VarUsesVisitor::visit(const ShPtr<CallStmt>& stmt) {
 	findAndStoreUses(stmt);
 	OrderedAllVisitor::visit(stmt);
 }
 
-void VarUsesVisitor::visit(ShPtr<ReturnStmt> stmt) {
+void VarUsesVisitor::visit(const ShPtr<ReturnStmt>& stmt) {
 	findAndStoreUses(stmt);
 	OrderedAllVisitor::visit(stmt);
 }
 
-void VarUsesVisitor::visit(ShPtr<EmptyStmt> stmt) {
+void VarUsesVisitor::visit(const ShPtr<EmptyStmt>& stmt) {
 	findAndStoreUses(stmt);
 	OrderedAllVisitor::visit(stmt);
 }
 
-void VarUsesVisitor::visit(ShPtr<IfStmt> stmt) {
+void VarUsesVisitor::visit(const ShPtr<IfStmt>& stmt) {
 	findAndStoreUses(stmt);
 	OrderedAllVisitor::visit(stmt);
 }
 
-void VarUsesVisitor::visit(ShPtr<SwitchStmt> stmt) {
+void VarUsesVisitor::visit(const ShPtr<SwitchStmt>& stmt) {
 	findAndStoreUses(stmt);
 	OrderedAllVisitor::visit(stmt);
 }
 
-void VarUsesVisitor::visit(ShPtr<WhileLoopStmt> stmt) {
+void VarUsesVisitor::visit(const ShPtr<WhileLoopStmt>& stmt) {
 	findAndStoreUses(stmt);
 	OrderedAllVisitor::visit(stmt);
 }
 
-void VarUsesVisitor::visit(ShPtr<ForLoopStmt> stmt) {
+void VarUsesVisitor::visit(const ShPtr<ForLoopStmt>& stmt) {
 	findAndStoreUses(stmt);
 	OrderedAllVisitor::visit(stmt);
 }
 
-void VarUsesVisitor::visit(ShPtr<UForLoopStmt> stmt) {
+void VarUsesVisitor::visit(const ShPtr<UForLoopStmt>& stmt) {
 	findAndStoreUses(stmt);
 	OrderedAllVisitor::visit(stmt);
 }
 
-void VarUsesVisitor::visit(ShPtr<BreakStmt> stmt) {
+void VarUsesVisitor::visit(const ShPtr<BreakStmt>& stmt) {
 	findAndStoreUses(stmt);
 	OrderedAllVisitor::visit(stmt);
 }
 
-void VarUsesVisitor::visit(ShPtr<ContinueStmt> stmt) {
+void VarUsesVisitor::visit(const ShPtr<ContinueStmt>& stmt) {
 	findAndStoreUses(stmt);
 	OrderedAllVisitor::visit(stmt);
 }
 
-void VarUsesVisitor::visit(ShPtr<GotoStmt> stmt) {
+void VarUsesVisitor::visit(const ShPtr<GotoStmt>& stmt) {
 	findAndStoreUses(stmt);
 	OrderedAllVisitor::visit(stmt);
 }
 
-void VarUsesVisitor::visit(ShPtr<UnreachableStmt> stmt) {
+void VarUsesVisitor::visit(const ShPtr<UnreachableStmt>& stmt) {
 	findAndStoreUses(stmt);
 	OrderedAllVisitor::visit(stmt);
 }

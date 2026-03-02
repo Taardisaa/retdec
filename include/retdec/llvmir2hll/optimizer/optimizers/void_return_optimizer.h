@@ -42,15 +42,15 @@ private:
 	/// @name Visitor Interface
 	/// @{
 	using OrderedAllVisitor::visit;
-	virtual void visit(ShPtr<AssignStmt> stmt) override;
-	virtual void visit(ShPtr<VarDefStmt> stmt) override;
-	virtual void visit(ShPtr<CallStmt> stmt) override;
-	virtual void visit(ShPtr<ReturnStmt> stmt) override;
-	virtual void visit(ShPtr<IfStmt> stmt) override;
-	virtual void visit(ShPtr<SwitchStmt> stmt) override;
-	virtual void visit(ShPtr<WhileLoopStmt> stmt) override;
-	virtual void visit(ShPtr<ForLoopStmt> stmt) override;
-	virtual void visit(ShPtr<UForLoopStmt> stmt) override;
+	virtual void visit(const ShPtr<AssignStmt>& stmt) override;
+	virtual void visit(const ShPtr<VarDefStmt>& stmt) override;
+	virtual void visit(const ShPtr<CallStmt>& stmt) override;
+	virtual void visit(const ShPtr<ReturnStmt>& stmt) override;
+	virtual void visit(const ShPtr<IfStmt>& stmt) override;
+	virtual void visit(const ShPtr<SwitchStmt>& stmt) override;
+	virtual void visit(const ShPtr<WhileLoopStmt>& stmt) override;
+	virtual void visit(const ShPtr<ForLoopStmt>& stmt) override;
+	virtual void visit(const ShPtr<UForLoopStmt>& stmt) override;
 	/// @}
 
 private:

@@ -46,11 +46,11 @@ bool BreakInIfAnalysis::hasBreakStmt(ShPtr<IfStmt> stmt) {
 	return analysis->foundBreakStmt;
 }
 
-void BreakInIfAnalysis::visit(ShPtr<BreakStmt> stmt) {
+void BreakInIfAnalysis::visit(const ShPtr<BreakStmt>& stmt) {
 	foundBreakStmt |= true;
 }
 
-void BreakInIfAnalysis::visit(ShPtr<GotoStmt> stmt) {
+void BreakInIfAnalysis::visit(const ShPtr<GotoStmt>& stmt) {
 	// Do not visit the goto's target, just its successor (if any).
 	// We don't want to find break statement that is out of if statement body.
 	OrderedAllVisitor::visitStmt(stmt->getSuccessor());

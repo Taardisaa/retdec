@@ -34,13 +34,13 @@ private:
 	/// @name Visitor Interface
 	/// @{
 	using OrderedAllVisitor::visit;
-	virtual void visit(ShPtr<BitCastExpr> expr) override;
-	virtual void visit(ShPtr<ExtCastExpr> expr) override;
-	virtual void visit(ShPtr<TruncCastExpr> expr) override;
-	virtual void visit(ShPtr<FPToIntCastExpr> expr) override;
-	virtual void visit(ShPtr<IntToFPCastExpr> expr) override;
-	virtual void visit(ShPtr<IntToPtrCastExpr> expr) override;
-	virtual void visit(ShPtr<PtrToIntCastExpr> expr) override;
+	virtual void visit(const ShPtr<BitCastExpr>& expr) override;
+	virtual void visit(const ShPtr<ExtCastExpr>& expr) override;
+	virtual void visit(const ShPtr<TruncCastExpr>& expr) override;
+	virtual void visit(const ShPtr<FPToIntCastExpr>& expr) override;
+	virtual void visit(const ShPtr<IntToFPCastExpr>& expr) override;
+	virtual void visit(const ShPtr<IntToPtrCastExpr>& expr) override;
+	virtual void visit(const ShPtr<PtrToIntCastExpr>& expr) override;
 	/// @}
 
 	void removeCast(ShPtr<CastExpr> castExpr);

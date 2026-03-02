@@ -144,14 +144,14 @@ private:
 	/// @name Visitor Interface
 	/// @{
 	using SubOptimizer::visit;
-	virtual void visit(ShPtr<AddOpExpr> expr) override;
-	virtual void visit(ShPtr<SubOpExpr> expr) override;
-	virtual void visit(ShPtr<MulOpExpr> expr) override;
-	virtual void visit(ShPtr<DivOpExpr> expr) override;
-	virtual void visit(ShPtr<ModOpExpr> expr) override;
-	virtual void visit(ShPtr<BitAndOpExpr> expr) override;
-	virtual void visit(ShPtr<BitOrOpExpr> expr) override;
-	virtual void visit(ShPtr<BitXorOpExpr> expr) override;
+	virtual void visit(const ShPtr<AddOpExpr>& expr) override;
+	virtual void visit(const ShPtr<SubOpExpr>& expr) override;
+	virtual void visit(const ShPtr<MulOpExpr>& expr) override;
+	virtual void visit(const ShPtr<DivOpExpr>& expr) override;
+	virtual void visit(const ShPtr<ModOpExpr>& expr) override;
+	virtual void visit(const ShPtr<BitAndOpExpr>& expr) override;
+	virtual void visit(const ShPtr<BitOrOpExpr>& expr) override;
+	virtual void visit(const ShPtr<BitXorOpExpr>& expr) override;
 	/// @}
 
 	bool isConstFloatZero(ShPtr<Expression> expr) const;

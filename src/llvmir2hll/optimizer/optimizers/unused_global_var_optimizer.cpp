@@ -35,7 +35,7 @@ void UnusedGlobalVarOptimizer::doOptimization() {
 	removeUnusedGlobalVars();
 }
 
-void UnusedGlobalVarOptimizer::visit(ShPtr<Variable> var) {
+void UnusedGlobalVarOptimizer::visit(const ShPtr<Variable>& var) {
 	if (isGlobal(var)) {
 		usedGlobalVars.insert(var);
 	}

@@ -75,7 +75,7 @@ private:
 	/// @name Visitor Interface
 	/// @{
 	using OrderedAllVisitor::visit;
-	virtual void visit(ShPtr<IfStmt> stmt) override;
+	virtual void visit(const ShPtr<IfStmt>& stmt) override;
 	/// @}
 
 private:

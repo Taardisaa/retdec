@@ -33,7 +33,7 @@ std::string NoGlobalVarDefValidator::getId() const {
 	return NO_GLOBAL_VAR_DEF_VALIDATOR_ID;
 }
 
-void NoGlobalVarDefValidator::visit(ShPtr<VarDefStmt> stmt) {
+void NoGlobalVarDefValidator::visit(const ShPtr<VarDefStmt>& stmt) {
 	// The left-hand side of a VarDefStmt cannot be a global variable.
 	std::ostringstream stmtStr;
 	stmtStr << stmt;

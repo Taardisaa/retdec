@@ -38,8 +38,8 @@ private:
 	/// @name Visitor Interface
 	/// @{
 	using OrderedAllVisitor::visit;
-	virtual void visit(ShPtr<BreakStmt> stmt) override;
-	virtual void visit(ShPtr<ContinueStmt> stmt) override;
+	virtual void visit(const ShPtr<BreakStmt>& stmt) override;
+	virtual void visit(const ShPtr<ContinueStmt>& stmt) override;
 	/// @}
 };
 

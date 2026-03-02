@@ -40,7 +40,7 @@ BitOpToLogOpOptimizer::BitOpToLogOpOptimizer(ShPtr<Module> module,
 	PRECONDITION_NON_NULL(va);
 }
 
-void BitOpToLogOpOptimizer::visit(ShPtr<IfStmt> stmt) {
+void BitOpToLogOpOptimizer::visit(const ShPtr<IfStmt>& stmt) {
 	// First of all, visit nested and subsequent statements.
 	FuncOptimizer::visit(stmt);
 
@@ -52,7 +52,7 @@ void BitOpToLogOpOptimizer::visit(ShPtr<IfStmt> stmt) {
 	}
 }
 
-void BitOpToLogOpOptimizer::visit(ShPtr<SwitchStmt> stmt) {
+void BitOpToLogOpOptimizer::visit(const ShPtr<SwitchStmt>& stmt) {
 	// First of all, visit nested and subsequent statements.
 	FuncOptimizer::visit(stmt);
 
@@ -60,7 +60,7 @@ void BitOpToLogOpOptimizer::visit(ShPtr<SwitchStmt> stmt) {
 	tryOptimizeCond(stmt->getControlExpr());
 }
 
-void BitOpToLogOpOptimizer::visit(ShPtr<WhileLoopStmt> stmt) {
+void BitOpToLogOpOptimizer::visit(const ShPtr<WhileLoopStmt>& stmt) {
 	// First of all, visit nested and subsequent statements.
 	FuncOptimizer::visit(stmt);
 
@@ -68,7 +68,7 @@ void BitOpToLogOpOptimizer::visit(ShPtr<WhileLoopStmt> stmt) {
 	tryOptimizeCond(stmt->getCondition());
 }
 
-void BitOpToLogOpOptimizer::visit(ShPtr<BitAndOpExpr> expr) {
+void BitOpToLogOpOptimizer::visit(const ShPtr<BitAndOpExpr>& expr) {
 	// BitAnd which is not in condition.
 	if (!isCondition) {
 		return;
@@ -102,7 +102,7 @@ void BitOpToLogOpOptimizer::visit(ShPtr<BitAndOpExpr> expr) {
 	}
 }
 
-void BitOpToLogOpOptimizer::visit(ShPtr<BitOrOpExpr> expr) {
+void BitOpToLogOpOptimizer::visit(const ShPtr<BitOrOpExpr>& expr) {
 	// BitAnd which is not in condition.
 	if (!isCondition) {
 		return;
@@ -119,7 +119,7 @@ void BitOpToLogOpOptimizer::visit(ShPtr<BitOrOpExpr> expr) {
 	}
 }
 
-void BitOpToLogOpOptimizer::visit(ShPtr<DivOpExpr> expr) {
+void BitOpToLogOpOptimizer::visit(const ShPtr<DivOpExpr>& expr) {
 	// BitAnd which is not in condition.
 	if (!isCondition) {
 		return;
@@ -130,7 +130,7 @@ void BitOpToLogOpOptimizer::visit(ShPtr<DivOpExpr> expr) {
 	}
 }
 
-void BitOpToLogOpOptimizer::visit(ShPtr<ModOpExpr> expr) {
+void BitOpToLogOpOptimizer::visit(const ShPtr<ModOpExpr>& expr) {
 	// BitAnd which is not in condition.
 	if (!isCondition) {
 		return;
@@ -141,7 +141,7 @@ void BitOpToLogOpOptimizer::visit(ShPtr<ModOpExpr> expr) {
 	}
 }
 
-void BitOpToLogOpOptimizer::visit(ShPtr<MulOpExpr> expr) {
+void BitOpToLogOpOptimizer::visit(const ShPtr<MulOpExpr>& expr) {
 	// BitAnd which is not in condition.
 	if (!isCondition) {
 		return;

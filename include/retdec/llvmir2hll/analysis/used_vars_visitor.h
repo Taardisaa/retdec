@@ -42,9 +42,9 @@ public:
 	bool operator==(const UsedVars &other) const;
 	bool operator!=(const UsedVars &other) const;
 
-	VarSet getReadVars() const;
-	VarSet getWrittenVars() const;
-	VarSet getAllVars() const;
+	const VarSet& getReadVars() const;
+	const VarSet& getWrittenVars() const;
+	const VarSet& getAllVars() const;
 	std::size_t getCount(bool read = true, bool written = true) const;
 	std::size_t getNumOfUses(ShPtr<Variable> var) const;
 	bool isUsed(ShPtr<Variable> var, bool read = true,
@@ -114,14 +114,14 @@ private:
 	/// @name Visitor Interface
 	/// @{
 	using OrderedAllVisitor::visit;
-	virtual void visit(ShPtr<Function> func) override;
-	virtual void visit(ShPtr<Variable> var) override;
-	virtual void visit(ShPtr<ArrayIndexOpExpr> expr) override;
-	virtual void visit(ShPtr<StructIndexOpExpr> expr) override;
-	virtual void visit(ShPtr<DerefOpExpr> expr) override;
-	virtual void visit(ShPtr<AssignStmt> stmt) override;
-	virtual void visit(ShPtr<VarDefStmt> stmt) override;
-	virtual void visit(ShPtr<ForLoopStmt> stmt) override;
+	virtual void visit(const ShPtr<Function>& func) override;
+	virtual void visit(const ShPtr<Variable>& var) override;
+	virtual void visit(const ShPtr<ArrayIndexOpExpr>& expr) override;
+	virtual void visit(const ShPtr<StructIndexOpExpr>& expr) override;
+	virtual void visit(const ShPtr<DerefOpExpr>& expr) override;
+	virtual void visit(const ShPtr<AssignStmt>& stmt) override;
+	virtual void visit(const ShPtr<VarDefStmt>& stmt) override;
+	virtual void visit(const ShPtr<ForLoopStmt>& stmt) override;
 	/// @}
 
 private:

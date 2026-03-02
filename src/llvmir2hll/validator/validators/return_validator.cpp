@@ -34,7 +34,7 @@ std::string ReturnValidator::getId() const {
 	return RETURN_VALIDATOR_ID;
 }
 
-void ReturnValidator::visit(ShPtr<ReturnStmt> stmt) {
+void ReturnValidator::visit(const ShPtr<ReturnStmt>& stmt) {
 	// If the function is non-void, there has to be a return value.
 	if (!isa<VoidType>(func->getRetType()) && !stmt->getRetVal()) {
 		std::ostringstream stmtStr;

@@ -39,7 +39,7 @@ private:
 	/// @name Visitor Interface
 	/// @{
 	using OrderedAllVisitor::visit;
-	virtual void visit(ShPtr<DerefOpExpr> expr) override;
+	virtual void visit(const ShPtr<DerefOpExpr>& expr) override;
 	/// @}
 };
 

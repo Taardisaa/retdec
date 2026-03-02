@@ -59,7 +59,7 @@ void PreWhileTrueLoopConvOptimizer::doOptimization() {
 	va->invalidateState();
 }
 
-void PreWhileTrueLoopConvOptimizer::visit(ShPtr<WhileLoopStmt> stmt) {
+void PreWhileTrueLoopConvOptimizer::visit(const ShPtr<WhileLoopStmt>& stmt) {
 	// First of all, visit nested and subsequent statements.
 	FuncOptimizer::visit(stmt);
 

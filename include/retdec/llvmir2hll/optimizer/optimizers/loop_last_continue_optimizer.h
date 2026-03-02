@@ -57,8 +57,8 @@ private:
 	/// @name Visitor Interface
 	/// @{
 	using OrderedAllVisitor::visit;
-	virtual void visit(ShPtr<ForLoopStmt> stmt) override;
-	virtual void visit(ShPtr<WhileLoopStmt> stmt) override;
+	virtual void visit(const ShPtr<ForLoopStmt>& stmt) override;
+	virtual void visit(const ShPtr<WhileLoopStmt>& stmt) override;
 	/// @}
 
 	void tryToOptimize(ShPtr<Statement> stmt);

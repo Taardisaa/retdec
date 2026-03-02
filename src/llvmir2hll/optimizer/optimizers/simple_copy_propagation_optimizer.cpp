@@ -74,14 +74,14 @@ void SimpleCopyPropagationOptimizer::runOnFunction(ShPtr<Function> func) {
 	FuncOptimizer::runOnFunction(func);
 }
 
-void SimpleCopyPropagationOptimizer::visit(ShPtr<AssignStmt> stmt) {
+void SimpleCopyPropagationOptimizer::visit(const ShPtr<AssignStmt>& stmt) {
 	// First, visit nested statements.
 	FuncOptimizer::visit(stmt);
 
 	tryOptimization(stmt);
 }
 
-void SimpleCopyPropagationOptimizer::visit(ShPtr<VarDefStmt> stmt) {
+void SimpleCopyPropagationOptimizer::visit(const ShPtr<VarDefStmt>& stmt) {
 	// First, visit nested statements.
 	FuncOptimizer::visit(stmt);
 

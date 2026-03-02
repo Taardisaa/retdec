@@ -29,7 +29,7 @@ RemoveUselessCastsOptimizer::RemoveUselessCastsOptimizer(ShPtr<Module> module):
 		PRECONDITION_NON_NULL(module);
 	}
 
-void RemoveUselessCastsOptimizer::visit(ShPtr<AssignStmt> stmt) {
+void RemoveUselessCastsOptimizer::visit(const ShPtr<AssignStmt>& stmt) {
 	if (tryOptimizationCase1(stmt)) {
 		return;
 	}

@@ -230,7 +230,7 @@ ShPtr<Expression> ConstSymbolConverter::convertArgToSymbolicNames(
 	return newArg;
 }
 
-void ConstSymbolConverter::visit(ShPtr<CallExpr> expr) {
+void ConstSymbolConverter::visit(const ShPtr<CallExpr>& expr) {
 	// Visit nested calls (if any).
 	OrderedAllVisitor::visit(expr);
 

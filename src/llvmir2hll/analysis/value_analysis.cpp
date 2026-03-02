@@ -815,7 +815,7 @@ void ValueAnalysis::computeAndStoreIndirectlyUsedVars(ShPtr<DerefOpExpr> expr) {
 	}
 }
 
-void ValueAnalysis::visit(ShPtr<Function> func) {
+void ValueAnalysis::visit(const ShPtr<Function>& func) {
 	//
 	// Caching
 	//
@@ -828,7 +828,7 @@ void ValueAnalysis::visit(ShPtr<Function> func) {
 	}
 }
 
-void ValueAnalysis::visit(ShPtr<AssignStmt> stmt) {
+void ValueAnalysis::visit(const ShPtr<AssignStmt>& stmt) {
 	//
 	// Caching
 	//
@@ -847,7 +847,7 @@ void ValueAnalysis::visit(ShPtr<AssignStmt> stmt) {
 	stmt->getRhs()->accept(this);
 }
 
-void ValueAnalysis::visit(ShPtr<BreakStmt> stmt) {
+void ValueAnalysis::visit(const ShPtr<BreakStmt>& stmt) {
 	//
 	// Caching
 	//
@@ -858,7 +858,7 @@ void ValueAnalysis::visit(ShPtr<BreakStmt> stmt) {
 	OrderedAllVisitor::visit(stmt);
 }
 
-void ValueAnalysis::visit(ShPtr<CallStmt> stmt) {
+void ValueAnalysis::visit(const ShPtr<CallStmt>& stmt) {
 	//
 	// Caching
 	//
@@ -869,7 +869,7 @@ void ValueAnalysis::visit(ShPtr<CallStmt> stmt) {
 	OrderedAllVisitor::visit(stmt);
 }
 
-void ValueAnalysis::visit(ShPtr<ContinueStmt> stmt) {
+void ValueAnalysis::visit(const ShPtr<ContinueStmt>& stmt) {
 	//
 	// Caching
 	//
@@ -880,7 +880,7 @@ void ValueAnalysis::visit(ShPtr<ContinueStmt> stmt) {
 	OrderedAllVisitor::visit(stmt);
 }
 
-void ValueAnalysis::visit(ShPtr<EmptyStmt> stmt) {
+void ValueAnalysis::visit(const ShPtr<EmptyStmt>& stmt) {
 	//
 	// Caching
 	//
@@ -891,7 +891,7 @@ void ValueAnalysis::visit(ShPtr<EmptyStmt> stmt) {
 	OrderedAllVisitor::visit(stmt);
 }
 
-void ValueAnalysis::visit(ShPtr<ForLoopStmt> stmt) {
+void ValueAnalysis::visit(const ShPtr<ForLoopStmt>& stmt) {
 	//
 	// Caching
 	//
@@ -912,7 +912,7 @@ void ValueAnalysis::visit(ShPtr<ForLoopStmt> stmt) {
 	stmt->getStep()->accept(this);
 }
 
-void ValueAnalysis::visit(ShPtr<UForLoopStmt> stmt) {
+void ValueAnalysis::visit(const ShPtr<UForLoopStmt>& stmt) {
 	//
 	// Caching
 	//
@@ -936,7 +936,7 @@ void ValueAnalysis::visit(ShPtr<UForLoopStmt> stmt) {
 	}
 }
 
-void ValueAnalysis::visit(ShPtr<GotoStmt> stmt) {
+void ValueAnalysis::visit(const ShPtr<GotoStmt>& stmt) {
 	//
 	// Caching
 	//
@@ -947,7 +947,7 @@ void ValueAnalysis::visit(ShPtr<GotoStmt> stmt) {
 	OrderedAllVisitor::visit(stmt);
 }
 
-void ValueAnalysis::visit(ShPtr<IfStmt> stmt) {
+void ValueAnalysis::visit(const ShPtr<IfStmt>& stmt) {
 	//
 	// Caching
 	//
@@ -958,7 +958,7 @@ void ValueAnalysis::visit(ShPtr<IfStmt> stmt) {
 	OrderedAllVisitor::visit(stmt);
 }
 
-void ValueAnalysis::visit(ShPtr<ReturnStmt> stmt) {
+void ValueAnalysis::visit(const ShPtr<ReturnStmt>& stmt) {
 	//
 	// Caching
 	//
@@ -969,7 +969,7 @@ void ValueAnalysis::visit(ShPtr<ReturnStmt> stmt) {
 	OrderedAllVisitor::visit(stmt);
 }
 
-void ValueAnalysis::visit(ShPtr<SwitchStmt> stmt) {
+void ValueAnalysis::visit(const ShPtr<SwitchStmt>& stmt) {
 	//
 	// Caching
 	//
@@ -980,7 +980,7 @@ void ValueAnalysis::visit(ShPtr<SwitchStmt> stmt) {
 	OrderedAllVisitor::visit(stmt);
 }
 
-void ValueAnalysis::visit(ShPtr<UnreachableStmt> stmt) {
+void ValueAnalysis::visit(const ShPtr<UnreachableStmt>& stmt) {
 	//
 	// Caching
 	//
@@ -991,7 +991,7 @@ void ValueAnalysis::visit(ShPtr<UnreachableStmt> stmt) {
 	OrderedAllVisitor::visit(stmt);
 }
 
-void ValueAnalysis::visit(ShPtr<VarDefStmt> stmt) {
+void ValueAnalysis::visit(const ShPtr<VarDefStmt>& stmt) {
 	//
 	// Caching
 	//
@@ -1012,7 +1012,7 @@ void ValueAnalysis::visit(ShPtr<VarDefStmt> stmt) {
 	}
 }
 
-void ValueAnalysis::visit(ShPtr<WhileLoopStmt> stmt) {
+void ValueAnalysis::visit(const ShPtr<WhileLoopStmt>& stmt) {
 	//
 	// Caching
 	//
@@ -1023,7 +1023,7 @@ void ValueAnalysis::visit(ShPtr<WhileLoopStmt> stmt) {
 	OrderedAllVisitor::visit(stmt);
 }
 
-void ValueAnalysis::visit(ShPtr<AddOpExpr> expr) {
+void ValueAnalysis::visit(const ShPtr<AddOpExpr>& expr) {
 	//
 	// Caching
 	//
@@ -1034,7 +1034,7 @@ void ValueAnalysis::visit(ShPtr<AddOpExpr> expr) {
 	OrderedAllVisitor::visit(expr);
 }
 
-void ValueAnalysis::visit(ShPtr<AddressOpExpr> expr) {
+void ValueAnalysis::visit(const ShPtr<AddressOpExpr>& expr) {
 	//
 	// Caching
 	//
@@ -1054,7 +1054,7 @@ void ValueAnalysis::visit(ShPtr<AddressOpExpr> expr) {
 	OrderedAllVisitor::visit(expr);
 }
 
-void ValueAnalysis::visit(ShPtr<AndOpExpr> expr) {
+void ValueAnalysis::visit(const ShPtr<AndOpExpr>& expr) {
 	//
 	// Caching
 	//
@@ -1065,7 +1065,7 @@ void ValueAnalysis::visit(ShPtr<AndOpExpr> expr) {
 	OrderedAllVisitor::visit(expr);
 }
 
-void ValueAnalysis::visit(ShPtr<ArrayIndexOpExpr> expr) {
+void ValueAnalysis::visit(const ShPtr<ArrayIndexOpExpr>& expr) {
 	//
 	// Caching
 	//
@@ -1091,7 +1091,7 @@ void ValueAnalysis::visit(ShPtr<ArrayIndexOpExpr> expr) {
 	writing = oldWriting;
 }
 
-void ValueAnalysis::visit(ShPtr<AssignOpExpr> expr) {
+void ValueAnalysis::visit(const ShPtr<AssignOpExpr>& expr) {
 	//
 	// Caching
 	//
@@ -1110,7 +1110,7 @@ void ValueAnalysis::visit(ShPtr<AssignOpExpr> expr) {
 	expr->getSecondOperand()->accept(this);
 }
 
-void ValueAnalysis::visit(ShPtr<StructIndexOpExpr> expr) {
+void ValueAnalysis::visit(const ShPtr<StructIndexOpExpr>& expr) {
 	//
 	// Caching
 	//
@@ -1136,7 +1136,7 @@ void ValueAnalysis::visit(ShPtr<StructIndexOpExpr> expr) {
 	writing = oldWriting;
 }
 
-void ValueAnalysis::visit(ShPtr<BitAndOpExpr> expr) {
+void ValueAnalysis::visit(const ShPtr<BitAndOpExpr>& expr) {
 	//
 	// Caching
 	//
@@ -1147,7 +1147,7 @@ void ValueAnalysis::visit(ShPtr<BitAndOpExpr> expr) {
 	OrderedAllVisitor::visit(expr);
 }
 
-void ValueAnalysis::visit(ShPtr<BitOrOpExpr> expr) {
+void ValueAnalysis::visit(const ShPtr<BitOrOpExpr>& expr) {
 	//
 	// Caching
 	//
@@ -1158,7 +1158,7 @@ void ValueAnalysis::visit(ShPtr<BitOrOpExpr> expr) {
 	OrderedAllVisitor::visit(expr);
 }
 
-void ValueAnalysis::visit(ShPtr<BitShlOpExpr> expr) {
+void ValueAnalysis::visit(const ShPtr<BitShlOpExpr>& expr) {
 	//
 	// Caching
 	//
@@ -1169,7 +1169,7 @@ void ValueAnalysis::visit(ShPtr<BitShlOpExpr> expr) {
 	OrderedAllVisitor::visit(expr);
 }
 
-void ValueAnalysis::visit(ShPtr<BitShrOpExpr> expr) {
+void ValueAnalysis::visit(const ShPtr<BitShrOpExpr>& expr) {
 	//
 	// Caching
 	//
@@ -1180,7 +1180,7 @@ void ValueAnalysis::visit(ShPtr<BitShrOpExpr> expr) {
 	OrderedAllVisitor::visit(expr);
 }
 
-void ValueAnalysis::visit(ShPtr<BitXorOpExpr> expr) {
+void ValueAnalysis::visit(const ShPtr<BitXorOpExpr>& expr) {
 	//
 	// Caching
 	//
@@ -1191,7 +1191,7 @@ void ValueAnalysis::visit(ShPtr<BitXorOpExpr> expr) {
 	OrderedAllVisitor::visit(expr);
 }
 
-void ValueAnalysis::visit(ShPtr<CallExpr> expr) {
+void ValueAnalysis::visit(const ShPtr<CallExpr>& expr) {
 	//
 	// Caching
 	//
@@ -1209,7 +1209,7 @@ void ValueAnalysis::visit(ShPtr<CallExpr> expr) {
 	OrderedAllVisitor::visit(expr);
 }
 
-void ValueAnalysis::visit(ShPtr<CommaOpExpr> expr) {
+void ValueAnalysis::visit(const ShPtr<CommaOpExpr>& expr) {
 	//
 	// Caching
 	//
@@ -1220,7 +1220,7 @@ void ValueAnalysis::visit(ShPtr<CommaOpExpr> expr) {
 	OrderedAllVisitor::visit(expr);
 }
 
-void ValueAnalysis::visit(ShPtr<DerefOpExpr> expr) {
+void ValueAnalysis::visit(const ShPtr<DerefOpExpr>& expr) {
 	//
 	// Caching
 	//
@@ -1263,7 +1263,7 @@ void ValueAnalysis::visit(ShPtr<DerefOpExpr> expr) {
 	writing = oldWriting;
 }
 
-void ValueAnalysis::visit(ShPtr<DivOpExpr> expr) {
+void ValueAnalysis::visit(const ShPtr<DivOpExpr>& expr) {
 	//
 	// Caching
 	//
@@ -1274,7 +1274,7 @@ void ValueAnalysis::visit(ShPtr<DivOpExpr> expr) {
 	OrderedAllVisitor::visit(expr);
 }
 
-void ValueAnalysis::visit(ShPtr<EqOpExpr> expr) {
+void ValueAnalysis::visit(const ShPtr<EqOpExpr>& expr) {
 	//
 	// Caching
 	//
@@ -1285,7 +1285,7 @@ void ValueAnalysis::visit(ShPtr<EqOpExpr> expr) {
 	OrderedAllVisitor::visit(expr);
 }
 
-void ValueAnalysis::visit(ShPtr<GtEqOpExpr> expr) {
+void ValueAnalysis::visit(const ShPtr<GtEqOpExpr>& expr) {
 	//
 	// Caching
 	//
@@ -1296,7 +1296,7 @@ void ValueAnalysis::visit(ShPtr<GtEqOpExpr> expr) {
 	OrderedAllVisitor::visit(expr);
 }
 
-void ValueAnalysis::visit(ShPtr<GtOpExpr> expr) {
+void ValueAnalysis::visit(const ShPtr<GtOpExpr>& expr) {
 	//
 	// Caching
 	//
@@ -1307,7 +1307,7 @@ void ValueAnalysis::visit(ShPtr<GtOpExpr> expr) {
 	OrderedAllVisitor::visit(expr);
 }
 
-void ValueAnalysis::visit(ShPtr<LtEqOpExpr> expr) {
+void ValueAnalysis::visit(const ShPtr<LtEqOpExpr>& expr) {
 	//
 	// Caching
 	//
@@ -1318,7 +1318,7 @@ void ValueAnalysis::visit(ShPtr<LtEqOpExpr> expr) {
 	OrderedAllVisitor::visit(expr);
 }
 
-void ValueAnalysis::visit(ShPtr<LtOpExpr> expr) {
+void ValueAnalysis::visit(const ShPtr<LtOpExpr>& expr) {
 	//
 	// Caching
 	//
@@ -1329,7 +1329,7 @@ void ValueAnalysis::visit(ShPtr<LtOpExpr> expr) {
 	OrderedAllVisitor::visit(expr);
 }
 
-void ValueAnalysis::visit(ShPtr<ModOpExpr> expr) {
+void ValueAnalysis::visit(const ShPtr<ModOpExpr>& expr) {
 	//
 	// Caching
 	//
@@ -1340,7 +1340,7 @@ void ValueAnalysis::visit(ShPtr<ModOpExpr> expr) {
 	OrderedAllVisitor::visit(expr);
 }
 
-void ValueAnalysis::visit(ShPtr<MulOpExpr> expr) {
+void ValueAnalysis::visit(const ShPtr<MulOpExpr>& expr) {
 	//
 	// Caching
 	//
@@ -1351,7 +1351,7 @@ void ValueAnalysis::visit(ShPtr<MulOpExpr> expr) {
 	OrderedAllVisitor::visit(expr);
 }
 
-void ValueAnalysis::visit(ShPtr<NegOpExpr> expr) {
+void ValueAnalysis::visit(const ShPtr<NegOpExpr>& expr) {
 	//
 	// Caching
 	//
@@ -1362,7 +1362,7 @@ void ValueAnalysis::visit(ShPtr<NegOpExpr> expr) {
 	OrderedAllVisitor::visit(expr);
 }
 
-void ValueAnalysis::visit(ShPtr<NeqOpExpr> expr) {
+void ValueAnalysis::visit(const ShPtr<NeqOpExpr>& expr) {
 	//
 	// Caching
 	//
@@ -1373,7 +1373,7 @@ void ValueAnalysis::visit(ShPtr<NeqOpExpr> expr) {
 	OrderedAllVisitor::visit(expr);
 }
 
-void ValueAnalysis::visit(ShPtr<NotOpExpr> expr) {
+void ValueAnalysis::visit(const ShPtr<NotOpExpr>& expr) {
 	//
 	// Caching
 	//
@@ -1384,7 +1384,7 @@ void ValueAnalysis::visit(ShPtr<NotOpExpr> expr) {
 	OrderedAllVisitor::visit(expr);
 }
 
-void ValueAnalysis::visit(ShPtr<OrOpExpr> expr) {
+void ValueAnalysis::visit(const ShPtr<OrOpExpr>& expr) {
 	//
 	// Caching
 	//
@@ -1395,7 +1395,7 @@ void ValueAnalysis::visit(ShPtr<OrOpExpr> expr) {
 	OrderedAllVisitor::visit(expr);
 }
 
-void ValueAnalysis::visit(ShPtr<SubOpExpr> expr) {
+void ValueAnalysis::visit(const ShPtr<SubOpExpr>& expr) {
 	//
 	// Caching
 	//
@@ -1406,7 +1406,7 @@ void ValueAnalysis::visit(ShPtr<SubOpExpr> expr) {
 	OrderedAllVisitor::visit(expr);
 }
 
-void ValueAnalysis::visit(ShPtr<TernaryOpExpr> expr) {
+void ValueAnalysis::visit(const ShPtr<TernaryOpExpr>& expr) {
 	//
 	// Caching
 	//
@@ -1417,7 +1417,7 @@ void ValueAnalysis::visit(ShPtr<TernaryOpExpr> expr) {
 	OrderedAllVisitor::visit(expr);
 }
 
-void ValueAnalysis::visit(ShPtr<Variable> var) {
+void ValueAnalysis::visit(const ShPtr<Variable>& var) {
 	//
 	// Caching
 	//
@@ -1439,7 +1439,7 @@ void ValueAnalysis::visit(ShPtr<Variable> var) {
 	valueData->dirNumOfVarUses[var]++;
 }
 
-void ValueAnalysis::visit(ShPtr<BitCastExpr> expr) {
+void ValueAnalysis::visit(const ShPtr<BitCastExpr>& expr) {
 	//
 	// Caching
 	//
@@ -1450,7 +1450,7 @@ void ValueAnalysis::visit(ShPtr<BitCastExpr> expr) {
 	OrderedAllVisitor::visit(expr);
 }
 
-void ValueAnalysis::visit(ShPtr<ExtCastExpr> expr) {
+void ValueAnalysis::visit(const ShPtr<ExtCastExpr>& expr) {
 	//
 	// Caching
 	//
@@ -1461,7 +1461,7 @@ void ValueAnalysis::visit(ShPtr<ExtCastExpr> expr) {
 	OrderedAllVisitor::visit(expr);
 }
 
-void ValueAnalysis::visit(ShPtr<FPToIntCastExpr> expr) {
+void ValueAnalysis::visit(const ShPtr<FPToIntCastExpr>& expr) {
 	//
 	// Caching
 	//
@@ -1472,7 +1472,7 @@ void ValueAnalysis::visit(ShPtr<FPToIntCastExpr> expr) {
 	OrderedAllVisitor::visit(expr);
 }
 
-void ValueAnalysis::visit(ShPtr<IntToFPCastExpr> expr) {
+void ValueAnalysis::visit(const ShPtr<IntToFPCastExpr>& expr) {
 	//
 	// Caching
 	//
@@ -1483,7 +1483,7 @@ void ValueAnalysis::visit(ShPtr<IntToFPCastExpr> expr) {
 	OrderedAllVisitor::visit(expr);
 }
 
-void ValueAnalysis::visit(ShPtr<IntToPtrCastExpr> expr) {
+void ValueAnalysis::visit(const ShPtr<IntToPtrCastExpr>& expr) {
 	//
 	// Caching
 	//
@@ -1494,7 +1494,7 @@ void ValueAnalysis::visit(ShPtr<IntToPtrCastExpr> expr) {
 	OrderedAllVisitor::visit(expr);
 }
 
-void ValueAnalysis::visit(ShPtr<PtrToIntCastExpr> expr) {
+void ValueAnalysis::visit(const ShPtr<PtrToIntCastExpr>& expr) {
 	//
 	// Caching
 	//
@@ -1505,7 +1505,7 @@ void ValueAnalysis::visit(ShPtr<PtrToIntCastExpr> expr) {
 	OrderedAllVisitor::visit(expr);
 }
 
-void ValueAnalysis::visit(ShPtr<TruncCastExpr> expr) {
+void ValueAnalysis::visit(const ShPtr<TruncCastExpr>& expr) {
 	//
 	// Caching
 	//
@@ -1516,7 +1516,7 @@ void ValueAnalysis::visit(ShPtr<TruncCastExpr> expr) {
 	OrderedAllVisitor::visit(expr);
 }
 
-void ValueAnalysis::visit(ShPtr<ConstArray> constant) {
+void ValueAnalysis::visit(const ShPtr<ConstArray>& constant) {
 	//
 	// Caching
 	//
@@ -1527,7 +1527,7 @@ void ValueAnalysis::visit(ShPtr<ConstArray> constant) {
 	OrderedAllVisitor::visit(constant);
 }
 
-void ValueAnalysis::visit(ShPtr<ConstBool> constant) {
+void ValueAnalysis::visit(const ShPtr<ConstBool>& constant) {
 	//
 	// Caching
 	//
@@ -1538,7 +1538,7 @@ void ValueAnalysis::visit(ShPtr<ConstBool> constant) {
 	OrderedAllVisitor::visit(constant);
 }
 
-void ValueAnalysis::visit(ShPtr<ConstFloat> constant) {
+void ValueAnalysis::visit(const ShPtr<ConstFloat>& constant) {
 	//
 	// Caching
 	//
@@ -1549,7 +1549,7 @@ void ValueAnalysis::visit(ShPtr<ConstFloat> constant) {
 	OrderedAllVisitor::visit(constant);
 }
 
-void ValueAnalysis::visit(ShPtr<ConstInt> constant) {
+void ValueAnalysis::visit(const ShPtr<ConstInt>& constant) {
 	//
 	// Caching
 	//
@@ -1560,7 +1560,7 @@ void ValueAnalysis::visit(ShPtr<ConstInt> constant) {
 	OrderedAllVisitor::visit(constant);
 }
 
-void ValueAnalysis::visit(ShPtr<ConstNullPointer> constant) {
+void ValueAnalysis::visit(const ShPtr<ConstNullPointer>& constant) {
 	//
 	// Caching
 	//
@@ -1571,7 +1571,7 @@ void ValueAnalysis::visit(ShPtr<ConstNullPointer> constant) {
 	OrderedAllVisitor::visit(constant);
 }
 
-void ValueAnalysis::visit(ShPtr<ConstString> constant) {
+void ValueAnalysis::visit(const ShPtr<ConstString>& constant) {
 	//
 	// Caching
 	//
@@ -1582,7 +1582,7 @@ void ValueAnalysis::visit(ShPtr<ConstString> constant) {
 	OrderedAllVisitor::visit(constant);
 }
 
-void ValueAnalysis::visit(ShPtr<ConstStruct> constant) {
+void ValueAnalysis::visit(const ShPtr<ConstStruct>& constant) {
 	//
 	// Caching
 	//

@@ -72,7 +72,7 @@ void CallsInModuleObtainer::obtainCallsInFunc(ShPtr<Function> func) {
 	func->accept(this);
 }
 
-void CallsInModuleObtainer::visit(ShPtr<CallExpr> expr) {
+void CallsInModuleObtainer::visit(const ShPtr<CallExpr>& expr) {
 	CallInfo ci = {
 		expr,     // call
 		lastStmt, // stmt

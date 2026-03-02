@@ -32,7 +32,7 @@ GotoStmtOptimizer::GotoStmtOptimizer(ShPtr<Module> module):
 /**
 * @brief Optimize goto statement.
 */
-void GotoStmtOptimizer::visit(ShPtr<GotoStmt> stmt) {
+void GotoStmtOptimizer::visit(const ShPtr<GotoStmt>& stmt) {
 	auto target = stmt->getTarget();
 
 	// goto label

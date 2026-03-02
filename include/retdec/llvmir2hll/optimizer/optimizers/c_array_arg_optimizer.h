@@ -51,7 +51,7 @@ public:
 	/// @name Visitor Interface
 	/// @{
 	using OrderedAllVisitor::visit;
-	void visit(ShPtr<CallExpr> expr) override;
+	void visit(const ShPtr<CallExpr>& expr) override;
 	/// @}
 };
 

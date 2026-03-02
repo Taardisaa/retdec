@@ -36,13 +36,13 @@ private:
 	/// @name Visitor Interface
 	/// @{
 	using OrderedAllVisitor::visit;
-	virtual void visit(ShPtr<Variable> var) override;
-	virtual void visit(ShPtr<ArrayIndexOpExpr> expr) override;
-	virtual void visit(ShPtr<StructIndexOpExpr> expr) override;
-	virtual void visit(ShPtr<DerefOpExpr> expr) override;
-	virtual void visit(ShPtr<AssignStmt> stmt) override;
-	virtual void visit(ShPtr<VarDefStmt> stmt) override;
-	virtual void visit(ShPtr<ForLoopStmt> stmt) override;
+	virtual void visit(const ShPtr<Variable>& var) override;
+	virtual void visit(const ShPtr<ArrayIndexOpExpr>& expr) override;
+	virtual void visit(const ShPtr<StructIndexOpExpr>& expr) override;
+	virtual void visit(const ShPtr<DerefOpExpr>& expr) override;
+	virtual void visit(const ShPtr<AssignStmt>& stmt) override;
+	virtual void visit(const ShPtr<VarDefStmt>& stmt) override;
+	virtual void visit(const ShPtr<ForLoopStmt>& stmt) override;
 	/// @}
 
 private:

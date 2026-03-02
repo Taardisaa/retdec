@@ -43,8 +43,8 @@ private:
 	/// @name Visitor Interface
 	/// @{
 	using OrderedAllVisitor::visit;
-	virtual void visit(ShPtr<CallExpr> expr) override;
-	virtual void visit(ShPtr<CallStmt> stmt) override;
+	virtual void visit(const ShPtr<CallExpr>& expr) override;
+	virtual void visit(const ShPtr<CallStmt>& stmt) override;
 	/// @}
 
 private:

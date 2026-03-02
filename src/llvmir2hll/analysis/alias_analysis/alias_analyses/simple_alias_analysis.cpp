@@ -124,7 +124,7 @@ bool SimpleAliasAnalysis::mayBePointed(ShPtr<Variable> var) const {
 	return hasItem(allAddressedVars, var);
 }
 
-void SimpleAliasAnalysis::visit(ShPtr<AddressOpExpr> expr) {
+void SimpleAliasAnalysis::visit(const ShPtr<AddressOpExpr>& expr) {
 	if (ShPtr<Variable> var = cast<Variable>(expr->getOperand())) {
 		allAddressedVars.insert(var);
 		// Initializers of global variables may contain the `&` operator.

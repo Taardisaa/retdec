@@ -48,15 +48,15 @@ void BreakContinueReturnOptimizer::removeSuccessorWhenAppropriate(
 	}
 }
 
-void BreakContinueReturnOptimizer::visit(ShPtr<BreakStmt> stmt) {
+void BreakContinueReturnOptimizer::visit(const ShPtr<BreakStmt>& stmt) {
 	removeSuccessorWhenAppropriate(stmt);
 }
 
-void BreakContinueReturnOptimizer::visit(ShPtr<ContinueStmt> stmt) {
+void BreakContinueReturnOptimizer::visit(const ShPtr<ContinueStmt>& stmt) {
 	removeSuccessorWhenAppropriate(stmt);
 }
 
-void BreakContinueReturnOptimizer::visit(ShPtr<ReturnStmt> stmt) {
+void BreakContinueReturnOptimizer::visit(const ShPtr<ReturnStmt>& stmt) {
 	removeSuccessorWhenAppropriate(stmt);
 }
 

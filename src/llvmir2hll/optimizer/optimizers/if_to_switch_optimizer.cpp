@@ -36,7 +36,7 @@ IfToSwitchOptimizer::IfToSwitchOptimizer(ShPtr<Module> module,
 	PRECONDITION_NON_NULL(va);
 }
 
-void IfToSwitchOptimizer::visit(ShPtr<IfStmt> stmt) {
+void IfToSwitchOptimizer::visit(const ShPtr<IfStmt>& stmt) {
 	ShPtr<Expression> controlExpr(getControlExprIfConvertibleToSwitch(stmt));
 	if (!controlExpr) {
 		return;

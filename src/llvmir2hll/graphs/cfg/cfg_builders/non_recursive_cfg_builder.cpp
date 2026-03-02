@@ -623,19 +623,19 @@ void NonRecursiveCFGBuilder::createAndAddNode() {
 	cfg->addNode(currNode);
 }
 
-void NonRecursiveCFGBuilder::visit(ShPtr<AssignStmt> stmt) {
+void NonRecursiveCFGBuilder::visit(const ShPtr<AssignStmt>& stmt) {
 	addStatement(stmt);
 }
 
-void NonRecursiveCFGBuilder::visit(ShPtr<VarDefStmt> stmt) {
+void NonRecursiveCFGBuilder::visit(const ShPtr<VarDefStmt>& stmt) {
 	addStatement(stmt);
 }
 
-void NonRecursiveCFGBuilder::visit(ShPtr<CallStmt> stmt) {
+void NonRecursiveCFGBuilder::visit(const ShPtr<CallStmt>& stmt) {
 	addStatement(stmt);
 }
 
-void NonRecursiveCFGBuilder::visit(ShPtr<ReturnStmt> stmt) {
+void NonRecursiveCFGBuilder::visit(const ShPtr<ReturnStmt>& stmt) {
 	resolveGotoTargets(stmt);
 	addStmtToNodeAndToMapOfStmtToNode(stmt);
 
@@ -649,7 +649,7 @@ void NonRecursiveCFGBuilder::visit(ShPtr<ReturnStmt> stmt) {
 	}
 }
 
-void NonRecursiveCFGBuilder::visit(ShPtr<EmptyStmt> stmt) {
+void NonRecursiveCFGBuilder::visit(const ShPtr<EmptyStmt>& stmt) {
 	resolveGotoTargets(stmt);
 
 	// We don't add EmptyStmt to mapping statement to node and don't add
@@ -663,7 +663,7 @@ void NonRecursiveCFGBuilder::visit(ShPtr<EmptyStmt> stmt) {
 	}
 }
 
-void NonRecursiveCFGBuilder::visit(ShPtr<IfStmt> stmt) {
+void NonRecursiveCFGBuilder::visit(const ShPtr<IfStmt>& stmt) {
 	createNewNodeForIfSwitchForWhileStmtAndAddStmtToNode(stmt);
 
 	// Create new jobs for the bodies of the if statement.
@@ -693,7 +693,7 @@ void NonRecursiveCFGBuilder::visit(ShPtr<IfStmt> stmt) {
 	createNewNodeIfStmtHasSucc(stmt);
 }
 
-void NonRecursiveCFGBuilder::visit(ShPtr<SwitchStmt> stmt) {
+void NonRecursiveCFGBuilder::visit(const ShPtr<SwitchStmt>& stmt) {
 	createNewNodeForIfSwitchForWhileStmtAndAddStmtToNode(stmt);
 
 	// Create a new job for each clause.
@@ -721,7 +721,7 @@ void NonRecursiveCFGBuilder::visit(ShPtr<SwitchStmt> stmt) {
 	createNewNodeIfStmtHasSucc(stmt);
 }
 
-void NonRecursiveCFGBuilder::visit(ShPtr<WhileLoopStmt> stmt) {
+void NonRecursiveCFGBuilder::visit(const ShPtr<WhileLoopStmt>& stmt) {
 	createNewNodeForIfSwitchForWhileStmtAndAddStmtToNode(stmt);
 
 	// Create a job for the loop's body.
@@ -742,15 +742,15 @@ void NonRecursiveCFGBuilder::visit(ShPtr<WhileLoopStmt> stmt) {
 	createNewNodeIfStmtHasSucc(stmt);
 }
 
-void NonRecursiveCFGBuilder::visit(ShPtr<ForLoopStmt> stmt) {
+void NonRecursiveCFGBuilder::visit(const ShPtr<ForLoopStmt>& stmt) {
 	visitForOrUForLoop(stmt, stmt->getBody());
 }
 
-void NonRecursiveCFGBuilder::visit(ShPtr<UForLoopStmt> stmt) {
+void NonRecursiveCFGBuilder::visit(const ShPtr<UForLoopStmt>& stmt) {
 	visitForOrUForLoop(stmt, stmt->getBody());
 }
 
-void NonRecursiveCFGBuilder::visit(ShPtr<BreakStmt> stmt) {
+void NonRecursiveCFGBuilder::visit(const ShPtr<BreakStmt>& stmt) {
 	resolveGotoTargets(stmt);
 	addStmtToNodeAndToMapOfStmtToNode(stmt);
 
@@ -763,7 +763,7 @@ void NonRecursiveCFGBuilder::visit(ShPtr<BreakStmt> stmt) {
 	}
 }
 
-void NonRecursiveCFGBuilder::visit(ShPtr<ContinueStmt> stmt) {
+void NonRecursiveCFGBuilder::visit(const ShPtr<ContinueStmt>& stmt) {
 	resolveGotoTargets(stmt);
 	addStmtToNodeAndToMapOfStmtToNode(stmt);
 
@@ -776,7 +776,7 @@ void NonRecursiveCFGBuilder::visit(ShPtr<ContinueStmt> stmt) {
 	}
 }
 
-void NonRecursiveCFGBuilder::visit(ShPtr<GotoStmt> stmt) {
+void NonRecursiveCFGBuilder::visit(const ShPtr<GotoStmt>& stmt) {
 	resolveGotoTargets(stmt);
 	addStmtToNodeAndToMapOfStmtToNode(stmt);
 
@@ -799,7 +799,7 @@ void NonRecursiveCFGBuilder::visit(ShPtr<GotoStmt> stmt) {
 	}
 }
 
-void NonRecursiveCFGBuilder::visit(ShPtr<UnreachableStmt> stmt) {
+void NonRecursiveCFGBuilder::visit(const ShPtr<UnreachableStmt>& stmt) {
 	resolveGotoTargets(stmt);
 	addStmtToNodeAndToMapOfStmtToNode(stmt);
 

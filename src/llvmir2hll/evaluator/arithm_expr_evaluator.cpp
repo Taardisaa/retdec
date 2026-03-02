@@ -154,23 +154,23 @@ std::optional<bool> ArithmExprEvaluator::toBool(ShPtr<Expression> expr, VarConst
 	}
 }
 
-void ArithmExprEvaluator::visit(ShPtr<AddressOpExpr> expr) {
+void ArithmExprEvaluator::visit(const ShPtr<AddressOpExpr>& expr) {
 	canBeEvaluated = false;
 }
 
-void ArithmExprEvaluator::visit(ShPtr<ArrayIndexOpExpr> expr) {
+void ArithmExprEvaluator::visit(const ShPtr<ArrayIndexOpExpr>& expr) {
 	canBeEvaluated = false;
 }
 
-void ArithmExprEvaluator::visit(ShPtr<StructIndexOpExpr> expr) {
+void ArithmExprEvaluator::visit(const ShPtr<StructIndexOpExpr>& expr) {
 	canBeEvaluated = false;
 }
 
-void ArithmExprEvaluator::visit(ShPtr<DerefOpExpr> expr) {
+void ArithmExprEvaluator::visit(const ShPtr<DerefOpExpr>& expr) {
 	canBeEvaluated = false;
 }
 
-void ArithmExprEvaluator::visit(ShPtr<NotOpExpr> expr) {
+void ArithmExprEvaluator::visit(const ShPtr<NotOpExpr>& expr) {
 	OrderedAllVisitor::visit(expr);
 
 	if (canBeEvaluated) {
@@ -197,7 +197,7 @@ void ArithmExprEvaluator::visit(ShPtr<NotOpExpr> expr) {
 	}
 }
 
-void ArithmExprEvaluator::visit(ShPtr<NegOpExpr> expr) {
+void ArithmExprEvaluator::visit(const ShPtr<NegOpExpr>& expr) {
 	OrderedAllVisitor::visit(expr);
 
 	if (canBeEvaluated) {
@@ -223,7 +223,7 @@ void ArithmExprEvaluator::visit(ShPtr<NegOpExpr> expr) {
 	}
 }
 
-void ArithmExprEvaluator::visit(ShPtr<EqOpExpr> expr) {
+void ArithmExprEvaluator::visit(const ShPtr<EqOpExpr>& expr) {
 	OrderedAllVisitor::visit(expr);
 
 	if (canBeEvaluated) {
@@ -254,7 +254,7 @@ void ArithmExprEvaluator::visit(ShPtr<EqOpExpr> expr) {
 	}
 }
 
-void ArithmExprEvaluator::visit(ShPtr<NeqOpExpr> expr) {
+void ArithmExprEvaluator::visit(const ShPtr<NeqOpExpr>& expr) {
 	OrderedAllVisitor::visit(expr);
 
 	if (canBeEvaluated) {
@@ -285,7 +285,7 @@ void ArithmExprEvaluator::visit(ShPtr<NeqOpExpr> expr) {
 	}
 }
 
-void ArithmExprEvaluator::visit(ShPtr<LtEqOpExpr> expr) {
+void ArithmExprEvaluator::visit(const ShPtr<LtEqOpExpr>& expr) {
 	OrderedAllVisitor::visit(expr);
 
 	if (canBeEvaluated) {
@@ -313,7 +313,7 @@ void ArithmExprEvaluator::visit(ShPtr<LtEqOpExpr> expr) {
 	}
 }
 
-void ArithmExprEvaluator::visit(ShPtr<GtEqOpExpr> expr) {
+void ArithmExprEvaluator::visit(const ShPtr<GtEqOpExpr>& expr) {
 	OrderedAllVisitor::visit(expr);
 
 	if (canBeEvaluated) {
@@ -341,7 +341,7 @@ void ArithmExprEvaluator::visit(ShPtr<GtEqOpExpr> expr) {
 	}
 }
 
-void ArithmExprEvaluator::visit(ShPtr<LtOpExpr> expr) {
+void ArithmExprEvaluator::visit(const ShPtr<LtOpExpr>& expr) {
 	OrderedAllVisitor::visit(expr);
 
 	if (canBeEvaluated) {
@@ -368,7 +368,7 @@ void ArithmExprEvaluator::visit(ShPtr<LtOpExpr> expr) {
 	}
 }
 
-void ArithmExprEvaluator::visit(ShPtr<GtOpExpr> expr) {
+void ArithmExprEvaluator::visit(const ShPtr<GtOpExpr>& expr) {
 	OrderedAllVisitor::visit(expr);
 
 	if (canBeEvaluated) {
@@ -395,7 +395,7 @@ void ArithmExprEvaluator::visit(ShPtr<GtOpExpr> expr) {
 	}
 }
 
-void ArithmExprEvaluator::visit(ShPtr<AddOpExpr> expr) {
+void ArithmExprEvaluator::visit(const ShPtr<AddOpExpr>& expr) {
 	OrderedAllVisitor::visit(expr);
 
 	if (canBeEvaluated) {
@@ -425,7 +425,7 @@ void ArithmExprEvaluator::visit(ShPtr<AddOpExpr> expr) {
 	}
 }
 
-void ArithmExprEvaluator::visit(ShPtr<SubOpExpr> expr) {
+void ArithmExprEvaluator::visit(const ShPtr<SubOpExpr>& expr) {
 	OrderedAllVisitor::visit(expr);
 
 	if (canBeEvaluated) {
@@ -455,7 +455,7 @@ void ArithmExprEvaluator::visit(ShPtr<SubOpExpr> expr) {
 	}
 }
 
-void ArithmExprEvaluator::visit(ShPtr<MulOpExpr> expr) {
+void ArithmExprEvaluator::visit(const ShPtr<MulOpExpr>& expr) {
 	OrderedAllVisitor::visit(expr);
 
 	if (canBeEvaluated) {
@@ -485,7 +485,7 @@ void ArithmExprEvaluator::visit(ShPtr<MulOpExpr> expr) {
 	}
 }
 
-void ArithmExprEvaluator::visit(ShPtr<ModOpExpr> expr) {
+void ArithmExprEvaluator::visit(const ShPtr<ModOpExpr>& expr) {
 	OrderedAllVisitor::visit(expr);
 
 	if (canBeEvaluated) {
@@ -513,7 +513,7 @@ void ArithmExprEvaluator::visit(ShPtr<ModOpExpr> expr) {
 	}
 }
 
-void ArithmExprEvaluator::visit(ShPtr<DivOpExpr> expr) {
+void ArithmExprEvaluator::visit(const ShPtr<DivOpExpr>& expr) {
 	OrderedAllVisitor::visit(expr);
 
 	if (canBeEvaluated) {
@@ -543,7 +543,7 @@ void ArithmExprEvaluator::visit(ShPtr<DivOpExpr> expr) {
 	}
 }
 
-void ArithmExprEvaluator::visit(ShPtr<AndOpExpr> expr) {
+void ArithmExprEvaluator::visit(const ShPtr<AndOpExpr>& expr) {
 	OrderedAllVisitor::visit(expr);
 
 	if (canBeEvaluated) {
@@ -574,7 +574,7 @@ void ArithmExprEvaluator::visit(ShPtr<AndOpExpr> expr) {
 	}
 }
 
-void ArithmExprEvaluator::visit(ShPtr<OrOpExpr> expr) {
+void ArithmExprEvaluator::visit(const ShPtr<OrOpExpr>& expr) {
 	OrderedAllVisitor::visit(expr);
 
 	if (canBeEvaluated) {
@@ -605,7 +605,7 @@ void ArithmExprEvaluator::visit(ShPtr<OrOpExpr> expr) {
 	}
 }
 
-void ArithmExprEvaluator::visit(ShPtr<BitAndOpExpr> expr) {
+void ArithmExprEvaluator::visit(const ShPtr<BitAndOpExpr>& expr) {
 	OrderedAllVisitor::visit(expr);
 
 	if (canBeEvaluated) {
@@ -628,7 +628,7 @@ void ArithmExprEvaluator::visit(ShPtr<BitAndOpExpr> expr) {
 	}
 }
 
-void ArithmExprEvaluator::visit(ShPtr<BitOrOpExpr> expr) {
+void ArithmExprEvaluator::visit(const ShPtr<BitOrOpExpr>& expr) {
 	OrderedAllVisitor::visit(expr);
 
 	if (canBeEvaluated) {
@@ -651,7 +651,7 @@ void ArithmExprEvaluator::visit(ShPtr<BitOrOpExpr> expr) {
 	}
 }
 
-void ArithmExprEvaluator::visit(ShPtr<BitXorOpExpr> expr) {
+void ArithmExprEvaluator::visit(const ShPtr<BitXorOpExpr>& expr) {
 	OrderedAllVisitor::visit(expr);
 
 	if (canBeEvaluated) {
@@ -674,7 +674,7 @@ void ArithmExprEvaluator::visit(ShPtr<BitXorOpExpr> expr) {
 	}
 }
 
-void ArithmExprEvaluator::visit(ShPtr<BitShlOpExpr> expr) {
+void ArithmExprEvaluator::visit(const ShPtr<BitShlOpExpr>& expr) {
 	OrderedAllVisitor::visit(expr);
 
 	if (canBeEvaluated) {
@@ -700,7 +700,7 @@ void ArithmExprEvaluator::visit(ShPtr<BitShlOpExpr> expr) {
 	}
 }
 
-void ArithmExprEvaluator::visit(ShPtr<BitShrOpExpr> expr) {
+void ArithmExprEvaluator::visit(const ShPtr<BitShrOpExpr>& expr) {
 	OrderedAllVisitor::visit(expr);
 
 	if (canBeEvaluated) {
@@ -736,7 +736,7 @@ void ArithmExprEvaluator::visit(ShPtr<BitShrOpExpr> expr) {
 	}
 }
 
-void ArithmExprEvaluator::visit(ShPtr<TernaryOpExpr> expr) {
+void ArithmExprEvaluator::visit(const ShPtr<TernaryOpExpr>& expr) {
 	OrderedAllVisitor::visit(expr);
 
 	if (canBeEvaluated) {
@@ -760,11 +760,11 @@ void ArithmExprEvaluator::visit(ShPtr<TernaryOpExpr> expr) {
 	}
 }
 
-void ArithmExprEvaluator::visit(ShPtr<CallExpr> expr) {
+void ArithmExprEvaluator::visit(const ShPtr<CallExpr>& expr) {
 	canBeEvaluated = false;
 }
 
-void ArithmExprEvaluator::visit(ShPtr<BitCastExpr> expr) {
+void ArithmExprEvaluator::visit(const ShPtr<BitCastExpr>& expr) {
 	OrderedAllVisitor::visit(expr);
 
 	if (canBeEvaluated) {
@@ -774,7 +774,7 @@ void ArithmExprEvaluator::visit(ShPtr<BitCastExpr> expr) {
 	}
 }
 
-void ArithmExprEvaluator::visit(ShPtr<ExtCastExpr> expr) {
+void ArithmExprEvaluator::visit(const ShPtr<ExtCastExpr>& expr) {
 	OrderedAllVisitor::visit(expr);
 
 	if (canBeEvaluated) {
@@ -784,7 +784,7 @@ void ArithmExprEvaluator::visit(ShPtr<ExtCastExpr> expr) {
 	}
 }
 
-void ArithmExprEvaluator::visit(ShPtr<TruncCastExpr> expr) {
+void ArithmExprEvaluator::visit(const ShPtr<TruncCastExpr>& expr) {
 	OrderedAllVisitor::visit(expr);
 
 	if (canBeEvaluated) {
@@ -794,7 +794,7 @@ void ArithmExprEvaluator::visit(ShPtr<TruncCastExpr> expr) {
 	}
 }
 
-void ArithmExprEvaluator::visit(ShPtr<FPToIntCastExpr> expr) {
+void ArithmExprEvaluator::visit(const ShPtr<FPToIntCastExpr>& expr) {
 	OrderedAllVisitor::visit(expr);
 
 	if (canBeEvaluated) {
@@ -804,7 +804,7 @@ void ArithmExprEvaluator::visit(ShPtr<FPToIntCastExpr> expr) {
 	}
 }
 
-void ArithmExprEvaluator::visit(ShPtr<IntToFPCastExpr> expr) {
+void ArithmExprEvaluator::visit(const ShPtr<IntToFPCastExpr>& expr) {
 	OrderedAllVisitor::visit(expr);
 
 	if (canBeEvaluated) {
@@ -814,47 +814,47 @@ void ArithmExprEvaluator::visit(ShPtr<IntToFPCastExpr> expr) {
 	}
 }
 
-void ArithmExprEvaluator::visit(ShPtr<IntToPtrCastExpr> expr) {
+void ArithmExprEvaluator::visit(const ShPtr<IntToPtrCastExpr>& expr) {
 	canBeEvaluated = false;
 }
 
-void ArithmExprEvaluator::visit(ShPtr<PtrToIntCastExpr> expr) {
+void ArithmExprEvaluator::visit(const ShPtr<PtrToIntCastExpr>& expr) {
 	canBeEvaluated = false;
 }
 
-void ArithmExprEvaluator::visit(ShPtr<ConstBool> constant) {
+void ArithmExprEvaluator::visit(const ShPtr<ConstBool>& constant) {
 	stackOfResults.push(constant);
 }
 
-void ArithmExprEvaluator::visit(ShPtr<ConstFloat> constant) {
+void ArithmExprEvaluator::visit(const ShPtr<ConstFloat>& constant) {
 	stackOfResults.push(constant);
 }
 
-void ArithmExprEvaluator::visit(ShPtr<ConstInt> constant) {
+void ArithmExprEvaluator::visit(const ShPtr<ConstInt>& constant) {
 	stackOfResults.push(constant);
 }
 
-void ArithmExprEvaluator::visit(ShPtr<ConstSymbol> constant) {
+void ArithmExprEvaluator::visit(const ShPtr<ConstSymbol>& constant) {
 	stackOfResults.push(constant->getValue());
 }
 
-void ArithmExprEvaluator::visit(ShPtr<ConstNullPointer> constant) {
+void ArithmExprEvaluator::visit(const ShPtr<ConstNullPointer>& constant) {
 	canBeEvaluated = false;
 }
 
-void ArithmExprEvaluator::visit(ShPtr<ConstString> constant) {
+void ArithmExprEvaluator::visit(const ShPtr<ConstString>& constant) {
 	canBeEvaluated = false;
 }
 
-void ArithmExprEvaluator::visit(ShPtr<ConstArray> constant) {
+void ArithmExprEvaluator::visit(const ShPtr<ConstArray>& constant) {
 	canBeEvaluated = false;
 }
 
-void ArithmExprEvaluator::visit(ShPtr<ConstStruct> constant) {
+void ArithmExprEvaluator::visit(const ShPtr<ConstStruct>& constant) {
 	canBeEvaluated = false;
 }
 
-void ArithmExprEvaluator::visit(ShPtr<Variable> var) {
+void ArithmExprEvaluator::visit(const ShPtr<Variable>& var) {
 	auto it = varValues->find(var);
 	if (it != varValues->end()) {
 		stackOfResults.push(it->second);

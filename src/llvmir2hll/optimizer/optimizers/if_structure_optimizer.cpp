@@ -42,7 +42,7 @@ IfStructureOptimizer::IfStructureOptimizer(ShPtr<Module> module):
 		PRECONDITION_NON_NULL(module);
 	}
 
-void IfStructureOptimizer::visit(ShPtr<IfStmt> stmt) {
+void IfStructureOptimizer::visit(const ShPtr<IfStmt>& stmt) {
 	// First of all, visit nested and subsequent statements.
 	FuncOptimizer::visit(stmt);
 

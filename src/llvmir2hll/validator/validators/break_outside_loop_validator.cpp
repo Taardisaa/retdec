@@ -30,7 +30,7 @@ std::string BreakOutsideLoopValidator::getId() const {
 	return BREAK_OUTSIDE_LOOP_VALIDATOR_ID;
 }
 
-void BreakOutsideLoopValidator::visit(ShPtr<BreakStmt> stmt) {
+void BreakOutsideLoopValidator::visit(const ShPtr<BreakStmt>& stmt) {
 	// A break statement has to be inside of a loop or a switch statement. To
 	// this end, get the innermost loop or switch.
 	ShPtr<Statement> innLoopOrSwitch(getInnermostLoopOrSwitch(stmt));
@@ -43,7 +43,7 @@ void BreakOutsideLoopValidator::visit(ShPtr<BreakStmt> stmt) {
 	OrderedAllVisitor::visit(stmt);
 }
 
-void BreakOutsideLoopValidator::visit(ShPtr<ContinueStmt> stmt) {
+void BreakOutsideLoopValidator::visit(const ShPtr<ContinueStmt>& stmt) {
 	// A continue statement has to be inside of a loop. To this end, get the
 	// innermost loop.
 	ShPtr<Statement> innLoop(getInnermostLoop(stmt));

@@ -113,7 +113,7 @@ std::string ValueTextReprVisitor::getTextRepr(ShPtr<Value> value) {
 	return visitor->textRepr.str();
 }
 
-void ValueTextReprVisitor::visit(ShPtr<GlobalVarDef> varDef) {
+void ValueTextReprVisitor::visit(const ShPtr<GlobalVarDef>& varDef) {
 	varDef->getVar()->accept(this);
 
 	if (ShPtr<Expression> init = varDef->getInitializer()) {
@@ -122,7 +122,7 @@ void ValueTextReprVisitor::visit(ShPtr<GlobalVarDef> varDef) {
 	}
 }
 
-void ValueTextReprVisitor::visit(ShPtr<Function> func) {
+void ValueTextReprVisitor::visit(const ShPtr<Function>& func) {
 	textRepr << "def " << func->getName() << "(";
 
 	// For each parameter...
@@ -152,17 +152,17 @@ void ValueTextReprVisitor::visit(ShPtr<Function> func) {
 	textRepr << ")";
 }
 
-void ValueTextReprVisitor::visit(ShPtr<Variable> var) {
+void ValueTextReprVisitor::visit(const ShPtr<Variable>& var) {
 	textRepr << var->getName();
 }
 
-void ValueTextReprVisitor::visit(ShPtr<AddressOpExpr> expr) {
+void ValueTextReprVisitor::visit(const ShPtr<AddressOpExpr>& expr) {
 	textRepr << "&(";
 	expr->getOperand()->accept(this);
 	textRepr << ")";
 }
 
-void ValueTextReprVisitor::visit(ShPtr<AssignOpExpr> expr) {
+void ValueTextReprVisitor::visit(const ShPtr<AssignOpExpr>& expr) {
 	textRepr << "(";
 	expr->getFirstOperand()->accept(this);
 	textRepr << " = ";
@@ -170,39 +170,39 @@ void ValueTextReprVisitor::visit(ShPtr<AssignOpExpr> expr) {
 	textRepr << ")";
 }
 
-void ValueTextReprVisitor::visit(ShPtr<ArrayIndexOpExpr> expr) {
+void ValueTextReprVisitor::visit(const ShPtr<ArrayIndexOpExpr>& expr) {
 	expr->getFirstOperand()->accept(this);
 	textRepr << "[";
 	expr->getSecondOperand()->accept(this);
 	textRepr << "]";
 }
 
-void ValueTextReprVisitor::visit(ShPtr<StructIndexOpExpr> expr) {
+void ValueTextReprVisitor::visit(const ShPtr<StructIndexOpExpr>& expr) {
 	expr->getFirstOperand()->accept(this);
 	textRepr << "['";
 	expr->getSecondOperand()->accept(this);
 	textRepr << "']";
 }
 
-void ValueTextReprVisitor::visit(ShPtr<DerefOpExpr> expr) {
+void ValueTextReprVisitor::visit(const ShPtr<DerefOpExpr>& expr) {
 	textRepr << "*(";
 	expr->getOperand()->accept(this);
 	textRepr << ")";
 }
 
-void ValueTextReprVisitor::visit(ShPtr<NotOpExpr> expr) {
+void ValueTextReprVisitor::visit(const ShPtr<NotOpExpr>& expr) {
 	textRepr << "not (";
 	expr->getOperand()->accept(this);
 	textRepr << ")";
 }
 
-void ValueTextReprVisitor::visit(ShPtr<NegOpExpr> expr) {
+void ValueTextReprVisitor::visit(const ShPtr<NegOpExpr>& expr) {
 	textRepr << "-(";
 	expr->getOperand()->accept(this);
 	textRepr << ")";
 }
 
-void ValueTextReprVisitor::visit(ShPtr<EqOpExpr> expr) {
+void ValueTextReprVisitor::visit(const ShPtr<EqOpExpr>& expr) {
 	textRepr << "(";
 	expr->getFirstOperand()->accept(this);
 	textRepr << " == ";
@@ -210,7 +210,7 @@ void ValueTextReprVisitor::visit(ShPtr<EqOpExpr> expr) {
 	textRepr << ")";
 }
 
-void ValueTextReprVisitor::visit(ShPtr<NeqOpExpr> expr) {
+void ValueTextReprVisitor::visit(const ShPtr<NeqOpExpr>& expr) {
 	textRepr << "(";
 	expr->getFirstOperand()->accept(this);
 	textRepr << " != ";
@@ -218,7 +218,7 @@ void ValueTextReprVisitor::visit(ShPtr<NeqOpExpr> expr) {
 	textRepr << ")";
 }
 
-void ValueTextReprVisitor::visit(ShPtr<LtOpExpr> expr) {
+void ValueTextReprVisitor::visit(const ShPtr<LtOpExpr>& expr) {
 	textRepr << "(";
 	expr->getFirstOperand()->accept(this);
 	textRepr << " < ";
@@ -226,7 +226,7 @@ void ValueTextReprVisitor::visit(ShPtr<LtOpExpr> expr) {
 	textRepr << ")";
 }
 
-void ValueTextReprVisitor::visit(ShPtr<GtOpExpr> expr) {
+void ValueTextReprVisitor::visit(const ShPtr<GtOpExpr>& expr) {
 	textRepr << "(";
 	expr->getFirstOperand()->accept(this);
 	textRepr << " > ";
@@ -234,7 +234,7 @@ void ValueTextReprVisitor::visit(ShPtr<GtOpExpr> expr) {
 	textRepr << ")";
 }
 
-void ValueTextReprVisitor::visit(ShPtr<LtEqOpExpr> expr) {
+void ValueTextReprVisitor::visit(const ShPtr<LtEqOpExpr>& expr) {
 	textRepr << "(";
 	expr->getFirstOperand()->accept(this);
 	textRepr << " <= ";
@@ -242,7 +242,7 @@ void ValueTextReprVisitor::visit(ShPtr<LtEqOpExpr> expr) {
 	textRepr << ")";
 }
 
-void ValueTextReprVisitor::visit(ShPtr<GtEqOpExpr> expr) {
+void ValueTextReprVisitor::visit(const ShPtr<GtEqOpExpr>& expr) {
 	textRepr << "(";
 	expr->getFirstOperand()->accept(this);
 	textRepr << " >= ";
@@ -250,7 +250,7 @@ void ValueTextReprVisitor::visit(ShPtr<GtEqOpExpr> expr) {
 	textRepr << ")";
 }
 
-void ValueTextReprVisitor::visit(ShPtr<TernaryOpExpr> expr) {
+void ValueTextReprVisitor::visit(const ShPtr<TernaryOpExpr>& expr) {
 	textRepr << "(";
 	expr->getTrueValue()->accept(this);
 	textRepr << " if ";
@@ -260,7 +260,7 @@ void ValueTextReprVisitor::visit(ShPtr<TernaryOpExpr> expr) {
 	textRepr << ")";
 }
 
-void ValueTextReprVisitor::visit(ShPtr<AddOpExpr> expr) {
+void ValueTextReprVisitor::visit(const ShPtr<AddOpExpr>& expr) {
 	textRepr << "(";
 	expr->getFirstOperand()->accept(this);
 	textRepr << " + ";
@@ -268,7 +268,7 @@ void ValueTextReprVisitor::visit(ShPtr<AddOpExpr> expr) {
 	textRepr << ")";
 }
 
-void ValueTextReprVisitor::visit(ShPtr<SubOpExpr> expr) {
+void ValueTextReprVisitor::visit(const ShPtr<SubOpExpr>& expr) {
 	textRepr << "(";
 	expr->getFirstOperand()->accept(this);
 	textRepr << " - ";
@@ -276,7 +276,7 @@ void ValueTextReprVisitor::visit(ShPtr<SubOpExpr> expr) {
 	textRepr << ")";
 }
 
-void ValueTextReprVisitor::visit(ShPtr<MulOpExpr> expr) {
+void ValueTextReprVisitor::visit(const ShPtr<MulOpExpr>& expr) {
 	textRepr << "(";
 	expr->getFirstOperand()->accept(this);
 	textRepr << " * ";
@@ -284,7 +284,7 @@ void ValueTextReprVisitor::visit(ShPtr<MulOpExpr> expr) {
 	textRepr << ")";
 }
 
-void ValueTextReprVisitor::visit(ShPtr<ModOpExpr> expr) {
+void ValueTextReprVisitor::visit(const ShPtr<ModOpExpr>& expr) {
 	textRepr << "(";
 	expr->getFirstOperand()->accept(this);
 	textRepr << " % ";
@@ -292,7 +292,7 @@ void ValueTextReprVisitor::visit(ShPtr<ModOpExpr> expr) {
 	textRepr << ")";
 }
 
-void ValueTextReprVisitor::visit(ShPtr<DivOpExpr> expr) {
+void ValueTextReprVisitor::visit(const ShPtr<DivOpExpr>& expr) {
 	textRepr << "(";
 	expr->getFirstOperand()->accept(this);
 	textRepr << " / ";
@@ -300,7 +300,7 @@ void ValueTextReprVisitor::visit(ShPtr<DivOpExpr> expr) {
 	textRepr << ")";
 }
 
-void ValueTextReprVisitor::visit(ShPtr<AndOpExpr> expr) {
+void ValueTextReprVisitor::visit(const ShPtr<AndOpExpr>& expr) {
 	textRepr << "(";
 	expr->getFirstOperand()->accept(this);
 	textRepr << " and ";
@@ -308,7 +308,7 @@ void ValueTextReprVisitor::visit(ShPtr<AndOpExpr> expr) {
 	textRepr << ")";
 }
 
-void ValueTextReprVisitor::visit(ShPtr<OrOpExpr> expr) {
+void ValueTextReprVisitor::visit(const ShPtr<OrOpExpr>& expr) {
 	textRepr << "(";
 	expr->getFirstOperand()->accept(this);
 	textRepr << " or ";
@@ -316,7 +316,7 @@ void ValueTextReprVisitor::visit(ShPtr<OrOpExpr> expr) {
 	textRepr << ")";
 }
 
-void ValueTextReprVisitor::visit(ShPtr<BitAndOpExpr> expr) {
+void ValueTextReprVisitor::visit(const ShPtr<BitAndOpExpr>& expr) {
 	textRepr << "(";
 	expr->getFirstOperand()->accept(this);
 	textRepr << " & ";
@@ -324,7 +324,7 @@ void ValueTextReprVisitor::visit(ShPtr<BitAndOpExpr> expr) {
 	textRepr << ")";
 }
 
-void ValueTextReprVisitor::visit(ShPtr<BitOrOpExpr> expr) {
+void ValueTextReprVisitor::visit(const ShPtr<BitOrOpExpr>& expr) {
 	textRepr << "(";
 	expr->getFirstOperand()->accept(this);
 	textRepr << " | ";
@@ -332,7 +332,7 @@ void ValueTextReprVisitor::visit(ShPtr<BitOrOpExpr> expr) {
 	textRepr << ")";
 }
 
-void ValueTextReprVisitor::visit(ShPtr<BitXorOpExpr> expr) {
+void ValueTextReprVisitor::visit(const ShPtr<BitXorOpExpr>& expr) {
 	textRepr << "(";
 	expr->getFirstOperand()->accept(this);
 	textRepr << " ^ ";
@@ -340,7 +340,7 @@ void ValueTextReprVisitor::visit(ShPtr<BitXorOpExpr> expr) {
 	textRepr << ")";
 }
 
-void ValueTextReprVisitor::visit(ShPtr<BitShlOpExpr> expr) {
+void ValueTextReprVisitor::visit(const ShPtr<BitShlOpExpr>& expr) {
 	textRepr << "(";
 	expr->getFirstOperand()->accept(this);
 	textRepr << " << ";
@@ -348,7 +348,7 @@ void ValueTextReprVisitor::visit(ShPtr<BitShlOpExpr> expr) {
 	textRepr << ")";
 }
 
-void ValueTextReprVisitor::visit(ShPtr<BitShrOpExpr> expr) {
+void ValueTextReprVisitor::visit(const ShPtr<BitShrOpExpr>& expr) {
 	textRepr << "(";
 	expr->getFirstOperand()->accept(this);
 	textRepr << " >> ";
@@ -356,7 +356,7 @@ void ValueTextReprVisitor::visit(ShPtr<BitShrOpExpr> expr) {
 	textRepr << ")";
 }
 
-void ValueTextReprVisitor::visit(ShPtr<CallExpr> expr) {
+void ValueTextReprVisitor::visit(const ShPtr<CallExpr>& expr) {
 	expr->getCalledExpr()->accept(this);
 	textRepr << "(";
 	// For each argument...
@@ -371,7 +371,7 @@ void ValueTextReprVisitor::visit(ShPtr<CallExpr> expr) {
 	textRepr << ")";
 }
 
-void ValueTextReprVisitor::visit(ShPtr<CommaOpExpr> expr) {
+void ValueTextReprVisitor::visit(const ShPtr<CommaOpExpr>& expr) {
 	textRepr << "(";
 	expr->getFirstOperand()->accept(this);
 	textRepr << ", ";
@@ -380,7 +380,7 @@ void ValueTextReprVisitor::visit(ShPtr<CommaOpExpr> expr) {
 }
 
 // Casts.
-void ValueTextReprVisitor::visit(ShPtr<BitCastExpr> expr) {
+void ValueTextReprVisitor::visit(const ShPtr<BitCastExpr>& expr) {
 	textRepr << "BitCastExpr<";
 	expr->getType()->accept(this);
 	textRepr << ">(";
@@ -388,7 +388,7 @@ void ValueTextReprVisitor::visit(ShPtr<BitCastExpr> expr) {
 	textRepr << ")";
 }
 
-void ValueTextReprVisitor::visit(ShPtr<ExtCastExpr> expr) {
+void ValueTextReprVisitor::visit(const ShPtr<ExtCastExpr>& expr) {
 	textRepr << "ExtCastExpr<";
 	expr->getType()->accept(this);
 	textRepr << ">(";
@@ -396,7 +396,7 @@ void ValueTextReprVisitor::visit(ShPtr<ExtCastExpr> expr) {
 	textRepr << ")";
 }
 
-void ValueTextReprVisitor::visit(ShPtr<TruncCastExpr> expr) {
+void ValueTextReprVisitor::visit(const ShPtr<TruncCastExpr>& expr) {
 	textRepr << "TruncCastExpr<";
 	expr->getType()->accept(this);
 	textRepr << ">(";
@@ -404,7 +404,7 @@ void ValueTextReprVisitor::visit(ShPtr<TruncCastExpr> expr) {
 	textRepr << ")";
 }
 
-void ValueTextReprVisitor::visit(ShPtr<FPToIntCastExpr> expr) {
+void ValueTextReprVisitor::visit(const ShPtr<FPToIntCastExpr>& expr) {
 	textRepr << "FPToIntCastExpr<";
 	expr->getType()->accept(this);
 	textRepr << ">(";
@@ -412,7 +412,7 @@ void ValueTextReprVisitor::visit(ShPtr<FPToIntCastExpr> expr) {
 	textRepr << ")";
 }
 
-void ValueTextReprVisitor::visit(ShPtr<IntToFPCastExpr> expr) {
+void ValueTextReprVisitor::visit(const ShPtr<IntToFPCastExpr>& expr) {
 	textRepr << "IntToFPCastExpr<";
 	expr->getType()->accept(this);
 	textRepr << ">(";
@@ -420,7 +420,7 @@ void ValueTextReprVisitor::visit(ShPtr<IntToFPCastExpr> expr) {
 	textRepr << ")";
 }
 
-void ValueTextReprVisitor::visit(ShPtr<IntToPtrCastExpr> expr) {
+void ValueTextReprVisitor::visit(const ShPtr<IntToPtrCastExpr>& expr) {
 	textRepr << "IntToPtrCastExpr<";
 	expr->getType()->accept(this);
 	textRepr << ">(";
@@ -428,7 +428,7 @@ void ValueTextReprVisitor::visit(ShPtr<IntToPtrCastExpr> expr) {
 	textRepr << ")";
 }
 
-void ValueTextReprVisitor::visit(ShPtr<PtrToIntCastExpr> expr) {
+void ValueTextReprVisitor::visit(const ShPtr<PtrToIntCastExpr>& expr) {
 	textRepr << "PtrToIntCastExpr<";
 	expr->getType()->accept(this);
 	textRepr << ">(";
@@ -437,29 +437,29 @@ void ValueTextReprVisitor::visit(ShPtr<PtrToIntCastExpr> expr) {
 }
 // End of casts.
 
-void ValueTextReprVisitor::visit(ShPtr<ConstBool> constant) {
+void ValueTextReprVisitor::visit(const ShPtr<ConstBool>& constant) {
 	textRepr << (constant->getValue() ? "True" : "False");
 }
 
-void ValueTextReprVisitor::visit(ShPtr<ConstFloat> constant) {
+void ValueTextReprVisitor::visit(const ShPtr<ConstFloat>& constant) {
 	textRepr << constant->toString();
 }
 
-void ValueTextReprVisitor::visit(ShPtr<ConstInt> constant) {
+void ValueTextReprVisitor::visit(const ShPtr<ConstInt>& constant) {
 	textRepr << constant->toString();
 }
 
-void ValueTextReprVisitor::visit(ShPtr<ConstNullPointer> constant) {
+void ValueTextReprVisitor::visit(const ShPtr<ConstNullPointer>& constant) {
 	textRepr << "NULL";
 }
 
-void ValueTextReprVisitor::visit(ShPtr<ConstString> constant) {
+void ValueTextReprVisitor::visit(const ShPtr<ConstString>& constant) {
 	textRepr << "\"";
 	textRepr << constant->getValueAsEscapedCString();
 	textRepr << "\"";
 }
 
-void ValueTextReprVisitor::visit(ShPtr<ConstArray> constant) {
+void ValueTextReprVisitor::visit(const ShPtr<ConstArray>& constant) {
 	if (constant->isInitialized()) {
 		textRepr << "[";
 		bool first = true;
@@ -496,7 +496,7 @@ void ValueTextReprVisitor::visit(ShPtr<ConstArray> constant) {
 	}
 }
 
-void ValueTextReprVisitor::visit(ShPtr<ConstStruct> constant) {
+void ValueTextReprVisitor::visit(const ShPtr<ConstStruct>& constant) {
 	textRepr << "{";
 	bool first = true;
 	for (const auto &member : constant->getValue()) {
@@ -512,20 +512,20 @@ void ValueTextReprVisitor::visit(ShPtr<ConstStruct> constant) {
 	textRepr << "}";
 }
 
-void ValueTextReprVisitor::visit(ShPtr<ConstSymbol> constant) {
+void ValueTextReprVisitor::visit(const ShPtr<ConstSymbol>& constant) {
 	// (name -> value)
 	textRepr << "(" << constant->getName() << " -> ";
 	constant->getValue()->accept(this);
 	textRepr << ")";
 }
 
-void ValueTextReprVisitor::visit(ShPtr<AssignStmt> stmt) {
+void ValueTextReprVisitor::visit(const ShPtr<AssignStmt>& stmt) {
 	stmt->getLhs()->accept(this);
 	textRepr << " = ";
 	stmt->getRhs()->accept(this);
 }
 
-void ValueTextReprVisitor::visit(ShPtr<VarDefStmt> stmt) {
+void ValueTextReprVisitor::visit(const ShPtr<VarDefStmt>& stmt) {
 	stmt->getVar()->accept(this);
 
 	if (ShPtr<Expression> init = stmt->getInitializer()) {
@@ -534,11 +534,11 @@ void ValueTextReprVisitor::visit(ShPtr<VarDefStmt> stmt) {
 	}
 }
 
-void ValueTextReprVisitor::visit(ShPtr<CallStmt> stmt) {
+void ValueTextReprVisitor::visit(const ShPtr<CallStmt>& stmt) {
 	stmt->getCall()->accept(this);
 }
 
-void ValueTextReprVisitor::visit(ShPtr<ReturnStmt> stmt) {
+void ValueTextReprVisitor::visit(const ShPtr<ReturnStmt>& stmt) {
 	textRepr << "return";
 	if (ShPtr<Expression> retVal = stmt->getRetVal()) {
 		textRepr << " ";
@@ -546,11 +546,11 @@ void ValueTextReprVisitor::visit(ShPtr<ReturnStmt> stmt) {
 	}
 }
 
-void ValueTextReprVisitor::visit(ShPtr<EmptyStmt> stmt) {
+void ValueTextReprVisitor::visit(const ShPtr<EmptyStmt>& stmt) {
 	textRepr << "# empty statement";
 }
 
-void ValueTextReprVisitor::visit(ShPtr<IfStmt> stmt) {
+void ValueTextReprVisitor::visit(const ShPtr<IfStmt>& stmt) {
 	// Emit the first if clause and other else-if clauses (if any).
 	for (auto i = stmt->clause_begin(), e = stmt->clause_end(); i != e; ++i) {
 		textRepr << (i == stmt->clause_begin() ? "if " : "\nelif ");
@@ -564,7 +564,7 @@ void ValueTextReprVisitor::visit(ShPtr<IfStmt> stmt) {
 	}
 }
 
-void ValueTextReprVisitor::visit(ShPtr<SwitchStmt> stmt) {
+void ValueTextReprVisitor::visit(const ShPtr<SwitchStmt>& stmt) {
 	textRepr << "switch ";
 	stmt->getControlExpr()->accept(this);
 	textRepr << ":";
@@ -580,13 +580,13 @@ void ValueTextReprVisitor::visit(ShPtr<SwitchStmt> stmt) {
 	}
 }
 
-void ValueTextReprVisitor::visit(ShPtr<WhileLoopStmt> stmt) {
+void ValueTextReprVisitor::visit(const ShPtr<WhileLoopStmt>& stmt) {
 	textRepr << "while ";
 	stmt->getCondition()->accept(this);
 	textRepr << ":";
 }
 
-void ValueTextReprVisitor::visit(ShPtr<ForLoopStmt> stmt) {
+void ValueTextReprVisitor::visit(const ShPtr<ForLoopStmt>& stmt) {
 	textRepr << "for ";
 	stmt->getIndVar()->accept(this);
 	textRepr << " in range(";
@@ -614,7 +614,7 @@ void ValueTextReprVisitor::visit(ShPtr<ForLoopStmt> stmt) {
 	textRepr << "):";
 }
 
-void ValueTextReprVisitor::visit(ShPtr<UForLoopStmt> stmt) {
+void ValueTextReprVisitor::visit(const ShPtr<UForLoopStmt>& stmt) {
 	// Use a C version because Python does not support our "universal" for
 	// loops.
 	textRepr << "for (";
@@ -632,59 +632,59 @@ void ValueTextReprVisitor::visit(ShPtr<UForLoopStmt> stmt) {
 	textRepr << "):";
 }
 
-void ValueTextReprVisitor::visit(ShPtr<BreakStmt> stmt) {
+void ValueTextReprVisitor::visit(const ShPtr<BreakStmt>& stmt) {
 	textRepr << "break";
 }
 
-void ValueTextReprVisitor::visit(ShPtr<ContinueStmt> stmt) {
+void ValueTextReprVisitor::visit(const ShPtr<ContinueStmt>& stmt) {
 	textRepr << "continue";
 }
 
-void ValueTextReprVisitor::visit(ShPtr<GotoStmt> stmt) {
+void ValueTextReprVisitor::visit(const ShPtr<GotoStmt>& stmt) {
 	textRepr << "goto " << stmt->getTarget()->getLabel();
 }
 
-void ValueTextReprVisitor::visit(ShPtr<UnreachableStmt> stmt) {
+void ValueTextReprVisitor::visit(const ShPtr<UnreachableStmt>& stmt) {
 	textRepr << "# UNREACHABLE";
 }
 
-void ValueTextReprVisitor::visit(ShPtr<FloatType> type) {
+void ValueTextReprVisitor::visit(const ShPtr<FloatType>& type) {
 	textRepr << "double";
 }
 
-void ValueTextReprVisitor::visit(ShPtr<IntType> type) {
+void ValueTextReprVisitor::visit(const ShPtr<IntType>& type) {
 	if (type->isUnsigned()) {
 		textRepr << "u";
 	}
 	textRepr << "int" << type->getSize();
 }
 
-void ValueTextReprVisitor::visit(ShPtr<PointerType> type) {
+void ValueTextReprVisitor::visit(const ShPtr<PointerType>& type) {
 	textRepr << "ptr";
 }
 
-void ValueTextReprVisitor::visit(ShPtr<StringType> type) {
+void ValueTextReprVisitor::visit(const ShPtr<StringType>& type) {
 	textRepr << "string";
 }
 
-void ValueTextReprVisitor::visit(ShPtr<ArrayType> type) {
+void ValueTextReprVisitor::visit(const ShPtr<ArrayType>& type) {
 	textRepr << "array";
 }
 
-void ValueTextReprVisitor::visit(ShPtr<StructType> type) {
+void ValueTextReprVisitor::visit(const ShPtr<StructType>& type) {
 	textRepr << "struct (" <<
 		(type->hasName() ? type->getName() : "anonymous") << ")";
 }
 
-void ValueTextReprVisitor::visit(ShPtr<FunctionType> type) {
+void ValueTextReprVisitor::visit(const ShPtr<FunctionType>& type) {
 	textRepr << "function";
 }
 
-void ValueTextReprVisitor::visit(ShPtr<VoidType> type) {
+void ValueTextReprVisitor::visit(const ShPtr<VoidType>& type) {
 	textRepr << "void";
 }
 
-void ValueTextReprVisitor::visit(ShPtr<UnknownType> type) {
+void ValueTextReprVisitor::visit(const ShPtr<UnknownType>& type) {
 	textRepr << "unknown";
 }
 

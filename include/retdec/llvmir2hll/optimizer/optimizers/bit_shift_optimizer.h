@@ -68,8 +68,8 @@ private:
 	/// @name Visitor Interface
 	/// @{
 	using OrderedAllVisitor::visit;
-	virtual void visit(ShPtr<BitShlOpExpr> expr) override;
-	virtual void visit(ShPtr<BitShrOpExpr> expr) override;
+	virtual void visit(const ShPtr<BitShlOpExpr>& expr) override;
+	virtual void visit(const ShPtr<BitShrOpExpr>& expr) override;
 	/// @}
 };
 

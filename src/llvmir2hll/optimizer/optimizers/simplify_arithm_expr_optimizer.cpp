@@ -79,71 +79,71 @@ void SimplifyArithmExprOptimizer::doOptimization() {
 	}
 }
 
-void SimplifyArithmExprOptimizer::visit(ShPtr<AddOpExpr> expr) {
+void SimplifyArithmExprOptimizer::visit(const ShPtr<AddOpExpr>& expr) {
 	tryOptimizeInSubOptimizations(expr);
 }
 
-void SimplifyArithmExprOptimizer::visit(ShPtr<SubOpExpr> expr) {
+void SimplifyArithmExprOptimizer::visit(const ShPtr<SubOpExpr>& expr) {
 	tryOptimizeInSubOptimizations(expr);
 }
 
-void SimplifyArithmExprOptimizer::visit(ShPtr<MulOpExpr> expr) {
+void SimplifyArithmExprOptimizer::visit(const ShPtr<MulOpExpr>& expr) {
 	tryOptimizeInSubOptimizations(expr);
 }
 
-void SimplifyArithmExprOptimizer::visit(ShPtr<DivOpExpr> expr) {
+void SimplifyArithmExprOptimizer::visit(const ShPtr<DivOpExpr>& expr) {
 	tryOptimizeInSubOptimizations(expr);
 }
 
-void SimplifyArithmExprOptimizer::visit(ShPtr<ModOpExpr> expr) {
+void SimplifyArithmExprOptimizer::visit(const ShPtr<ModOpExpr>& expr) {
 	tryOptimizeInSubOptimizations(expr);
 }
 
-void SimplifyArithmExprOptimizer::visit(ShPtr<BitAndOpExpr> expr) {
+void SimplifyArithmExprOptimizer::visit(const ShPtr<BitAndOpExpr>& expr) {
 	tryOptimizeInSubOptimizations(expr);
 }
 
-void SimplifyArithmExprOptimizer::visit(ShPtr<BitOrOpExpr> expr) {
+void SimplifyArithmExprOptimizer::visit(const ShPtr<BitOrOpExpr>& expr) {
 	tryOptimizeInSubOptimizations(expr);
 }
 
-void SimplifyArithmExprOptimizer::visit(ShPtr<BitXorOpExpr> expr) {
+void SimplifyArithmExprOptimizer::visit(const ShPtr<BitXorOpExpr>& expr) {
 	tryOptimizeInSubOptimizations(expr);
 }
 
-void SimplifyArithmExprOptimizer::visit(ShPtr<LtOpExpr> expr) {
+void SimplifyArithmExprOptimizer::visit(const ShPtr<LtOpExpr>& expr) {
 	tryOptimizeInSubOptimizations(expr);
 }
 
-void SimplifyArithmExprOptimizer::visit(ShPtr<LtEqOpExpr> expr) {
+void SimplifyArithmExprOptimizer::visit(const ShPtr<LtEqOpExpr>& expr) {
 	tryOptimizeInSubOptimizations(expr);
 }
 
-void SimplifyArithmExprOptimizer::visit(ShPtr<GtOpExpr> expr) {
+void SimplifyArithmExprOptimizer::visit(const ShPtr<GtOpExpr>& expr) {
 	tryOptimizeInSubOptimizations(expr);
 }
 
-void SimplifyArithmExprOptimizer::visit(ShPtr<GtEqOpExpr> expr) {
+void SimplifyArithmExprOptimizer::visit(const ShPtr<GtEqOpExpr>& expr) {
 	tryOptimizeInSubOptimizations(expr);
 }
 
-void SimplifyArithmExprOptimizer::visit(ShPtr<EqOpExpr> expr) {
+void SimplifyArithmExprOptimizer::visit(const ShPtr<EqOpExpr>& expr) {
 	tryOptimizeInSubOptimizations(expr);
 }
 
-void SimplifyArithmExprOptimizer::visit(ShPtr<NeqOpExpr> expr) {
+void SimplifyArithmExprOptimizer::visit(const ShPtr<NeqOpExpr>& expr) {
 	tryOptimizeInSubOptimizations(expr);
 }
 
-void SimplifyArithmExprOptimizer::visit(ShPtr<NotOpExpr> expr) {
+void SimplifyArithmExprOptimizer::visit(const ShPtr<NotOpExpr>& expr) {
 	tryOptimizeInSubOptimizations(expr);
 }
 
-void SimplifyArithmExprOptimizer::visit(ShPtr<OrOpExpr> expr) {
+void SimplifyArithmExprOptimizer::visit(const ShPtr<OrOpExpr>& expr) {
 	tryOptimizeInSubOptimizations(expr);
 }
 
-void SimplifyArithmExprOptimizer::visit(ShPtr<TernaryOpExpr> expr) {
+void SimplifyArithmExprOptimizer::visit(const ShPtr<TernaryOpExpr>& expr) {
 	tryOptimizeInSubOptimizations(expr);
 }
 

@@ -89,7 +89,7 @@ void IndirectFuncRefAnalysis::visitArgs(const ExprVector &args) {
 	}
 }
 
-void IndirectFuncRefAnalysis::visit(ShPtr<CallExpr> expr) {
+void IndirectFuncRefAnalysis::visit(const ShPtr<CallExpr>& expr) {
 	ShPtr<Expression> calledExpr(expr->getCalledExpr());
 	if (shouldCalledExprBeVisited(calledExpr)) {
 		calledExpr->accept(this);
@@ -98,7 +98,7 @@ void IndirectFuncRefAnalysis::visit(ShPtr<CallExpr> expr) {
 	visitArgs(expr->getArgs());
 }
 
-void IndirectFuncRefAnalysis::visit(ShPtr<Variable> var) {
+void IndirectFuncRefAnalysis::visit(const ShPtr<Variable>& var) {
 	// Ignore functions that are named as one of the parameters of local
 	// variables.
 	if (currFunc->hasLocalVar(var, true)) {

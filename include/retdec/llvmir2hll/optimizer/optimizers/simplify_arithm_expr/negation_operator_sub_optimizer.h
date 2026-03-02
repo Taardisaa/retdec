@@ -64,7 +64,7 @@ private:
 	/// @name Visitor Interface
 	/// @{
 	using SubOptimizer::visit;
-	virtual void visit(ShPtr<NotOpExpr> expr) override;
+	virtual void visit(const ShPtr<NotOpExpr>& expr) override;
 	/// @}
 };
 

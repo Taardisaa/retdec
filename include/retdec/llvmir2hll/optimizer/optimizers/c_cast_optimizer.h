@@ -96,10 +96,10 @@ public:
 	/// @name Visitor Interface
 	/// @{
 	using OrderedAllVisitor::visit;
-	virtual void visit(ShPtr<CallExpr> expr) override;
-	virtual void visit(ShPtr<AssignStmt> stmt) override;
-	virtual void visit(ShPtr<VarDefStmt> stmt) override;
-	virtual void visit(ShPtr<ReturnStmt> stmt) override;
+	virtual void visit(const ShPtr<CallExpr>& expr) override;
+	virtual void visit(const ShPtr<AssignStmt>& stmt) override;
+	virtual void visit(const ShPtr<VarDefStmt>& stmt) override;
+	virtual void visit(const ShPtr<ReturnStmt>& stmt) override;
 	/// @}
 
 private:

@@ -285,207 +285,207 @@ void BracketManager::treeTraversalForCallWithStackOperations(
 	}
 }
 
-void BracketManager::visit(ShPtr<AddressOpExpr> expr) {
+void BracketManager::visit(const ShPtr<AddressOpExpr>& expr) {
 	areBracketsNeededForExpr(expr, Operators::ADDRESS);
 	treeTraversalForUnaryOpWithStackOperations(expr, Operators::ADDRESS);
 }
 
-void BracketManager::visit(ShPtr<AssignOpExpr> expr) {
+void BracketManager::visit(const ShPtr<AssignOpExpr>& expr) {
 	areBracketsNeededForExpr(expr, Operators::ASSIGN);
 	treeTraversalForBinaryOpWithStackOperations(expr, Operators::ASSIGN);
 }
 
-void BracketManager::visit(ShPtr<ArrayIndexOpExpr> expr) {
+void BracketManager::visit(const ShPtr<ArrayIndexOpExpr>& expr) {
 	areBracketsNeededForExpr(expr, Operators::ARRAY);
 	treeTraversalForBinaryOpWithStackOperations(expr, Operators::ARRAY);
 }
 
-void BracketManager::visit(ShPtr<StructIndexOpExpr> expr) {
+void BracketManager::visit(const ShPtr<StructIndexOpExpr>& expr) {
 	areBracketsNeededForExpr(expr, Operators::STRUCT);
 	treeTraversalForBinaryOpWithStackOperations(expr, Operators::STRUCT);
 }
 
-void BracketManager::visit(ShPtr<DerefOpExpr> expr) {
+void BracketManager::visit(const ShPtr<DerefOpExpr>& expr) {
 	areBracketsNeededForExpr(expr, Operators::DEREF);
 	treeTraversalForUnaryOpWithStackOperations(expr, Operators::DEREF);
 }
 
-void BracketManager::visit(ShPtr<NotOpExpr> expr) {
+void BracketManager::visit(const ShPtr<NotOpExpr>& expr) {
 	areBracketsNeededForExpr(expr, Operators::NOT);
 	treeTraversalForUnaryOpWithStackOperations(expr, Operators::NOT);
 }
 
-void BracketManager::visit(ShPtr<NegOpExpr> expr) {
+void BracketManager::visit(const ShPtr<NegOpExpr>& expr) {
 	areBracketsNeededForExpr(expr, Operators::NEG);
 	treeTraversalForUnaryOpWithStackOperations(expr, Operators::NEG);
 }
 
-void BracketManager::visit(ShPtr<EqOpExpr> expr) {
+void BracketManager::visit(const ShPtr<EqOpExpr>& expr) {
 	areBracketsNeededForExpr(expr, Operators::EQ);
 	treeTraversalForBinaryOpWithStackOperations(expr, Operators::EQ);
 }
 
-void BracketManager::visit(ShPtr<NeqOpExpr> expr) {
+void BracketManager::visit(const ShPtr<NeqOpExpr>& expr) {
 	areBracketsNeededForExpr(expr, Operators::NEQ);
 	treeTraversalForBinaryOpWithStackOperations(expr, Operators::NEQ);
 }
 
-void BracketManager::visit(ShPtr<LtEqOpExpr> expr) {
+void BracketManager::visit(const ShPtr<LtEqOpExpr>& expr) {
 	areBracketsNeededForExpr(expr, Operators::LTEQ);
 	treeTraversalForBinaryOpWithStackOperations(expr, Operators::LTEQ);
 }
 
-void BracketManager::visit(ShPtr<GtEqOpExpr> expr) {
+void BracketManager::visit(const ShPtr<GtEqOpExpr>& expr) {
 	areBracketsNeededForExpr(expr, Operators::GTEQ);
 	treeTraversalForBinaryOpWithStackOperations(expr, Operators::GTEQ);
 }
 
-void BracketManager::visit(ShPtr<LtOpExpr> expr) {
+void BracketManager::visit(const ShPtr<LtOpExpr>& expr) {
 	areBracketsNeededForExpr(expr, Operators::LT);
 	treeTraversalForBinaryOpWithStackOperations(expr, Operators::LT);
 }
 
-void BracketManager::visit(ShPtr<GtOpExpr> expr) {
+void BracketManager::visit(const ShPtr<GtOpExpr>& expr) {
 	areBracketsNeededForExpr(expr, Operators::GT);
 	treeTraversalForBinaryOpWithStackOperations(expr, Operators::GT);
 }
 
-void BracketManager::visit(ShPtr<AddOpExpr> expr) {
+void BracketManager::visit(const ShPtr<AddOpExpr>& expr) {
 	areBracketsNeededForExpr(expr, Operators::ADD);
 	treeTraversalForBinaryOpWithStackOperations(expr, Operators::ADD);
 }
 
-void BracketManager::visit(ShPtr<SubOpExpr> expr) {
+void BracketManager::visit(const ShPtr<SubOpExpr>& expr) {
 	areBracketsNeededForExpr(expr, Operators::SUB);
 	treeTraversalForBinaryOpWithStackOperations(expr, Operators::SUB);
 }
 
-void BracketManager::visit(ShPtr<MulOpExpr> expr) {
+void BracketManager::visit(const ShPtr<MulOpExpr>& expr) {
 	areBracketsNeededForExpr(expr, Operators::MUL);
 	treeTraversalForBinaryOpWithStackOperations(expr, Operators::MUL);
 }
 
-void BracketManager::visit(ShPtr<ModOpExpr> expr) {
+void BracketManager::visit(const ShPtr<ModOpExpr>& expr) {
 	areBracketsNeededForExpr(expr, Operators::MOD);
 	treeTraversalForBinaryOpWithStackOperations(expr, Operators::MOD);
 }
 
-void BracketManager::visit(ShPtr<DivOpExpr> expr) {
+void BracketManager::visit(const ShPtr<DivOpExpr>& expr) {
 	areBracketsNeededForExpr(expr, Operators::DIV);
 	treeTraversalForBinaryOpWithStackOperations(expr, Operators::DIV);
 }
 
-void BracketManager::visit(ShPtr<AndOpExpr> expr) {
+void BracketManager::visit(const ShPtr<AndOpExpr>& expr) {
 	areBracketsNeededForExpr(expr, Operators::AND);
 	treeTraversalForBinaryOpWithStackOperations(expr, Operators::AND);
 }
 
-void BracketManager::visit(ShPtr<OrOpExpr> expr) {
+void BracketManager::visit(const ShPtr<OrOpExpr>& expr) {
 	areBracketsNeededForExpr(expr, Operators::OR);
 	treeTraversalForBinaryOpWithStackOperations(expr, Operators::OR);
 }
 
-void BracketManager::visit(ShPtr<BitAndOpExpr> expr) {
+void BracketManager::visit(const ShPtr<BitAndOpExpr>& expr) {
 	areBracketsNeededForExpr(expr, Operators::BITAND);
 	treeTraversalForBinaryOpWithStackOperations(expr, Operators::BITAND);
 }
 
-void BracketManager::visit(ShPtr<BitOrOpExpr> expr) {
+void BracketManager::visit(const ShPtr<BitOrOpExpr>& expr) {
 	areBracketsNeededForExpr(expr, Operators::BITOR);
 	treeTraversalForBinaryOpWithStackOperations(expr, Operators::BITOR);
 }
 
-void BracketManager::visit(ShPtr<BitXorOpExpr> expr) {
+void BracketManager::visit(const ShPtr<BitXorOpExpr>& expr) {
 	areBracketsNeededForExpr(expr, Operators::BITXOR);
 	treeTraversalForBinaryOpWithStackOperations(expr, Operators::BITXOR);
 }
 
-void BracketManager::visit(ShPtr<BitShlOpExpr> expr) {
+void BracketManager::visit(const ShPtr<BitShlOpExpr>& expr) {
 	areBracketsNeededForExpr(expr, Operators::BITSHL);
 	treeTraversalForBinaryOpWithStackOperations(expr, Operators::BITSHL);
 }
 
-void BracketManager::visit(ShPtr<BitShrOpExpr> expr) {
+void BracketManager::visit(const ShPtr<BitShrOpExpr>& expr) {
 	areBracketsNeededForExpr(expr, Operators::BITSHR);
 	treeTraversalForBinaryOpWithStackOperations(expr, Operators::BITSHR);
 }
 
-void BracketManager::visit(ShPtr<TernaryOpExpr> expr) {
+void BracketManager::visit(const ShPtr<TernaryOpExpr>& expr) {
 	areBracketsNeededForExpr(expr, Operators::TERNARY);
 	treeTraversalForTernaryOpWithStackOperations(expr, Operators::TERNARY);
 }
 
-void BracketManager::visit(ShPtr<CallExpr> expr) {
+void BracketManager::visit(const ShPtr<CallExpr>& expr) {
 	areBracketsNeededForExpr(expr, Operators::CALL);
 	treeTraversalForCallWithStackOperations(expr, Operators::CALL);
 }
 
-void BracketManager::visit(ShPtr<CommaOpExpr> expr) {
+void BracketManager::visit(const ShPtr<CommaOpExpr>& expr) {
 	areBracketsNeededForExpr(expr, Operators::COMMA);
 	treeTraversalForBinaryOpWithStackOperations(expr, Operators::COMMA);
 }
 
-void BracketManager::visit(ShPtr<BitCastExpr> expr) {
+void BracketManager::visit(const ShPtr<BitCastExpr>& expr) {
 	areBracketsNeededForExpr(expr, Operators::CAST);
 	treeTraversalForCastWithStackOperations(expr, Operators::CAST);
 }
 
-void BracketManager::visit(ShPtr<ExtCastExpr> expr) {
+void BracketManager::visit(const ShPtr<ExtCastExpr>& expr) {
 	areBracketsNeededForExpr(expr, Operators::CAST);
 	treeTraversalForCastWithStackOperations(expr, Operators::CAST);
 }
 
-void BracketManager::visit(ShPtr<TruncCastExpr> expr) {
+void BracketManager::visit(const ShPtr<TruncCastExpr>& expr) {
 	areBracketsNeededForExpr(expr, Operators::CAST);
 	treeTraversalForCastWithStackOperations(expr, Operators::CAST);
 }
 
-void BracketManager::visit(ShPtr<FPToIntCastExpr> expr) {
+void BracketManager::visit(const ShPtr<FPToIntCastExpr>& expr) {
 	areBracketsNeededForExpr(expr, Operators::CAST);
 	treeTraversalForCastWithStackOperations(expr, Operators::CAST);
 }
 
-void BracketManager::visit(ShPtr<IntToFPCastExpr> expr) {
+void BracketManager::visit(const ShPtr<IntToFPCastExpr>& expr) {
 	areBracketsNeededForExpr(expr, Operators::CAST);
 	treeTraversalForCastWithStackOperations(expr, Operators::CAST);
 }
 
-void BracketManager::visit(ShPtr<IntToPtrCastExpr> expr) {
+void BracketManager::visit(const ShPtr<IntToPtrCastExpr>& expr) {
 	areBracketsNeededForExpr(expr, Operators::CAST);
 	treeTraversalForCastWithStackOperations(expr, Operators::CAST);
 }
 
-void BracketManager::visit(ShPtr<PtrToIntCastExpr> expr) {
+void BracketManager::visit(const ShPtr<PtrToIntCastExpr>& expr) {
 	areBracketsNeededForExpr(expr, Operators::CAST);
 	treeTraversalForCastWithStackOperations(expr, Operators::CAST);
 }
 
-void BracketManager::visit(ShPtr<ConstBool> constant) {
+void BracketManager::visit(const ShPtr<ConstBool>& constant) {
 	// Brackets are never needed around constants.
 	bracketsAreNeededMap[constant] = false;
 }
 
-void BracketManager::visit(ShPtr<ConstFloat> constant) {
+void BracketManager::visit(const ShPtr<ConstFloat>& constant) {
 	// Brackets are never needed around constants.
 	bracketsAreNeededMap[constant] = false;
 }
 
-void BracketManager::visit(ShPtr<ConstInt> constant) {
+void BracketManager::visit(const ShPtr<ConstInt>& constant) {
 	// Brackets are never needed around constants.
 	bracketsAreNeededMap[constant] = false;
 }
 
-void BracketManager::visit(ShPtr<ConstNullPointer> constant) {
+void BracketManager::visit(const ShPtr<ConstNullPointer>& constant) {
 	// Brackets are never needed around constants.
 	bracketsAreNeededMap[constant] = false;
 }
 
-void BracketManager::visit(ShPtr<ConstString> constant) {
+void BracketManager::visit(const ShPtr<ConstString>& constant) {
 	// Brackets are never needed around constants.
 	bracketsAreNeededMap[constant] = false;
 }
 
-void BracketManager::visit(ShPtr<ConstArray> constant) {
+void BracketManager::visit(const ShPtr<ConstArray>& constant) {
 	// Brackets are never needed around constants.
 	bracketsAreNeededMap[constant] = false;
 
@@ -493,7 +493,7 @@ void BracketManager::visit(ShPtr<ConstArray> constant) {
 	OrderedAllVisitor::visit(constant);
 }
 
-void BracketManager::visit(ShPtr<ConstStruct> constant) {
+void BracketManager::visit(const ShPtr<ConstStruct>& constant) {
 	// Brackets are never needed around constants.
 	bracketsAreNeededMap[constant] = false;
 
@@ -501,12 +501,12 @@ void BracketManager::visit(ShPtr<ConstStruct> constant) {
 	OrderedAllVisitor::visit(constant);
 }
 
-void BracketManager::visit(ShPtr<ConstSymbol> constant) {
+void BracketManager::visit(const ShPtr<ConstSymbol>& constant) {
 	// Brackets are never needed around constants.
 	bracketsAreNeededMap[constant] = false;
 }
 
-void BracketManager::visit(ShPtr<Variable> var) {
+void BracketManager::visit(const ShPtr<Variable>& var) {
 	// Brackets are never needed around variables.
 	bracketsAreNeededMap[var] = false;
 }

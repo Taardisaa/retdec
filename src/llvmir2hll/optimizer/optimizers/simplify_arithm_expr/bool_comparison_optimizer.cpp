@@ -41,7 +41,7 @@ std::string BoolComparisonSubOptimizer::getId() const {
 	return BOOL_COMPARISON_OPTIMIZER_ID;
 }
 
-void BoolComparisonSubOptimizer::visit(ShPtr<EqOpExpr> expr) {
+void BoolComparisonSubOptimizer::visit(const ShPtr<EqOpExpr>& expr) {
 	optimizeNestedComparisons(expr);
 
 	auto secOpBool = cast<ConstBool>(expr->getSecondOperand());
@@ -74,7 +74,7 @@ void BoolComparisonSubOptimizer::visit(ShPtr<EqOpExpr> expr) {
 	}
 }
 
-void BoolComparisonSubOptimizer::visit(ShPtr<NeqOpExpr> expr) {
+void BoolComparisonSubOptimizer::visit(const ShPtr<NeqOpExpr>& expr) {
 	optimizeNestedComparisons(expr);
 
 	auto secOpBool = cast<ConstBool>(expr->getSecondOperand());

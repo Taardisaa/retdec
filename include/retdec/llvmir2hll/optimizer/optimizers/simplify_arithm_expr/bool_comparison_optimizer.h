@@ -51,8 +51,8 @@ private:
 	/// @name Visitor Interface
 	/// @{
 	using SubOptimizer::visit;
-	virtual void visit(ShPtr<EqOpExpr> expr) override;
-	virtual void visit(ShPtr<NeqOpExpr> expr) override;
+	virtual void visit(const ShPtr<EqOpExpr>& expr) override;
+	virtual void visit(const ShPtr<NeqOpExpr>& expr) override;
 	/// @}
 
 	template<typename ExprType>

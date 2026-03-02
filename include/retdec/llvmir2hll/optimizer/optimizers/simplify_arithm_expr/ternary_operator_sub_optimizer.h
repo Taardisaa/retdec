@@ -48,7 +48,7 @@ private:
 	/// @name Visitor Interface
 	/// @{
 	using SubOptimizer::visit;
-	virtual void visit(ShPtr<TernaryOpExpr> expr) override;
+	virtual void visit(const ShPtr<TernaryOpExpr>& expr) override;
 	/// @}
 };
 

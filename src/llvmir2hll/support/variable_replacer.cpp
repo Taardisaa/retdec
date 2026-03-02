@@ -38,7 +38,7 @@ void VariableReplacer::performReplace(ShPtr<Function> func) {
 	visitStmt(func->getBody());
 }
 
-void VariableReplacer::visit(ShPtr<Variable> var) {
+void VariableReplacer::visit(const ShPtr<Variable>& var) {
 	if (var == oldVar) {
 		lastStmt->replace(var, newVar);
 	}

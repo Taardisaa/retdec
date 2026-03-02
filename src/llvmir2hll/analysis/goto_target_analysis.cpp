@@ -62,7 +62,7 @@ void GotoTargetAnalysis::putIntoGotoTargetsIfGotoTarget(ShPtr<Statement> stmt) {
 	}
 }
 
-void GotoTargetAnalysis::visit(ShPtr<GotoStmt> stmt) {
+void GotoTargetAnalysis::visit(const ShPtr<GotoStmt>& stmt) {
 	// Do not visit the goto's target, just its successor (if any).
 	visitStmt(stmt->getSuccessor());
 }

@@ -71,7 +71,7 @@ private:
 	/// @name Visitor Interface
 	/// @{
 	using OrderedAllVisitor::visit;
-	virtual void visit(ShPtr<IfStmt> stmt) override;
+	virtual void visit(const ShPtr<IfStmt>& stmt) override;
 
 	void appendBreakStmtIfNeeded(ShPtr<Statement> stmt);
 	ShPtr<Expression> getControlExprIfConvertibleToSwitch(ShPtr<IfStmt> ifStmt);

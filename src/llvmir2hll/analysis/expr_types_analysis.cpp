@@ -103,7 +103,7 @@ ExprTypesAnalysis::ExprTagsMap ExprTypesAnalysis::analyzeExprTypes(ShPtr<Module>
 //
 
 // Casts.
-void ExprTypesAnalysis::visit(ShPtr<ExtCastExpr> expr) {
+void ExprTypesAnalysis::visit(const ShPtr<ExtCastExpr>& expr) {
 	// If it is a signed variant of an expression.
 	if (expr->getVariant() == ExtCastExpr::Variant::SExt) {
 		addTagToExpr(expr->getOperand(), ExprTag::Signed);
@@ -113,7 +113,7 @@ void ExprTypesAnalysis::visit(ShPtr<ExtCastExpr> expr) {
 	OrderedAllVisitor::visit(expr);
 }
 
-void ExprTypesAnalysis::visit(ShPtr<IntToFPCastExpr> expr) {
+void ExprTypesAnalysis::visit(const ShPtr<IntToFPCastExpr>& expr) {
 	// If it is a signed variant of an expression.
 	if (expr->getVariant() == IntToFPCastExpr::Variant::SIToFP) {
 		addTagToExpr(expr->getOperand(), ExprTag::Signed);
@@ -123,7 +123,7 @@ void ExprTypesAnalysis::visit(ShPtr<IntToFPCastExpr> expr) {
 	OrderedAllVisitor::visit(expr);
 }
 
-void ExprTypesAnalysis::visit(ShPtr<DivOpExpr> expr) {
+void ExprTypesAnalysis::visit(const ShPtr<DivOpExpr>& expr) {
 	// If it is a signed variant of an expression.
 	if (expr->getVariant() == DivOpExpr::Variant::SDiv) {
 		addTagToExpr(expr->getFirstOperand(), ExprTag::Signed);
@@ -136,7 +136,7 @@ void ExprTypesAnalysis::visit(ShPtr<DivOpExpr> expr) {
 	OrderedAllVisitor::visit(expr);
 }
 
-void ExprTypesAnalysis::visit(ShPtr<ModOpExpr> expr) {
+void ExprTypesAnalysis::visit(const ShPtr<ModOpExpr>& expr) {
 	// If it is a signed variant of an expression.
 	if (expr->getVariant() == ModOpExpr::Variant::SMod) {
 		addTagToExpr(expr->getFirstOperand(), ExprTag::Signed);
@@ -151,7 +151,7 @@ void ExprTypesAnalysis::visit(ShPtr<ModOpExpr> expr) {
 	OrderedAllVisitor::visit(expr);
 }
 
-void ExprTypesAnalysis::visit(ShPtr<AssignStmt> stmt) {
+void ExprTypesAnalysis::visit(const ShPtr<AssignStmt>& stmt) {
 	// If right value is expression - division.
 	if (ShPtr<DivOpExpr> expr = cast<DivOpExpr>(stmt->getRhs())) {
 		// If it is a signed variant of an expression.
@@ -188,7 +188,7 @@ void ExprTypesAnalysis::visit(ShPtr<AssignStmt> stmt) {
 	OrderedAllVisitor::visit(stmt);
 }
 
-void ExprTypesAnalysis::visit(ShPtr<VarDefStmt> stmt) {
+void ExprTypesAnalysis::visit(const ShPtr<VarDefStmt>& stmt) {
 	lastStmt = stmt;
 	if (ShPtr<Expression> init = stmt->getInitializer()) {
 		// If right value is expression - division.
@@ -229,7 +229,7 @@ void ExprTypesAnalysis::visit(ShPtr<VarDefStmt> stmt) {
 	OrderedAllVisitor::visit(stmt);
 }
 
-void ExprTypesAnalysis::visit(ShPtr<LtEqOpExpr> expr) {
+void ExprTypesAnalysis::visit(const ShPtr<LtEqOpExpr>& expr) {
 	// If it is the signed compare operator.
 	if (expr->getVariant() == LtEqOpExpr::Variant::SCmp) {
 		addTagToExpr(expr->getFirstOperand(), ExprTag::Signed);
@@ -242,7 +242,7 @@ void ExprTypesAnalysis::visit(ShPtr<LtEqOpExpr> expr) {
 	OrderedAllVisitor::visit(expr);
 }
 
-void ExprTypesAnalysis::visit(ShPtr<GtEqOpExpr> expr) {
+void ExprTypesAnalysis::visit(const ShPtr<GtEqOpExpr>& expr) {
 	// If it is the signed compare operator.
 	if (expr->getVariant() == GtEqOpExpr::Variant::SCmp) {
 		addTagToExpr(expr->getFirstOperand(), ExprTag::Signed);
@@ -255,7 +255,7 @@ void ExprTypesAnalysis::visit(ShPtr<GtEqOpExpr> expr) {
 	OrderedAllVisitor::visit(expr);
 }
 
-void ExprTypesAnalysis::visit(ShPtr<LtOpExpr> expr) {
+void ExprTypesAnalysis::visit(const ShPtr<LtOpExpr>& expr) {
 	// If it is the signed compare operator.
 	if (expr->getVariant() == LtOpExpr::Variant::SCmp) {
 		addTagToExpr(expr->getFirstOperand(), ExprTag::Signed);
@@ -268,7 +268,7 @@ void ExprTypesAnalysis::visit(ShPtr<LtOpExpr> expr) {
 	OrderedAllVisitor::visit(expr);
 }
 
-void ExprTypesAnalysis::visit(ShPtr<GtOpExpr> expr) {
+void ExprTypesAnalysis::visit(const ShPtr<GtOpExpr>& expr) {
 	// If it is the signed compare operator.
 	if (expr->getVariant() == GtOpExpr::Variant::SCmp) {
 		addTagToExpr(expr->getFirstOperand(), ExprTag::Signed);
@@ -281,12 +281,12 @@ void ExprTypesAnalysis::visit(ShPtr<GtOpExpr> expr) {
 	OrderedAllVisitor::visit(expr);
 }
 
-void ExprTypesAnalysis::visit(ShPtr<BitShlOpExpr> expr) {
+void ExprTypesAnalysis::visit(const ShPtr<BitShlOpExpr>& expr) {
 	addTagToExpr(expr->getSecondOperand(), ExprTag::Unsigned);
 	OrderedAllVisitor::visit(expr);
 }
 
-void ExprTypesAnalysis::visit(ShPtr<BitShrOpExpr> expr) {
+void ExprTypesAnalysis::visit(const ShPtr<BitShrOpExpr>& expr) {
 	if (expr->isArithmetical()) {
 		addTagToExpr(expr->getFirstOperand(), ExprTag::Signed);
 	} else {

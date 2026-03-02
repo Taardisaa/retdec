@@ -68,8 +68,8 @@ private:
 	/// @name Visitor Interface
 	/// @{
 	using SubOptimizer::visit;
-	virtual void visit(ShPtr<AddOpExpr> expr) override;
-	virtual void visit(ShPtr<SubOpExpr> expr) override;
+	virtual void visit(const ShPtr<AddOpExpr>& expr) override;
+	virtual void visit(const ShPtr<SubOpExpr>& expr) override;
 	/// @}
 
 	ShPtr<ConstFloat> ifNegativeConstFloatReturnIt(ShPtr<Expression> expr) const;

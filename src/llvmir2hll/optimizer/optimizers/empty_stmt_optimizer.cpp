@@ -24,7 +24,7 @@ EmptyStmtOptimizer::EmptyStmtOptimizer(ShPtr<Module> module):
 		PRECONDITION_NON_NULL(module);
 	}
 
-void EmptyStmtOptimizer::visit(ShPtr<EmptyStmt> stmt) {
+void EmptyStmtOptimizer::visit(const ShPtr<EmptyStmt>& stmt) {
 	// We have to store the statement's successor because
 	// Statement::removeStatement() resets it.
 	ShPtr<Statement> stmtSucc(stmt->getSuccessor());

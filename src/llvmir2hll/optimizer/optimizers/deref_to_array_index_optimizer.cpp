@@ -48,7 +48,7 @@ void DerefToArrayIndexOptimizer::doOptimization() {
 	}
 }
 
-void DerefToArrayIndexOptimizer::visit(ShPtr<DerefOpExpr> expr) {
+void DerefToArrayIndexOptimizer::visit(const ShPtr<DerefOpExpr>& expr) {
 	// First, visit (and possibly optimize) nested expressions.
 	Optimizer::visit(expr);
 

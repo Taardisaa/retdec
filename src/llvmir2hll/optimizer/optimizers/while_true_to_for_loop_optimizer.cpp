@@ -64,7 +64,7 @@ void WhileTrueToForLoopOptimizer::doOptimization() {
 	va->invalidateState();
 }
 
-void WhileTrueToForLoopOptimizer::visit(ShPtr<WhileLoopStmt> stmt) {
+void WhileTrueToForLoopOptimizer::visit(const ShPtr<WhileLoopStmt>& stmt) {
 	// First of all, visit nested and subsequent statements.
 	FuncOptimizer::visit(stmt);
 

@@ -49,7 +49,7 @@ bool SpecialFPAnalysis::hasSpecialFP(ShPtr<Module> module) {
 // Visits
 //
 
-void SpecialFPAnalysis::visit(ShPtr<ConstFloat> constant) {
+void SpecialFPAnalysis::visit(const ShPtr<ConstFloat>& constant) {
 	ConstFloat::Type value(constant->getValue());
 	if (value.isInfinity() || value.isNaN()) {
 		specialFPFound = true;

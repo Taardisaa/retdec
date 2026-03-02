@@ -42,7 +42,7 @@ private:
 	/// @name Visitor Interface
 	/// @{
 	using OrderedAllVisitor::visit;
-	virtual void visit(ShPtr<GotoStmt> stmt) override;
+	virtual void visit(const ShPtr<GotoStmt>& stmt) override;
 	virtual void visitStmt(ShPtr<Statement> stmt, bool visitSuccessors = true,
 		bool visitNestedStmts = true) override;
 	/// @}

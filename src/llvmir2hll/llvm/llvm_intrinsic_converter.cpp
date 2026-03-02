@@ -227,7 +227,7 @@ void LLVMIntrinsicConverter::trimLastNArgsAndParams(ShPtr<CallExpr> expr,
 	}
 }
 
-void LLVMIntrinsicConverter::visit(ShPtr<CallExpr> expr) {
+void LLVMIntrinsicConverter::visit(const ShPtr<CallExpr>& expr) {
 	// Check whether we have to change the call. If so, then we change it.
 
 	// The called expression has to be a variable.

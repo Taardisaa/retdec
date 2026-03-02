@@ -55,7 +55,7 @@ private:
 	/// @name Visitor Interface
 	/// @{
 	using OrderedAllVisitor::visit;
-	virtual void visit(ShPtr<AddressOpExpr> expr) override;
+	virtual void visit(const ShPtr<AddressOpExpr>& expr) override;
 	/// @}
 
 private:

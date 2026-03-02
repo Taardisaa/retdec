@@ -159,7 +159,7 @@ void WhileTrueToUForLoopOptimizer::removeStatementsToBeRemoved() {
 	}
 }
 
-void WhileTrueToUForLoopOptimizer::visit(ShPtr<WhileLoopStmt> stmt) {
+void WhileTrueToUForLoopOptimizer::visit(const ShPtr<WhileLoopStmt>& stmt) {
 	visitNestedAndSuccessorStatements(stmt);
 	tryReplacementWithUForLoop(stmt);
 }

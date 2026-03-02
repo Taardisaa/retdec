@@ -110,7 +110,7 @@ void BitShiftOptimizer::doOptimization() {
 	}
 }
 
-void BitShiftOptimizer::visit(ShPtr<BitShlOpExpr> expr) {
+void BitShiftOptimizer::visit(const ShPtr<BitShlOpExpr>& expr) {
 	// First, visit (and possibly optimize) nested expression.
 	Optimizer::visit(expr);
 
@@ -129,7 +129,7 @@ void BitShiftOptimizer::visit(ShPtr<BitShlOpExpr> expr) {
 	Expression::replaceExpression(expr, mulOpExpr);
 }
 
-void BitShiftOptimizer::visit(ShPtr<BitShrOpExpr> expr) {
+void BitShiftOptimizer::visit(const ShPtr<BitShrOpExpr>& expr) {
 	// First, visit (and possibly optimize) nested expression.
 	Optimizer::visit(expr);
 

@@ -115,14 +115,14 @@ private:
 	/// @name Visitor Interface
 	/// @{
 	using OrderedAllVisitor::visit;
-	virtual void visit(ShPtr<IfStmt> stmt) override;
-	virtual void visit(ShPtr<SwitchStmt> stmt) override;
-	virtual void visit(ShPtr<WhileLoopStmt> stmt) override;
-	virtual void visit(ShPtr<BitAndOpExpr> expr) override;
-	virtual void visit(ShPtr<BitOrOpExpr> expr) override;
-	virtual void visit(ShPtr<DivOpExpr> expr) override;
-	virtual void visit(ShPtr<ModOpExpr> expr) override;
-	virtual void visit(ShPtr<MulOpExpr> expr) override;
+	virtual void visit(const ShPtr<IfStmt>& stmt) override;
+	virtual void visit(const ShPtr<SwitchStmt>& stmt) override;
+	virtual void visit(const ShPtr<WhileLoopStmt>& stmt) override;
+	virtual void visit(const ShPtr<BitAndOpExpr>& expr) override;
+	virtual void visit(const ShPtr<BitOrOpExpr>& expr) override;
+	virtual void visit(const ShPtr<DivOpExpr>& expr) override;
+	virtual void visit(const ShPtr<ModOpExpr>& expr) override;
+	virtual void visit(const ShPtr<MulOpExpr>& expr) override;
 	/// @}
 
 private:

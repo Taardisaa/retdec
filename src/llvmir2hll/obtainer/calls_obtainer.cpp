@@ -55,7 +55,7 @@ bool CallsObtainer::hasCalls(ShPtr<Value> value) {
 	return !CallsObtainer::getCalls(value).empty();
 }
 
-void CallsObtainer::visit(ShPtr<CallExpr> expr) {
+void CallsObtainer::visit(const ShPtr<CallExpr>& expr) {
 	foundCalls.push_back(expr);
 }
 

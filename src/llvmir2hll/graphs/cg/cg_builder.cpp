@@ -68,7 +68,7 @@ ShPtr<CG::CalledFuncs> CGBuilder::computeCGPartForFunction(ShPtr<Function> func)
 	return calledFuncs;
 }
 
-void CGBuilder::visit(ShPtr<CallExpr> expr) {
+void CGBuilder::visit(const ShPtr<CallExpr>& expr) {
 	OrderedAllVisitor::visit(expr);
 
 	// Skip any casts, which are irrelevant when looking for called functions.

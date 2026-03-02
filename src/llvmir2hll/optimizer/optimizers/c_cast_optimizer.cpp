@@ -88,7 +88,7 @@ ShPtr<Expression> CCastOptimizer::checkAndOptimize(ShPtr<Expression> dst,
 }
 
 // Visitors
-void CCastOptimizer::visit(ShPtr<CallExpr> expr) {
+void CCastOptimizer::visit(const ShPtr<CallExpr>& expr) {
 	if (ShPtr<Variable> function = cast<Variable>(expr->getCalledExpr())) {
 		// Searching the function. Argument types are needed.
 		ShPtr<Function> func = module->getFuncByName(function->getName());
@@ -114,14 +114,14 @@ void CCastOptimizer::visit(ShPtr<CallExpr> expr) {
 	FuncOptimizer::visit(expr);
 }
 
-void CCastOptimizer::visit(ShPtr<AssignStmt> stmt) {
+void CCastOptimizer::visit(const ShPtr<AssignStmt>& stmt) {
 	do {
 		stmt->setRhs(checkAndOptimize(stmt->getLhs(), stmt->getRhs()));
 	} while (optimized);
 	FuncOptimizer::visit(stmt);
 }
 
-void CCastOptimizer::visit(ShPtr<VarDefStmt> stmt) {
+void CCastOptimizer::visit(const ShPtr<VarDefStmt>& stmt) {
 	if (ShPtr<Expression> init = stmt->getInitializer()) {
 		do {
 			stmt->setInitializer(checkAndOptimize(stmt->getVar(),
@@ -131,7 +131,7 @@ void CCastOptimizer::visit(ShPtr<VarDefStmt> stmt) {
 	FuncOptimizer::visit(stmt);
 }
 
-void CCastOptimizer::visit(ShPtr<ReturnStmt> stmt) {
+void CCastOptimizer::visit(const ShPtr<ReturnStmt>& stmt) {
 	if (ShPtr<Expression> retVal = stmt->getRetVal()) {
 		do {
 			stmt->setRetVal(checkAndOptimize(retVal, stmt->getRetVal()));

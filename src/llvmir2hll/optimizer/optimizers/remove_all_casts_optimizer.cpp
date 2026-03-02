@@ -33,37 +33,37 @@ RemoveAllCastsOptimizer::RemoveAllCastsOptimizer(ShPtr<Module> module):
 		PRECONDITION_NON_NULL(module);
 	}
 
-void RemoveAllCastsOptimizer::visit(ShPtr<BitCastExpr> expr) {
+void RemoveAllCastsOptimizer::visit(const ShPtr<BitCastExpr>& expr) {
 	FuncOptimizer::visit(expr);
 	removeCast(expr);
 }
 
-void RemoveAllCastsOptimizer::visit(ShPtr<ExtCastExpr> expr) {
+void RemoveAllCastsOptimizer::visit(const ShPtr<ExtCastExpr>& expr) {
 	FuncOptimizer::visit(expr);
 	removeCast(expr);
 }
 
-void RemoveAllCastsOptimizer::visit(ShPtr<TruncCastExpr> expr) {
+void RemoveAllCastsOptimizer::visit(const ShPtr<TruncCastExpr>& expr) {
 	FuncOptimizer::visit(expr);
 	removeCast(expr);
 }
 
-void RemoveAllCastsOptimizer::visit(ShPtr<FPToIntCastExpr> expr) {
+void RemoveAllCastsOptimizer::visit(const ShPtr<FPToIntCastExpr>& expr) {
 	FuncOptimizer::visit(expr);
 	removeCast(expr);
 }
 
-void RemoveAllCastsOptimizer::visit(ShPtr<IntToFPCastExpr> expr) {
+void RemoveAllCastsOptimizer::visit(const ShPtr<IntToFPCastExpr>& expr) {
 	FuncOptimizer::visit(expr);
 	removeCast(expr);
 }
 
-void RemoveAllCastsOptimizer::visit(ShPtr<IntToPtrCastExpr> expr) {
+void RemoveAllCastsOptimizer::visit(const ShPtr<IntToPtrCastExpr>& expr) {
 	FuncOptimizer::visit(expr);
 	removeCast(expr);
 }
 
-void RemoveAllCastsOptimizer::visit(ShPtr<PtrToIntCastExpr> expr) {
+void RemoveAllCastsOptimizer::visit(const ShPtr<PtrToIntCastExpr>& expr) {
 	FuncOptimizer::visit(expr);
 	removeCast(expr);
 }

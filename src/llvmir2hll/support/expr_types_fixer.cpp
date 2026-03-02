@@ -191,7 +191,7 @@ void ExprTypesFixer::fixTypes(ShPtr<Module> module) {
 //
 
 // Casts.
-void ExprTypesFixer::visit(ShPtr<ExtCastExpr> expr) {
+void ExprTypesFixer::visit(const ShPtr<ExtCastExpr>& expr) {
 	// If it is a variable with the int type.
 	if (expr->getVariant() == ExtCastExpr::Variant::SExt) {
 		expr->setOperand(exprCheckAndChange(true, expr->getOperand()));
@@ -202,7 +202,7 @@ void ExprTypesFixer::visit(ShPtr<ExtCastExpr> expr) {
 	OrderedAllVisitor::visit(expr);
 }
 
-void ExprTypesFixer::visit(ShPtr<IntToFPCastExpr> expr) {
+void ExprTypesFixer::visit(const ShPtr<IntToFPCastExpr>& expr) {
 	// If it is a signed variant of an expression.
 	if (expr->getVariant() == IntToFPCastExpr::Variant::SIToFP) {
 		expr->setOperand(exprCheckAndChange(true, expr->getOperand()));
@@ -213,7 +213,7 @@ void ExprTypesFixer::visit(ShPtr<IntToFPCastExpr> expr) {
 	OrderedAllVisitor::visit(expr);
 }
 
-void ExprTypesFixer::visit(ShPtr<DivOpExpr> expr) {
+void ExprTypesFixer::visit(const ShPtr<DivOpExpr>& expr) {
 	// If it is a signed variant of an expression.
 	if (expr->getVariant() == DivOpExpr::Variant::SDiv) {
 		// Checking and changing of operands.
@@ -227,7 +227,7 @@ void ExprTypesFixer::visit(ShPtr<DivOpExpr> expr) {
 	OrderedAllVisitor::visit(expr);
 }
 
-void ExprTypesFixer::visit(ShPtr<ModOpExpr> expr) {
+void ExprTypesFixer::visit(const ShPtr<ModOpExpr>& expr) {
 	// If it is a signed variant of an expression.
 	if (expr->getVariant() == ModOpExpr::Variant::SMod) {
 		// Checking and changing of operands.
@@ -241,7 +241,7 @@ void ExprTypesFixer::visit(ShPtr<ModOpExpr> expr) {
 	OrderedAllVisitor::visit(expr);
 }
 
-void ExprTypesFixer::visit(ShPtr<AssignStmt> stmt) {
+void ExprTypesFixer::visit(const ShPtr<AssignStmt>& stmt) {
 	stmt->getLhs()->accept(this);
 	stmt->getRhs()->accept(this);
 
@@ -297,7 +297,7 @@ void ExprTypesFixer::visit(ShPtr<AssignStmt> stmt) {
 	}
 }
 
-void ExprTypesFixer::visit(ShPtr<VarDefStmt> stmt) {
+void ExprTypesFixer::visit(const ShPtr<VarDefStmt>& stmt) {
 	if (ShPtr<Expression> init = stmt->getInitializer()) {
 		// If right value is expression - division.
 		if (ShPtr<DivOpExpr> expr = cast<DivOpExpr>(init)) {
@@ -354,7 +354,7 @@ void ExprTypesFixer::visit(ShPtr<VarDefStmt> stmt) {
 	OrderedAllVisitor::visit(stmt);
 }
 
-void ExprTypesFixer::visit(ShPtr<LtEqOpExpr> expr) {
+void ExprTypesFixer::visit(const ShPtr<LtEqOpExpr>& expr) {
 	// If it is the signed compare operator
 	if (expr->getVariant() == LtEqOpExpr::Variant::SCmp) {
 		expr->setFirstOperand(exprCheckAndChange(true, expr->getFirstOperand()));
@@ -368,7 +368,7 @@ void ExprTypesFixer::visit(ShPtr<LtEqOpExpr> expr) {
 	OrderedAllVisitor::visit(expr);
 }
 
-void ExprTypesFixer::visit(ShPtr<GtEqOpExpr> expr) {
+void ExprTypesFixer::visit(const ShPtr<GtEqOpExpr>& expr) {
 	if (expr->getVariant() == GtEqOpExpr::Variant::SCmp) {
 		expr->setFirstOperand(exprCheckAndChange(true, expr->getFirstOperand()));
 		expr->setSecondOperand(exprCheckAndChange(true, expr->getSecondOperand()));
@@ -380,7 +380,7 @@ void ExprTypesFixer::visit(ShPtr<GtEqOpExpr> expr) {
 	OrderedAllVisitor::visit(expr);
 }
 
-void ExprTypesFixer::visit(ShPtr<LtOpExpr> expr) {
+void ExprTypesFixer::visit(const ShPtr<LtOpExpr>& expr) {
 	if (expr->getVariant() == LtOpExpr::Variant::SCmp) {
 		expr->setFirstOperand(exprCheckAndChange(true, expr->getFirstOperand()));
 		expr->setSecondOperand(exprCheckAndChange(true, expr->getSecondOperand()));
@@ -392,7 +392,7 @@ void ExprTypesFixer::visit(ShPtr<LtOpExpr> expr) {
 	OrderedAllVisitor::visit(expr);
 }
 
-void ExprTypesFixer::visit(ShPtr<GtOpExpr> expr) {
+void ExprTypesFixer::visit(const ShPtr<GtOpExpr>& expr) {
 	if (expr->getVariant() == GtOpExpr::Variant::SCmp) {
 		expr->setFirstOperand(exprCheckAndChange(true, expr->getFirstOperand()));
 		expr->setSecondOperand(exprCheckAndChange(true, expr->getSecondOperand()));
@@ -404,13 +404,13 @@ void ExprTypesFixer::visit(ShPtr<GtOpExpr> expr) {
 	OrderedAllVisitor::visit(expr);
 }
 
-void ExprTypesFixer::visit(ShPtr<BitShlOpExpr> expr) {
+void ExprTypesFixer::visit(const ShPtr<BitShlOpExpr>& expr) {
 	expr->setSecondOperand(exprCheckAndChange(false, expr->getSecondOperand()));
 
 	OrderedAllVisitor::visit(expr);
 }
 
-void ExprTypesFixer::visit(ShPtr<BitShrOpExpr> expr) {
+void ExprTypesFixer::visit(const ShPtr<BitShrOpExpr>& expr) {
 	if (expr->isArithmetical()) {
 		expr->setFirstOperand(exprCheckAndChange(true, expr->getFirstOperand()));
 	} else {

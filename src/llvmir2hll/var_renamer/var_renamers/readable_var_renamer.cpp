@@ -408,7 +408,7 @@ std::string ReadableVarRenamer::genNameForFuncParam(
 	return "a"s + std::to_string(func->getParamPos(var));
 }
 
-void ReadableVarRenamer::visit(ShPtr<ForLoopStmt> stmt) {
+void ReadableVarRenamer::visit(const ShPtr<ForLoopStmt>& stmt) {
 	//
 	// Renaming of induction variables.
 	//
@@ -435,7 +435,7 @@ void ReadableVarRenamer::visit(ShPtr<ForLoopStmt> stmt) {
 	}
 }
 
-void ReadableVarRenamer::visit(ShPtr<ReturnStmt> stmt) {
+void ReadableVarRenamer::visit(const ShPtr<ReturnStmt>& stmt) {
 	//
 	// Renaming of variables returned from the function.
 	//
@@ -454,7 +454,7 @@ void ReadableVarRenamer::visit(ShPtr<ReturnStmt> stmt) {
 	}
 }
 
-void ReadableVarRenamer::visit(ShPtr<AssignStmt> stmt) {
+void ReadableVarRenamer::visit(const ShPtr<AssignStmt>& stmt) {
 	//
 	// Renaming of variables storing the results of calls to well-known
 	// functions.
@@ -467,7 +467,7 @@ void ReadableVarRenamer::visit(ShPtr<AssignStmt> stmt) {
 	}
 }
 
-void ReadableVarRenamer::visit(ShPtr<VarDefStmt> stmt) {
+void ReadableVarRenamer::visit(const ShPtr<VarDefStmt>& stmt) {
 	//
 	// Renaming of variables storing the results of calls to well-known
 	// functions.
@@ -480,7 +480,7 @@ void ReadableVarRenamer::visit(ShPtr<VarDefStmt> stmt) {
 	}
 }
 
-void ReadableVarRenamer::visit(ShPtr<CallExpr> expr) {
+void ReadableVarRenamer::visit(const ShPtr<CallExpr>& expr) {
 	VarRenamer::visit(expr);
 
 	//
@@ -492,7 +492,7 @@ void ReadableVarRenamer::visit(ShPtr<CallExpr> expr) {
 	}
 }
 
-void ReadableVarRenamer::visit(ShPtr<Variable> var) {
+void ReadableVarRenamer::visit(const ShPtr<Variable>& var) {
 	// Do not rename already renamed variables.
 	if (hasBeenRenamed(var)) {
 		return;

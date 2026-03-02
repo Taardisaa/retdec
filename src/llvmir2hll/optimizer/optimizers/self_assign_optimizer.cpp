@@ -25,7 +25,7 @@ SelfAssignOptimizer::SelfAssignOptimizer(ShPtr<Module> module):
 		PRECONDITION_NON_NULL(module);
 	}
 
-void SelfAssignOptimizer::visit(ShPtr<AssignStmt> stmt) {
+void SelfAssignOptimizer::visit(const ShPtr<AssignStmt>& stmt) {
 	// First, visit the successor so that when there is a list of self
 	// assignments, they are all properly removed.
 	visitStmt(stmt->getSuccessor());

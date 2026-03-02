@@ -63,7 +63,7 @@ void VarDefForLoopOptimizer::runOnFunction(ShPtr<Function> func) {
 	}
 }
 
-void VarDefForLoopOptimizer::visit(ShPtr<ForLoopStmt> stmt) {
+void VarDefForLoopOptimizer::visit(const ShPtr<ForLoopStmt>& stmt) {
 	indVars.insert(stmt->getIndVar());
 	FuncOptimizer::visit(stmt);
 }

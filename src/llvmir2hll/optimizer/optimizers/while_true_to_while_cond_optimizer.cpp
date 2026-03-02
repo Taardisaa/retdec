@@ -36,7 +36,7 @@ WhileTrueToWhileCondOptimizer::WhileTrueToWhileCondOptimizer(ShPtr<Module> modul
 		PRECONDITION_NON_NULL(module);
 	}
 
-void WhileTrueToWhileCondOptimizer::visit(ShPtr<WhileLoopStmt> stmt) {
+void WhileTrueToWhileCondOptimizer::visit(const ShPtr<WhileLoopStmt>& stmt) {
 	// First of all, visit nested and subsequent statements.
 	FuncOptimizer::visit(stmt);
 
