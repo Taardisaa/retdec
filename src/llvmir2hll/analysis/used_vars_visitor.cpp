@@ -49,21 +49,21 @@ bool UsedVars::operator!=(const UsedVars &other) const {
 /**
 * @brief Returns the variables that are read.
 */
-VarSet UsedVars::getReadVars() const {
+const VarSet& UsedVars::getReadVars() const {
 	return readVars;
 }
 
 /**
 * @brief Returns the variables that are written into.
 */
-VarSet UsedVars::getWrittenVars() const {
+const VarSet& UsedVars::getWrittenVars() const {
 	return writtenVars;
 }
 
 /**
 * @brief Returns read variables merged with written-into variables.
 */
-VarSet UsedVars::getAllVars() const {
+const VarSet& UsedVars::getAllVars() const {
 	return allVars;
 }
 
@@ -265,13 +265,13 @@ ShPtr<UsedVars> UsedVarsVisitor::getUsedVars(ShPtr<Value> value,
 	return visitor->getUsedVars_(value);
 }
 
-void UsedVarsVisitor::visit(ShPtr<Function> func) {
+void UsedVarsVisitor::visit(const ShPtr<Function>& func) {
 	if (func->isDefinition()) {
 		visitStmt(func->getBody());
 	}
 }
 
-void UsedVarsVisitor::visit(ShPtr<Variable> var) {
+void UsedVarsVisitor::visit(const ShPtr<Variable>& var) {
 	if (writing) {
 		usedVars->writtenVars.insert(var);
 	} else {
@@ -281,7 +281,7 @@ void UsedVarsVisitor::visit(ShPtr<Variable> var) {
 	usedVars->numOfVarUses[var]++;
 }
 
-void UsedVarsVisitor::visit(ShPtr<ArrayIndexOpExpr> expr) {
+void UsedVarsVisitor::visit(const ShPtr<ArrayIndexOpExpr>& expr) {
 	// We consider a in a[1] = 5 to be just read (not written). This allows a
 	// much simpler implementation of various optimizations.
 	bool oldWriting = writing;
@@ -291,7 +291,7 @@ void UsedVarsVisitor::visit(ShPtr<ArrayIndexOpExpr> expr) {
 	writing = oldWriting;
 }
 
-void UsedVarsVisitor::visit(ShPtr<StructIndexOpExpr> expr) {
+void UsedVarsVisitor::visit(const ShPtr<StructIndexOpExpr>& expr) {
 	// We consider a in a['1'] = 5 to be just read (not written). This allows a
 	// much simpler implementation of various optimizations.
 	bool oldWriting = writing;
@@ -301,7 +301,7 @@ void UsedVarsVisitor::visit(ShPtr<StructIndexOpExpr> expr) {
 	writing = oldWriting;
 }
 
-void UsedVarsVisitor::visit(ShPtr<DerefOpExpr> expr) {
+void UsedVarsVisitor::visit(const ShPtr<DerefOpExpr>& expr) {
 	// We consider a in *a = 5 to be just read (not written). This allows a
 	// much simpler implementation of various optimizations.
 	bool oldWriting = writing;
@@ -310,7 +310,7 @@ void UsedVarsVisitor::visit(ShPtr<DerefOpExpr> expr) {
 	writing = oldWriting;
 }
 
-void UsedVarsVisitor::visit(ShPtr<AssignStmt> stmt) {
+void UsedVarsVisitor::visit(const ShPtr<AssignStmt>& stmt) {
 	writing = true;
 	stmt->getLhs()->accept(this);
 	writing = false;
@@ -321,7 +321,7 @@ void UsedVarsVisitor::visit(ShPtr<AssignStmt> stmt) {
 	}
 }
 
-void UsedVarsVisitor::visit(ShPtr<VarDefStmt> stmt) {
+void UsedVarsVisitor::visit(const ShPtr<VarDefStmt>& stmt) {
 	writing = true;
 	stmt->getVar()->accept(this);
 	writing = false;
@@ -334,7 +334,7 @@ void UsedVarsVisitor::visit(ShPtr<VarDefStmt> stmt) {
 	}
 }
 
-void UsedVarsVisitor::visit(ShPtr<ForLoopStmt> stmt) {
+void UsedVarsVisitor::visit(const ShPtr<ForLoopStmt>& stmt) {
 	writing = true;
 	stmt->getIndVar()->accept(this);
 	writing = false;

@@ -33,15 +33,14 @@ ChangeOrderOfOperandsSubOptimizer::ChangeOrderOfOperandsSubOptimizer(
 */
 ShPtr<SubOptimizer> ChangeOrderOfOperandsSubOptimizer::create(
 		ShPtr<ArithmExprEvaluator> arithmExprEvaluator) {
-	return ShPtr<SubOptimizer>(new ChangeOrderOfOperandsSubOptimizer(
-		arithmExprEvaluator));
+	return std::make_shared<ChangeOrderOfOperandsSubOptimizer>(arithmExprEvaluator);
 }
 
 std::string ChangeOrderOfOperandsSubOptimizer::getId() const {
 	return CHANGE_ORDER_OF_OPERANDS_SUB_OPTIMIZER_ID;
 }
 
-void ChangeOrderOfOperandsSubOptimizer::visit(ShPtr<MulOpExpr> expr) {
+void ChangeOrderOfOperandsSubOptimizer::visit(const ShPtr<MulOpExpr>& expr) {
 	OrderedAllVisitor::visit(expr);
 
 	// Optimization like "a * 3(ConstInt/ConstFloat)" -> optimized to "3 * a".

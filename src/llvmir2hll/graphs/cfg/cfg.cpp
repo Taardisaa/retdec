@@ -624,10 +624,9 @@ CFG::NodeVector CFG::getUnreachableNodes() const {
 	// nodes that are not visited during the traversal are unreachable.
 	NodeVector nodesToVisit{entryNode};
 	NodeSet visitedNodes;
-	while (!nodesToVisit.empty()) {
-		// Get and remove the first node to be visited.
-		auto node = nodesToVisit.front();
-		nodesToVisit.erase(nodesToVisit.begin());
+	std::size_t idx = 0;
+	while (idx < nodesToVisit.size()) {
+		auto node = nodesToVisit[idx++];
 
 		if (hasItem(visitedNodes, node)) {
 			continue;

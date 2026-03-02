@@ -9,6 +9,7 @@
 
 #include <cstddef>
 #include <iterator>
+#include <memory>
 #include <set>
 #include <string>
 #include <vector>
@@ -157,6 +158,14 @@ public:
 	static ShPtr<Statement> cloneStatements(ShPtr<Statement> stmts);
 	static ShPtr<Statement> getLastStatement(ShPtr<Statement> stmts);
 
+	/// Break all shared_ptr cycles in the statement graph rooted at @a body.
+	/// For use during Function destruction only.
+	static void breakCycles(ShPtr<Statement> body);
+
+	/// Clear targets of all orphaned gotos still alive after per-function
+	/// cycle breaking.  Called once during Module teardown.
+	static void breakAllOrphanedCycles();
+
 protected:
 	Statement(Address a = Address::Undefined);
 
@@ -167,8 +176,8 @@ protected:
 	/// Predecessor statements (weak pointers to break shared_ptr cycles).
 	WeakStmtVec preds;
 
-	/// Label.
-	std::string label;
+	/// Label (lazily allocated — only goto targets have labels).
+	std::unique_ptr<std::string> label;
 
 	/// Address of ASM instruction from which this statement was created from.
 	Address address;

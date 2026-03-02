@@ -40,14 +40,14 @@ OneSubOptimizer::OneSubOptimizer(ShPtr<ArithmExprEvaluator>
 */
 ShPtr<SubOptimizer> OneSubOptimizer::create(ShPtr<ArithmExprEvaluator>
 		arithmExprEvaluator) {
-	return ShPtr<SubOptimizer>(new OneSubOptimizer(arithmExprEvaluator));
+	return std::make_shared<OneSubOptimizer>(arithmExprEvaluator);
 }
 
 std::string OneSubOptimizer::getId() const {
 	return ONE_SUB_OPTIMIZER_ID;
 }
 
-void OneSubOptimizer::visit(ShPtr<MulOpExpr> expr) {
+void OneSubOptimizer::visit(const ShPtr<MulOpExpr>& expr) {
 	OrderedAllVisitor::visit(expr);
 
 	if (isOpOne(expr->getFirstOperand())) {
@@ -59,7 +59,7 @@ void OneSubOptimizer::visit(ShPtr<MulOpExpr> expr) {
 	}
 }
 
-void OneSubOptimizer::visit(ShPtr<DivOpExpr> expr) {
+void OneSubOptimizer::visit(const ShPtr<DivOpExpr>& expr) {
 	OrderedAllVisitor::visit(expr);
 
 	if (isOpOne(expr->getSecondOperand())) {
@@ -68,7 +68,7 @@ void OneSubOptimizer::visit(ShPtr<DivOpExpr> expr) {
 	}
 }
 
-void OneSubOptimizer::visit(ShPtr<BitXorOpExpr> expr) {
+void OneSubOptimizer::visit(const ShPtr<BitXorOpExpr>& expr) {
 	OrderedAllVisitor::visit(expr);
 
 	if (isConstIntOne(expr->getFirstOperand())) {

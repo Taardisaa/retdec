@@ -165,8 +165,14 @@ auto ordered(const DefUseChains::DefUseChain &du) {
 			if (s1PredSize != s2PredSize) {
 				return s1PredSize < s2PredSize;
 			} else if (s1PredSize > 0 && s2PredSize > 0) {
-				const auto &s1Pred = *s1->predecessor_begin();
-				const auto &s2Pred = *s2->predecessor_begin();
+				auto s1Pred = *s1->predecessor_begin();
+				auto s2Pred = *s2->predecessor_begin();
+				if (!s1Pred && !s2Pred) {
+					break;
+				}
+				if (!s1Pred || !s2Pred) {
+					return !s1Pred;
+				}
 				cmpResult = compareStmtsInDUChains(s1Pred, s2Pred);
 				if (cmpResult != 0) {
 					return cmpResult < 0;

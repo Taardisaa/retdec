@@ -64,15 +64,14 @@ ThreeOperandsSubOptimizer::ThreeOperandsSubOptimizer(ShPtr<ArithmExprEvaluator>
 */
 ShPtr<SubOptimizer> ThreeOperandsSubOptimizer::create(ShPtr<ArithmExprEvaluator>
 		arithmExprEvaluator) {
-	return ShPtr<SubOptimizer>(new ThreeOperandsSubOptimizer(
-		arithmExprEvaluator));
+	return std::make_shared<ThreeOperandsSubOptimizer>(arithmExprEvaluator);
 }
 
 std::string ThreeOperandsSubOptimizer::getId() const {
 	return OP_OPER_OP_OPER_OP_SUB_OPTIMIZER_ID;
 }
 
-void ThreeOperandsSubOptimizer::visit(ShPtr<AddOpExpr> expr) {
+void ThreeOperandsSubOptimizer::visit(const ShPtr<AddOpExpr>& expr) {
 	OrderedAllVisitor::visit(expr);
 
 	// Optimizations dependent on the first Constant operand or on the second
@@ -195,7 +194,7 @@ void ThreeOperandsSubOptimizer::visit(ShPtr<AddOpExpr> expr) {
 	}
 }
 
-void ThreeOperandsSubOptimizer::visit(ShPtr<SubOpExpr> expr) {
+void ThreeOperandsSubOptimizer::visit(const ShPtr<SubOpExpr>& expr) {
 	OrderedAllVisitor::visit(expr);
 
 	// Optimizations dependent on the first Constant operand.
@@ -376,7 +375,7 @@ bool ThreeOperandsSubOptimizer::analyzeOpOperOp(ShPtr<Expression> &constant,
 	return true;
 }
 
-void ThreeOperandsSubOptimizer::visit(ShPtr<LtOpExpr> expr) {
+void ThreeOperandsSubOptimizer::visit(const ShPtr<LtOpExpr>& expr) {
 	OrderedAllVisitor::visit(expr);
 
 	std::optional<ExprPair> exprPair(tryOptimizeExpressionWithRelationalOperator(expr));
@@ -385,7 +384,7 @@ void ThreeOperandsSubOptimizer::visit(ShPtr<LtOpExpr> expr) {
 	}
 }
 
-void ThreeOperandsSubOptimizer::visit(ShPtr<LtEqOpExpr> expr) {
+void ThreeOperandsSubOptimizer::visit(const ShPtr<LtEqOpExpr>& expr) {
 	OrderedAllVisitor::visit(expr);
 
 	std::optional<ExprPair> exprPair(tryOptimizeExpressionWithRelationalOperator(expr));
@@ -394,7 +393,7 @@ void ThreeOperandsSubOptimizer::visit(ShPtr<LtEqOpExpr> expr) {
 	}
 }
 
-void ThreeOperandsSubOptimizer::visit(ShPtr<GtOpExpr> expr) {
+void ThreeOperandsSubOptimizer::visit(const ShPtr<GtOpExpr>& expr) {
 	OrderedAllVisitor::visit(expr);
 
 	std::optional<ExprPair> exprPair(tryOptimizeExpressionWithRelationalOperator(expr));
@@ -403,7 +402,7 @@ void ThreeOperandsSubOptimizer::visit(ShPtr<GtOpExpr> expr) {
 	}
 }
 
-void ThreeOperandsSubOptimizer::visit(ShPtr<GtEqOpExpr> expr) {
+void ThreeOperandsSubOptimizer::visit(const ShPtr<GtEqOpExpr>& expr) {
 	OrderedAllVisitor::visit(expr);
 
 	std::optional<ExprPair> exprPair(tryOptimizeExpressionWithRelationalOperator(expr));
@@ -412,7 +411,7 @@ void ThreeOperandsSubOptimizer::visit(ShPtr<GtEqOpExpr> expr) {
 	}
 }
 
-void ThreeOperandsSubOptimizer::visit(ShPtr<EqOpExpr> expr) {
+void ThreeOperandsSubOptimizer::visit(const ShPtr<EqOpExpr>& expr) {
 	OrderedAllVisitor::visit(expr);
 
 	std::optional<ExprPair> exprPair(tryOptimizeExpressionWithRelationalOperator(expr));
@@ -421,7 +420,7 @@ void ThreeOperandsSubOptimizer::visit(ShPtr<EqOpExpr> expr) {
 	}
 }
 
-void ThreeOperandsSubOptimizer::visit(ShPtr<NeqOpExpr> expr) {
+void ThreeOperandsSubOptimizer::visit(const ShPtr<NeqOpExpr>& expr) {
 	OrderedAllVisitor::visit(expr);
 
 	std::optional<ExprPair> exprPair(tryOptimizeExpressionWithRelationalOperator(expr));
@@ -430,13 +429,13 @@ void ThreeOperandsSubOptimizer::visit(ShPtr<NeqOpExpr> expr) {
 	}
 }
 
-void ThreeOperandsSubOptimizer::visit(ShPtr<BitXorOpExpr> expr) {
+void ThreeOperandsSubOptimizer::visit(const ShPtr<BitXorOpExpr>& expr) {
 	OrderedAllVisitor::visit(expr);
 
 	tryOptimizeBitXorOpWithRelationalOperator(expr);
 }
 
-void ThreeOperandsSubOptimizer::visit(ShPtr<OrOpExpr> expr) {
+void ThreeOperandsSubOptimizer::visit(const ShPtr<OrOpExpr>& expr) {
 	OrderedAllVisitor::visit(expr);
 
 	tryOptimizeOrOpExprWithRelOperators(expr);

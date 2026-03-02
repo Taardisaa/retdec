@@ -32,6 +32,8 @@ class Visitor;
 */
 class Function final: public Value {
 public:
+	~Function() override;
+
 	static ShPtr<Function> create(ShPtr<Module> module, ShPtr<Type> retType,
 		std::string name, VarVector params, VarSet localVars = VarSet(),
 		ShPtr<Statement> body = nullptr, bool isVarArg = false);

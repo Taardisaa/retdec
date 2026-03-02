@@ -16,8 +16,19 @@ namespace llvmir2hll {
 *
 * See create() for more information.
 */
+std::unordered_set<GotoStmt*>& GotoStmt::liveGotos() {
+	static std::unordered_set<GotoStmt*> instance;
+	return instance;
+}
+
 GotoStmt::GotoStmt(ShPtr<Statement> target, Address a):
-	Statement(a), target(target) {}
+	Statement(a), target(target) {
+	liveGotos().insert(this);
+}
+
+GotoStmt::~GotoStmt() {
+	liveGotos().erase(this);
+}
 
 ShPtr<Value> GotoStmt::clone() {
 	ShPtr<GotoStmt> gotoStmt(GotoStmt::create(target, getAddress()));
@@ -63,6 +74,13 @@ void GotoStmt::setTarget(ShPtr<Statement> newTarget) {
 	newTarget->addObserver(shared_from_this());
 	newTarget->addPredecessor(ucast<Statement>(shared_from_this()));
 	target = newTarget;
+}
+
+/**
+* @brief Clears the goto target to break reference cycles.
+*/
+void GotoStmt::clearTarget() {
+	target.reset();
 }
 
 /**

@@ -7,6 +7,9 @@
 #ifndef RETDEC_LLVMIR2HLL_SUPPORT_METADATABLE_H
 #define RETDEC_LLVMIR2HLL_SUPPORT_METADATABLE_H
 
+#include <memory>
+#include <utility>
+
 namespace retdec {
 namespace llvmir2hll {
 
@@ -14,6 +17,9 @@ namespace llvmir2hll {
 * @brief A mixin providing metadata attached to objects.
 *
 * @tparam T Type of metadata.
+*
+* Uses lazy allocation: the metadata storage is only allocated when
+* non-empty metadata is actually set, saving memory per IR node.
 */
 template<typename T>
 class Metadatable {
@@ -21,35 +27,39 @@ public:
 	/**
 	* @brief Attaches new metadata.
 	*
-	* @param[in] data Metadata to be attached.
+	* @param[in] newData Metadata to be attached.
 	*/
-	void setMetadata(T data) {
-		this->data = data;
+	void setMetadata(T newData) {
+		if (!data) {
+			data = std::make_unique<T>(std::move(newData));
+		} else {
+			*data = std::move(newData);
+		}
 	}
 
 	/**
 	* @brief Returns the attached metadata.
 	*/
 	T getMetadata() const {
-		return data;
+		return data ? *data : T{};
 	}
 
 	/**
 	* @brief Are there any non-empty metadata?
 	*/
 	bool hasMetadata() const {
-		return !data.empty();
+		return data && !data->empty();
 	}
 
 protected:
 	/**
 	* @brief Constructs a new metadatable object.
 	*/
-	Metadatable(): data() {}
+	Metadatable() = default;
 
 private:
-	/// Attached metadata.
-	T data;
+	/// Attached metadata (lazily allocated).
+	std::unique_ptr<T> data;
 };
 
 } // namespace llvmir2hll

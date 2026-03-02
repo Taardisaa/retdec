@@ -542,7 +542,7 @@ retdec::common::Object DebugFormat::loadDwarf_variable(llvm::DWARFDie die)
 
 		if (expr.begin() != expr.end())
 		{
-			auto& e = *expr.begin();
+			auto e = *expr.begin();
 
 			if (e.getCode() >= llvm::dwarf::DW_OP_breg0
 					&& e.getCode() <= llvm::dwarf::DW_OP_breg31

@@ -298,6 +298,7 @@ void OptimizerManager::runOptimizerProvidedItShouldBeRun(ShPtr<Optimizer> optimi
 	}
 
 	backendRunOpts.insert(OPT_ID);
+	va->clearCache();
 }
 
 /**

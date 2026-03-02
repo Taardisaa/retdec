@@ -11,6 +11,7 @@
 #include <functional>
 #include <map>
 #include <string>
+#include <unordered_map>
 
 #include "retdec/llvmir2hll/support/smart_ptr.h"
 #include "retdec/llvmir2hll/support/types.h"
@@ -53,6 +54,7 @@ public:
 public:
 	Module(const llvm::Module *llvmModule, const std::string &identifier,
 		ShPtr<Semantics> semantics, ShPtr<Config> config);
+	~Module();
 
 	const llvm::Module *getLLVMModule() const;
 	std::string getIdentifier(bool stripDirs = true) const;
@@ -196,8 +198,11 @@ private:
 	/// The used config.
 	ShPtr<Config> config;
 
-	/// Global variables.
+	/// Global variables (ordered).
 	GlobalVarDefVector globalVars;
+
+	/// Auxiliary map for O(1) global variable lookups.
+	std::unordered_map<ShPtr<Variable>, ShPtr<GlobalVarDef>> globalVarLookup;
 
 	/// Functions.
 	FuncVector funcs;

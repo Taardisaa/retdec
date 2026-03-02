@@ -18,7 +18,7 @@ namespace llvmir2hll {
 * See create() for more information.
 */
 Variable::Variable(const std::string &name, ShPtr<Type> type, Address a):
-	initialName(name), name(name), type(type), internal(true), address(a) {}
+	name(name), type(type), internal(true), address(a) {}
 
 ShPtr<Value> Variable::clone() {
 	// Variables are not cloned (see the description of Value::clone()).
@@ -28,7 +28,7 @@ ShPtr<Value> Variable::clone() {
 bool Variable::isEqualTo(ShPtr<Value> otherValue) const {
 	// Both types, names, and internal status have to be equal.
 	if (ShPtr<Variable> otherVariable = cast<Variable>(otherValue)) {
-		return initialName == otherVariable->initialName &&
+		return getInitialName() == otherVariable->getInitialName() &&
 			name == otherVariable->name &&
 			type->isEqualTo(otherVariable->type) &&
 			internal == otherVariable->internal;
@@ -48,7 +48,7 @@ void Variable::replace(ShPtr<Expression> oldExpr, ShPtr<Expression> newExpr) {
 * This is the name that was assigned to the variable before any renaming.
 */
 const std::string &Variable::getInitialName() const {
-	return initialName;
+	return initialName ? *initialName : name;
 }
 
 /**
@@ -114,8 +114,10 @@ bool Variable::isExternal() const {
 * variable.
 */
 ShPtr<Variable> Variable::copy() const {
-	ShPtr<Variable> varCopy(Variable::create(initialName, type));
-	varCopy->setName(name);
+	ShPtr<Variable> varCopy(Variable::create(getInitialName(), type));
+	if (getInitialName() != name) {
+		varCopy->setName(name);
+	}
 	varCopy->internal = internal;
 	return varCopy;
 }
@@ -124,6 +126,9 @@ ShPtr<Variable> Variable::copy() const {
 * @brief Sets the variable's name to @a newName.
 */
 void Variable::setName(const std::string &newName) {
+	if (!initialName) {
+		initialName = std::make_unique<std::string>(name);
+	}
 	name = newName;
 }
 

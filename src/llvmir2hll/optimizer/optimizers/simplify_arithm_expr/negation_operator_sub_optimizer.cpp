@@ -34,15 +34,14 @@ NegationOperatorSubOptimizer::NegationOperatorSubOptimizer(ShPtr<
 */
 ShPtr<SubOptimizer> NegationOperatorSubOptimizer::create(ShPtr<
 		ArithmExprEvaluator> arithmExprEvaluator) {
-	return ShPtr<SubOptimizer>(new NegationOperatorSubOptimizer(
-		arithmExprEvaluator));
+	return std::make_shared<NegationOperatorSubOptimizer>(arithmExprEvaluator);
 }
 
 std::string NegationOperatorSubOptimizer::getId() const {
 	return NEGATION_OPERATOR_SUB_OPTIMIZER_ID;
 }
 
-void NegationOperatorSubOptimizer::visit(ShPtr<NotOpExpr> expr) {
+void NegationOperatorSubOptimizer::visit(const ShPtr<NotOpExpr>& expr) {
 	OrderedAllVisitor::visit(expr);
 
 	ShPtr<Expression> negatedExpr(ExpressionNegater::negate(expr->getOperand()));

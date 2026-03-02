@@ -43,15 +43,14 @@ EqualOperandsSubOptimizer::EqualOperandsSubOptimizer(ShPtr<ArithmExprEvaluator>
 */
 ShPtr<SubOptimizer> EqualOperandsSubOptimizer::create(ShPtr<ArithmExprEvaluator>
 		arithmExprEvaluator) {
-	return ShPtr<SubOptimizer>(new EqualOperandsSubOptimizer(
-		arithmExprEvaluator));
+	return std::make_shared<EqualOperandsSubOptimizer>(arithmExprEvaluator);
 }
 
 std::string EqualOperandsSubOptimizer::getId() const {
 	return EQUAL_OPERANDS_SUB_OPTIMIZER_ID;
 }
 
-void EqualOperandsSubOptimizer::visit(ShPtr<AddOpExpr> expr) {
+void EqualOperandsSubOptimizer::visit(const ShPtr<AddOpExpr>& expr) {
 	OrderedAllVisitor::visit(expr);
 
 	// Optimization like "a + a" -> optimized to "2 * a".
@@ -64,7 +63,7 @@ void EqualOperandsSubOptimizer::visit(ShPtr<AddOpExpr> expr) {
 	}
 }
 
-void EqualOperandsSubOptimizer::visit(ShPtr<SubOpExpr> expr) {
+void EqualOperandsSubOptimizer::visit(const ShPtr<SubOpExpr>& expr) {
 	OrderedAllVisitor::visit(expr);
 
 	// Optimization like "a - a" -> optimized to "0".
@@ -79,7 +78,7 @@ void EqualOperandsSubOptimizer::visit(ShPtr<SubOpExpr> expr) {
 	}
 }
 
-void EqualOperandsSubOptimizer::visit(ShPtr<DivOpExpr> expr) {
+void EqualOperandsSubOptimizer::visit(const ShPtr<DivOpExpr>& expr) {
 	OrderedAllVisitor::visit(expr);
 
 	// Optimization like "a / a" -> optimized to "1".
@@ -94,7 +93,7 @@ void EqualOperandsSubOptimizer::visit(ShPtr<DivOpExpr> expr) {
 	}
 }
 
-void EqualOperandsSubOptimizer::visit(ShPtr<EqOpExpr> expr) {
+void EqualOperandsSubOptimizer::visit(const ShPtr<EqOpExpr>& expr) {
 	OrderedAllVisitor::visit(expr);
 
 	// We don't want to optimize func() == func() or 2.74 == 2.74.
@@ -109,7 +108,7 @@ void EqualOperandsSubOptimizer::visit(ShPtr<EqOpExpr> expr) {
 	}
 }
 
-void EqualOperandsSubOptimizer::visit(ShPtr<NeqOpExpr> expr) {
+void EqualOperandsSubOptimizer::visit(const ShPtr<NeqOpExpr>& expr) {
 	OrderedAllVisitor::visit(expr);
 
 	// We don't want to optimize func() != func() or 2.74 != 2.74.

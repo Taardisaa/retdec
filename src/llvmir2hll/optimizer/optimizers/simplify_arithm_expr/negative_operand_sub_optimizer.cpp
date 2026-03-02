@@ -36,15 +36,14 @@ NegativeOperandSubOptimizer::NegativeOperandSubOptimizer(
 */
 ShPtr<SubOptimizer> NegativeOperandSubOptimizer::create(
 		ShPtr<ArithmExprEvaluator> arithmExprEvaluator) {
-	return ShPtr<SubOptimizer>(new NegativeOperandSubOptimizer(
-		arithmExprEvaluator));
+	return std::make_shared<NegativeOperandSubOptimizer>(arithmExprEvaluator);
 }
 
 std::string NegativeOperandSubOptimizer::getId() const {
 	return NEGATIVE_OPERAND_SUB_OPTIMIZER_ID;
 }
 
-void NegativeOperandSubOptimizer::visit(ShPtr<AddOpExpr> expr) {
+void NegativeOperandSubOptimizer::visit(const ShPtr<AddOpExpr>& expr) {
 	OrderedAllVisitor::visit(expr);
 
 	// -------
@@ -128,7 +127,7 @@ void NegativeOperandSubOptimizer::visit(ShPtr<AddOpExpr> expr) {
 	// -------
 }
 
-void NegativeOperandSubOptimizer::visit(ShPtr<SubOpExpr> expr) {
+void NegativeOperandSubOptimizer::visit(const ShPtr<SubOpExpr>& expr) {
 	OrderedAllVisitor::visit(expr);
 
 	// -------

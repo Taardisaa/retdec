@@ -7,6 +7,7 @@
 #ifndef RETDEC_LLVMIR2HLL_IR_VARIABLE_H
 #define RETDEC_LLVMIR2HLL_IR_VARIABLE_H
 
+#include <memory>
 #include <string>
 
 #include "retdec/llvmir2hll/ir/expression.h"
@@ -63,8 +64,8 @@ private:
 		Address a = Address::Undefined);
 
 private:
-	/// Initial name of the variable.
-	std::string initialName;
+	/// Initial name of the variable (lazily allocated on first rename).
+	std::unique_ptr<std::string> initialName;
 
 	/// Name of the variable.
 	std::string name;

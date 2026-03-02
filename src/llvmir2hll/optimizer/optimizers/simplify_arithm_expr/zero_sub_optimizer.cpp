@@ -43,14 +43,14 @@ ZeroSubOptimizer::ZeroSubOptimizer(ShPtr<ArithmExprEvaluator>
 */
 ShPtr<SubOptimizer> ZeroSubOptimizer::create(ShPtr<ArithmExprEvaluator>
 		arithmExprEvaluator) {
-	return ShPtr<SubOptimizer>(new ZeroSubOptimizer(arithmExprEvaluator));
+	return std::make_shared<ZeroSubOptimizer>(arithmExprEvaluator);
 }
 
 std::string ZeroSubOptimizer::getId() const {
 	return ZERO_SUB_OPTIMIZER_ID;
 }
 
-void ZeroSubOptimizer::visit(ShPtr<AddOpExpr> expr) {
+void ZeroSubOptimizer::visit(const ShPtr<AddOpExpr>& expr) {
 	OrderedAllVisitor::visit(expr);
 
 	if (isOpZero(expr->getFirstOperand())) {
@@ -62,7 +62,7 @@ void ZeroSubOptimizer::visit(ShPtr<AddOpExpr> expr) {
 	}
 }
 
-void ZeroSubOptimizer::visit(ShPtr<SubOpExpr> expr) {
+void ZeroSubOptimizer::visit(const ShPtr<SubOpExpr>& expr) {
 	OrderedAllVisitor::visit(expr);
 
 	ShPtr<ConstInt> secOpConstInt(cast<ConstInt>(expr->getSecondOperand()));
@@ -99,7 +99,7 @@ void ZeroSubOptimizer::visit(ShPtr<SubOpExpr> expr) {
 	}
 }
 
-void ZeroSubOptimizer::visit(ShPtr<MulOpExpr> expr) {
+void ZeroSubOptimizer::visit(const ShPtr<MulOpExpr>& expr) {
 	OrderedAllVisitor::visit(expr);
 
 	if (isOpZero(expr->getFirstOperand())) {
@@ -111,7 +111,7 @@ void ZeroSubOptimizer::visit(ShPtr<MulOpExpr> expr) {
 	}
 }
 
-void ZeroSubOptimizer::visit(ShPtr<DivOpExpr> expr) {
+void ZeroSubOptimizer::visit(const ShPtr<DivOpExpr>& expr) {
 	OrderedAllVisitor::visit(expr);
 
 	if (isOpZero(expr->getFirstOperand())) {
@@ -120,7 +120,7 @@ void ZeroSubOptimizer::visit(ShPtr<DivOpExpr> expr) {
 	}
 }
 
-void ZeroSubOptimizer::visit(ShPtr<ModOpExpr> expr) {
+void ZeroSubOptimizer::visit(const ShPtr<ModOpExpr>& expr) {
 	OrderedAllVisitor::visit(expr);
 
 	if (isOpZero(expr->getFirstOperand())) {
@@ -129,7 +129,7 @@ void ZeroSubOptimizer::visit(ShPtr<ModOpExpr> expr) {
 	}
 }
 
-void ZeroSubOptimizer::visit(ShPtr<BitAndOpExpr> expr) {
+void ZeroSubOptimizer::visit(const ShPtr<BitAndOpExpr>& expr) {
 	OrderedAllVisitor::visit(expr);
 
 	if (isConstIntZero(expr->getFirstOperand())) {
@@ -141,7 +141,7 @@ void ZeroSubOptimizer::visit(ShPtr<BitAndOpExpr> expr) {
 	}
 }
 
-void ZeroSubOptimizer::visit(ShPtr<BitOrOpExpr> expr) {
+void ZeroSubOptimizer::visit(const ShPtr<BitOrOpExpr>& expr) {
 	OrderedAllVisitor::visit(expr);
 
 	if (isConstIntZero(expr->getFirstOperand())) {
@@ -154,7 +154,7 @@ void ZeroSubOptimizer::visit(ShPtr<BitOrOpExpr> expr) {
 
 }
 
-void ZeroSubOptimizer::visit(ShPtr<BitXorOpExpr> expr) {
+void ZeroSubOptimizer::visit(const ShPtr<BitXorOpExpr>& expr) {
 	OrderedAllVisitor::visit(expr);
 
 	if (isConstIntZero(expr->getFirstOperand())) {

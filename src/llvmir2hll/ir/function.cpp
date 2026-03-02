@@ -23,6 +23,10 @@ using retdec::utils::setDifference;
 namespace retdec {
 namespace llvmir2hll {
 
+Function::~Function() {
+	Statement::breakCycles(body);
+}
+
 /**
 * @brief Constructs a new function.
 *

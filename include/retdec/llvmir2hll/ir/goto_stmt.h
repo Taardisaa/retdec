@@ -7,6 +7,8 @@
 #ifndef RETDEC_LLVMIR2HLL_IR_GOTO_STMT_H
 #define RETDEC_LLVMIR2HLL_IR_GOTO_STMT_H
 
+#include <unordered_set>
+
 #include "retdec/llvmir2hll/ir/statement.h"
 #include "retdec/llvmir2hll/support/smart_ptr.h"
 
@@ -23,6 +25,11 @@ class Visitor;
 */
 class GotoStmt final: public Statement {
 public:
+	~GotoStmt() override;
+
+	/// Registry of all live GotoStmt instances for cycle cleanup.
+	static std::unordered_set<GotoStmt*>& liveGotos();
+
 	static ShPtr<GotoStmt> create(ShPtr<Statement> target,
 		Address a = Address::Undefined);
 
@@ -35,6 +42,7 @@ public:
 	ShPtr<Statement> getTarget() const;
 
 	void setTarget(ShPtr<Statement> target);
+	void clearTarget();
 
 	/// @name Observer Interface
 	/// @{

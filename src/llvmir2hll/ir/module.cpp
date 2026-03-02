@@ -48,6 +48,13 @@ Module::Module(const llvm::Module *llvmModule, const std::string &identifier,
 		PRECONDITION_NON_NULL(semantics);
 	}
 
+Module::~Module() {
+	// Destroy all functions first so their per-function breakCycles run.
+	funcs.clear();
+	// Then break cycles in any orphaned gotos that survived.
+	Statement::breakAllOrphanedCycles();
+}
+
 /**
 * @brief Adds a new global variable to the module.
 *
@@ -62,16 +69,17 @@ Module::Module(const llvm::Module *llvmModule, const std::string &identifier,
 */
 void Module::addGlobalVar(ShPtr<Variable> var, ShPtr<Expression> init) {
 	// Check whether the variable has already been added.
-	for (auto i = globalVars.begin(), e = globalVars.end(); i != e; ++i) {
-		if ((*i)->getVar() == var) {
-			// It does, so just replace its initializer.
-			(*i)->setInitializer(init);
-			return;
-		}
+	auto it = globalVarLookup.find(var);
+	if (it != globalVarLookup.end()) {
+		// It does, so just replace its initializer.
+		it->second->setInitializer(init);
+		return;
 	}
 
 	// The variable does not exist, so add it.
-	globalVars.push_back(GlobalVarDef::create(var, init));
+	auto varDef = GlobalVarDef::create(var, init);
+	globalVars.push_back(varDef);
+	globalVarLookup[var] = varDef;
 }
 
 /**
@@ -83,6 +91,11 @@ void Module::addGlobalVar(ShPtr<Variable> var, ShPtr<Expression> init) {
 * module.
 */
 void Module::removeGlobalVar(ShPtr<Variable> var) {
+	auto mapIt = globalVarLookup.find(var);
+	if (mapIt == globalVarLookup.end()) {
+		return;
+	}
+	globalVarLookup.erase(mapIt);
 	for (auto i = globalVars.begin(), e = globalVars.end(); i != e; ++i) {
 		if ((*i)->getVar() == var) {
 			globalVars.erase(i);
@@ -98,12 +111,7 @@ void Module::removeGlobalVar(ShPtr<Variable> var) {
 * module.
 */
 bool Module::isGlobalVar(ShPtr<Variable> var) const {
-	for (auto i = globalVars.begin(), e = globalVars.end(); i != e; ++i) {
-		if ((*i)->getVar() == var) {
-			return true;
-		}
-	}
-	return false;
+	return globalVarLookup.count(var) > 0;
 }
 
 /**
@@ -125,10 +133,9 @@ bool Module::isGlobalVarStoringStringLiteral(const std::string &varName) const {
 * module.
 */
 ShPtr<Expression> Module::getInitForGlobalVar(ShPtr<Variable> var) const {
-	for (auto i = globalVars.begin(), e = globalVars.end(); i != e; ++i) {
-		if ((*i)->getVar() == var) {
-			return (*i)->getInitializer();
-		}
+	auto it = globalVarLookup.find(var);
+	if (it != globalVarLookup.end()) {
+		return it->second->getInitializer();
 	}
 	return ShPtr<Expression>();
 }

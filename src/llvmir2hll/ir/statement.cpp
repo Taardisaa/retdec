@@ -5,11 +5,18 @@
 */
 
 #include <algorithm>
+#include <unordered_set>
+#include <vector>
 
 #include "retdec/llvmir2hll/ir/empty_stmt.h"
+#include "retdec/llvmir2hll/ir/for_loop_stmt.h"
 #include "retdec/llvmir2hll/ir/goto_stmt.h"
+#include "retdec/llvmir2hll/ir/if_stmt.h"
 #include "retdec/llvmir2hll/ir/return_stmt.h"
 #include "retdec/llvmir2hll/ir/statement.h"
+#include "retdec/llvmir2hll/ir/switch_stmt.h"
+#include "retdec/llvmir2hll/ir/ufor_loop_stmt.h"
+#include "retdec/llvmir2hll/ir/while_loop_stmt.h"
 #include "retdec/llvmir2hll/llvm/llvm_support.h"
 #include "retdec/llvmir2hll/support/debug.h"
 #include "retdec/utils/conversion.h"
@@ -58,7 +65,7 @@ StmtVector lockPreds(const std::vector<WkPtr<Statement>> &vec) {
 * @brief Constructs a new statement.
 */
 Statement::Statement(Address a):
-	succ(), preds(), label(), address(a) {
+	succ(), preds(), address(a) {
 }
 
 /**
@@ -83,8 +90,8 @@ Statement::Statement(Address a):
 */
 void Statement::setSuccessor(ShPtr<Statement> newSucc) {
 	if (succ) {
-		// Update the predecessors of the old successor.
-		eraseWeakPred(succ->preds, succ);
+		// Remove this statement from the old successor's predecessors.
+		eraseWeakPred(succ->preds, ucast<Statement>(shared_from_this()));
 	}
 
 	if (newSucc) {
@@ -751,21 +758,21 @@ void Statement::redirectGotosTo(ShPtr<Statement> stmt) {
 * @brief Does the statement has a label set?
 */
 bool Statement::hasLabel() const {
-	return !label.empty();
+	return label && !label->empty();
 }
 
 /**
 * @brief Returns the statement's label.
 */
 std::string Statement::getLabel() const {
-	return label;
+	return label ? *label : std::string();
 }
 
 /**
 * @brief Removes the statement's label (if any).
 */
 void Statement::removeLabel() {
-	label.clear();
+	label.reset();
 }
 
 /**
@@ -777,23 +784,25 @@ void Statement::removeLabel() {
 void Statement::setLabel(const std::string &newLabel) {
 	PRECONDITION(!newLabel.empty(), "the statement's label cannot be empty");
 
-	label = newLabel;
+	if (!label) {
+		label = std::make_unique<std::string>(newLabel);
+	} else {
+		*label = newLabel;
+	}
 }
 
 /**
 * @brief Transfers the label from the given statement to the current statement.
 */
 void Statement::transferLabelFrom(ShPtr<Statement> stmt) {
-	label = stmt->label;
-	stmt->label.clear();
+	label = std::move(stmt->label);
 }
 
 /**
 * @brief Transfers the label from the current statement to the given statement.
 */
 void Statement::transferLabelTo(ShPtr<Statement> stmt) {
-	stmt->label = label;
-	label.clear();
+	stmt->label = std::move(label);
 }
 
 /**
@@ -828,6 +837,89 @@ bool Statement::containsJustGotosToCurrentStatement(const WeakStmtVec &stmts) co
 		return false;
 	}
 	return true;
+}
+
+/**
+* @brief Break all shared_ptr cycles in the statement graph rooted at @a body.
+*
+* Walks all reachable statements (through successor chains, goto targets, and
+* compound statement bodies), then clears all cycle-forming strong references
+* (goto targets and successor pointers). For use during Function destruction.
+*/
+void Statement::breakCycles(ShPtr<Statement> body) {
+	if (!body)
+		return;
+
+	// Phase 1: collect all reachable statements
+	std::unordered_set<Statement*> visitedSet;
+	std::vector<ShPtr<Statement>> allStmts;
+	std::vector<ShPtr<Statement>> worklist;
+	worklist.push_back(body);
+
+	while (!worklist.empty()) {
+		auto stmt = worklist.back();
+		worklist.pop_back();
+		if (!stmt || !visitedSet.insert(stmt.get()).second)
+			continue;
+
+		allStmts.push_back(stmt);
+
+		// Queue successor
+		worklist.push_back(stmt->succ);
+
+		// GotoStmt: queue target
+		if (auto g = cast<GotoStmt>(stmt)) {
+			worklist.push_back(g->getTarget());
+		}
+
+		// Compound statements: queue bodies
+		if (auto ifStmt = cast<IfStmt>(stmt)) {
+			for (auto ci = ifStmt->clause_begin(),
+					ce = ifStmt->clause_end(); ci != ce; ++ci) {
+				worklist.push_back(ci->second);
+			}
+			if (ifStmt->hasElseClause()) {
+				worklist.push_back(ifStmt->getElseClause());
+			}
+		} else if (auto whileStmt = cast<WhileLoopStmt>(stmt)) {
+			worklist.push_back(whileStmt->getBody());
+		} else if (auto forStmt = cast<ForLoopStmt>(stmt)) {
+			worklist.push_back(forStmt->getBody());
+		} else if (auto uforStmt = cast<UForLoopStmt>(stmt)) {
+			worklist.push_back(uforStmt->getBody());
+		} else if (auto switchStmt = cast<SwitchStmt>(stmt)) {
+			for (auto ci = switchStmt->clause_begin(),
+					ce = switchStmt->clause_end(); ci != ce; ++ci) {
+				worklist.push_back(ci->second);
+			}
+		}
+	}
+
+	// Phase 2: clear all cycle-forming strong references.
+	// First clear goto targets (backward edges), then successor pointers.
+	// All statements remain alive through allStmts during this phase.
+	for (auto &stmt : allStmts) {
+		if (auto g = cast<GotoStmt>(stmt)) {
+			g->clearTarget();
+		}
+	}
+	for (auto &stmt : allStmts) {
+		stmt->succ.reset();
+	}
+
+}
+
+void Statement::breakAllOrphanedCycles() {
+	// After all per-function breakCycles have run, clear targets of any
+	// remaining live gotos.  These are orphaned gotos that form unreachable
+	// cycles.  We snapshot the set because clearing a target may cascade-
+	// destroy other GotoStmts, mutating liveGotos().
+	auto snapshot = GotoStmt::liveGotos(); // copy
+	for (auto *g : snapshot) {
+		if (GotoStmt::liveGotos().count(g) && g->getTarget()) {
+			g->clearTarget();
+		}
+	}
 }
 
 } // namespace llvmir2hll

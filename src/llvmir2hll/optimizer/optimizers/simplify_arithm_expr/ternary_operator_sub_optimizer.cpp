@@ -34,15 +34,14 @@ TernaryOperatorSubOptimizer::TernaryOperatorSubOptimizer(
 */
 ShPtr<SubOptimizer> TernaryOperatorSubOptimizer::create(
 		ShPtr<ArithmExprEvaluator> arithmExprEvaluator) {
-	return ShPtr<SubOptimizer>(new TernaryOperatorSubOptimizer(
-		arithmExprEvaluator));
+	return std::make_shared<TernaryOperatorSubOptimizer>(arithmExprEvaluator);
 }
 
 std::string TernaryOperatorSubOptimizer::getId() const {
 	return TERNARY_OPERATOR_SUB_OPTIMIZER_ID;
 }
 
-void TernaryOperatorSubOptimizer::visit(ShPtr<TernaryOpExpr> expr) {
+void TernaryOperatorSubOptimizer::visit(const ShPtr<TernaryOpExpr>& expr) {
 	OrderedAllVisitor::visit(expr);
 
 	ShPtr<ConstBool> constBool(cast<ConstBool>(expr->getCondition()));

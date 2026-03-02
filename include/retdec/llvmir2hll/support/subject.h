@@ -8,6 +8,7 @@
 #define RETDEC_LLVMIR2HLL_SUPPORT_SUBJECT_H
 
 #include <algorithm>
+#include <memory>
 #include <vector>
 
 #include "retdec/llvmir2hll/support/smart_ptr.h"
@@ -25,17 +26,9 @@ namespace llvmir2hll {
 *
 * Implements the Observer design pattern.
 *
-* Usage:
-* @code
-* class Planet: public Subject<Planet> {
-*     private:
-*         std::string name;
-*     public:
-*         Planet(std::string name): Subject<Planet>(this), name(name) {}
-*         ~Planet() {}
-*         std::string getName() { return name; }
-* };
-* @endcode
+* Uses lazy allocation for the observer container: the vector is only
+* allocated when an observer is actually added, saving ~24 bytes per IR
+* node that has no observers.
 *
 * @see Observer
 */
@@ -54,7 +47,7 @@ public:
 	/**
 	* @brief Creates a new subject.
 	*/
-	Subject(): observers() {}
+	Subject() = default;
 
 	/**
 	* @brief Destructs the subject.
@@ -89,7 +82,10 @@ public:
 	* @param[in] observer Observer to be added.
 	*/
 	void addObserver(ObserverPtr observer) {
-		observers.push_back(observer);
+		if (!observers) {
+			observers = std::make_unique<ObserverContainer>();
+		}
+		observers->push_back(observer);
 	}
 
 	/**
@@ -105,7 +101,9 @@ public:
 	* @brief Removes all observers.
 	*/
 	void removeObservers() {
-		observers.clear();
+		if (observers) {
+			observers->clear();
+		}
 	}
 
 	/**
@@ -123,9 +121,12 @@ public:
 	* @see addObserver(), Observer::update(), getSelf()
 	*/
 	void notifyObservers(ShPtr<ArgType> arg = nullptr) {
+		if (!observers || observers->empty()) {
+			return;
+		}
 		// We have to iterate over a copy of the container because it can be
 		// modified during the iteration (either by us or in an update() call).
-		for (const auto &observer : ObserverContainer(observers)) {
+		for (const auto &observer : ObserverContainer(*observers)) {
 			notifyObserverOrRemoveItIfNotExists(observer, arg);
 		}
 	}
@@ -144,14 +145,16 @@ protected:
 	* @brief Returns a constant iterator to the first observer.
 	*/
 	observer_iterator observer_begin() const {
-		return observers.begin();
+		static const ObserverContainer empty;
+		return observers ? observers->begin() : empty.begin();
 	}
 
 	/**
 	* @brief Returns a constant iterator past the last observer.
 	*/
 	observer_iterator observer_end() const {
-		return observers.end();
+		static const ObserverContainer empty;
+		return observers ? observers->end() : empty.end();
 	}
 
 private:
@@ -189,16 +192,19 @@ private:
 	* @brief Removes the given observer and all the non-existing observers.
 	*/
 	void removeObserverAndNonExistingObservers(ObserverPtr observer) {
-		observers.erase(std::remove_if(observers.begin(), observers.end(),
+		if (!observers) {
+			return;
+		}
+		observers->erase(std::remove_if(observers->begin(), observers->end(),
 			[&observer](const auto &other) {
 				return other.expired() || observer.lock() == other.lock();
 			}
-		));
+		), observers->end());
 	}
 
 private:
-	/// Container to store observers.
-	ObserverContainer observers;
+	/// Container to store observers (lazily allocated).
+	std::unique_ptr<ObserverContainer> observers;
 };
 
 } // namespace llvmir2hll

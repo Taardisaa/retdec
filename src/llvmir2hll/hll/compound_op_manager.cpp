@@ -9,6 +9,7 @@
 #include "retdec/llvmir2hll/ir/array_index_op_expr.h"
 #include "retdec/llvmir2hll/ir/assign_op_expr.h"
 #include "retdec/llvmir2hll/ir/assign_stmt.h"
+#include "retdec/llvmir2hll/ir/binary_op_expr.h"
 #include "retdec/llvmir2hll/ir/bit_and_op_expr.h"
 #include "retdec/llvmir2hll/ir/bit_or_op_expr.h"
 #include "retdec/llvmir2hll/ir/bit_shl_op_expr.h"
@@ -161,6 +162,16 @@ CompoundOpManager::CompoundOp CompoundOpManager::tryOptimizeToCompoundOp(
 	if (!isSupportedLhs(lhs)) {
 		return compoundOp;
 	}
+
+	// Only optimize to compound op when the RHS is directly a binary
+	// operation (e.g. x + 1, x * 2). Do not traverse into wrapping
+	// expressions like DerefOpExpr or casts, because that would
+	// incorrectly strip them. For example, x = *(x + 48) must NOT
+	// become x += 48 since the dereference is a memory load.
+	if (!isa<BinaryOpExpr>(rhs)) {
+		return compoundOp;
+	}
+
 	lhsOfAssignStmt = lhs;
 
 	// Analyze the right-hand side of AssignStmt.
@@ -169,43 +180,43 @@ CompoundOpManager::CompoundOp CompoundOpManager::tryOptimizeToCompoundOp(
 	return compoundOp;
 }
 
-void CompoundOpManager::visit(ShPtr<AddOpExpr> expr) {
+void CompoundOpManager::visit(const ShPtr<AddOpExpr>& expr) {
 	tryOptimizeWhenOneOfOperandsEqWithLhsOfAssignStmt(expr);
 }
 
-void CompoundOpManager::visit(ShPtr<SubOpExpr> expr) {
+void CompoundOpManager::visit(const ShPtr<SubOpExpr>& expr) {
 	tryOptimizeWhenLeftOperandEqWithLhsOfAssignStmt(expr);
 }
 
-void CompoundOpManager::visit(ShPtr<MulOpExpr> expr) {
+void CompoundOpManager::visit(const ShPtr<MulOpExpr>& expr) {
 	tryOptimizeWhenOneOfOperandsEqWithLhsOfAssignStmt(expr);
 }
 
-void CompoundOpManager::visit(ShPtr<DivOpExpr> expr) {
+void CompoundOpManager::visit(const ShPtr<DivOpExpr>& expr) {
 	tryOptimizeWhenLeftOperandEqWithLhsOfAssignStmt(expr);
 }
 
-void CompoundOpManager::visit(ShPtr<ModOpExpr> expr) {
+void CompoundOpManager::visit(const ShPtr<ModOpExpr>& expr) {
 	tryOptimizeWhenLeftOperandEqWithLhsOfAssignStmt(expr);
 }
 
-void CompoundOpManager::visit(ShPtr<BitShlOpExpr> expr) {
+void CompoundOpManager::visit(const ShPtr<BitShlOpExpr>& expr) {
 	tryOptimizeWhenLeftOperandEqWithLhsOfAssignStmt(expr);
 }
 
-void CompoundOpManager::visit(ShPtr<BitShrOpExpr> expr) {
+void CompoundOpManager::visit(const ShPtr<BitShrOpExpr>& expr) {
 	tryOptimizeWhenLeftOperandEqWithLhsOfAssignStmt(expr);
 }
 
-void CompoundOpManager::visit(ShPtr<BitAndOpExpr> expr) {
+void CompoundOpManager::visit(const ShPtr<BitAndOpExpr>& expr) {
 	tryOptimizeWhenOneOfOperandsEqWithLhsOfAssignStmt(expr);
 }
 
-void CompoundOpManager::visit(ShPtr<BitOrOpExpr> expr) {
+void CompoundOpManager::visit(const ShPtr<BitOrOpExpr>& expr) {
 	tryOptimizeWhenOneOfOperandsEqWithLhsOfAssignStmt(expr);
 }
 
-void CompoundOpManager::visit(ShPtr<BitXorOpExpr> expr) {
+void CompoundOpManager::visit(const ShPtr<BitXorOpExpr>& expr) {
 	tryOptimizeWhenOneOfOperandsEqWithLhsOfAssignStmt(expr);
 }
 
