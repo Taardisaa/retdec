@@ -84,7 +84,7 @@ void UnreachableCodeInCFGRemover::performRemovalInFunc(ShPtr<Function> func) {
 		// The body is empty.
 		return;
 	}
-	visitStmt(body);
+	visitStmtChain(body);
 }
 
 void UnreachableCodeInCFGRemover::visitStmt(ShPtr<Statement> stmt,
@@ -109,8 +109,20 @@ void UnreachableCodeInCFGRemover::visitStmt(ShPtr<Statement> stmt,
 	// Empty statements do not appear in CFGs, so we have to treat them in a
 	// special way.
 	if (isa<EmptyStmt>(stmt)) {
-		// We remove the statement only if it has lost its successor.
+		bool shouldRemove = false;
+		// The statement lost its successor (removed by a previous iteration).
 		if (stmtHadSuccessor && !stmt->hasSuccessor()) {
+			shouldRemove = true;
+		} else if (ShPtr<Statement> succ = stmt->getSuccessor()) {
+			// Forward-looking: if the successor is unreachable and will be
+			// removed, also remove this empty statement.
+			if (!succ->isGotoTarget() && !cfg->hasNodeForStmt(succ) &&
+					!(succ->isCompound() &&
+						GotoTargetAnalysis::hasGotoTargets(succ))) {
+				shouldRemove = true;
+			}
+		}
+		if (shouldRemove) {
 			Statement::removeStatement(stmt);
 			cfg->removeStmt(stmt);
 		}

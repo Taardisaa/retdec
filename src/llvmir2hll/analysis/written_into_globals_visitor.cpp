@@ -84,7 +84,7 @@ void WrittenIntoGlobalsVisitor::visit(const ShPtr<AssignStmt>& stmt) {
 	writing = false;
 	// We do not have to traverse the right-hand side since there may be only
 	// read variables.
-	visitStmt(stmt->getSuccessor());
+	nextStmtToVisit = stmt->getSuccessor();
 }
 
 void WrittenIntoGlobalsVisitor::visit(const ShPtr<VarDefStmt>& stmt) {
@@ -93,7 +93,7 @@ void WrittenIntoGlobalsVisitor::visit(const ShPtr<VarDefStmt>& stmt) {
 	writing = false;
 	// We do not have to traverse the right-hand side since there may be only
 	// read variables.
-	visitStmt(stmt->getSuccessor());
+	nextStmtToVisit = stmt->getSuccessor();
 }
 
 void WrittenIntoGlobalsVisitor::visit(const ShPtr<ForLoopStmt>& stmt) {
@@ -102,8 +102,8 @@ void WrittenIntoGlobalsVisitor::visit(const ShPtr<ForLoopStmt>& stmt) {
 	writing = false;
 	// We do not have to traverse the other operands, like the start value and
 	// the end value, because there may be only read variables.
-	visitStmt(stmt->getBody());
-	visitStmt(stmt->getSuccessor());
+	visitStmtChain(stmt->getBody());
+	nextStmtToVisit = stmt->getSuccessor();
 }
 
 } // namespace llvmir2hll

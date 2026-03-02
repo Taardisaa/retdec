@@ -27,7 +27,7 @@ NoInitVarDefOptimizer::NoInitVarDefOptimizer(ShPtr<Module> module):
 void NoInitVarDefOptimizer::visit(const ShPtr<VarDefStmt>& stmt) {
 	if (stmt->hasInitializer()) {
 		// There is an initializer, so keep traversing.
-		visitStmt(stmt->getSuccessor());
+		nextStmtToVisit = stmt->getSuccessor();
 		return;
 	}
 
@@ -35,7 +35,9 @@ void NoInitVarDefOptimizer::visit(const ShPtr<VarDefStmt>& stmt) {
 	// Statement::removeStatement() resets it.
 	ShPtr<Statement> stmtSucc(stmt->getSuccessor());
 	Statement::removeStatement(stmt);
-	visitStmt(stmtSucc);
+	if (stmtSucc) {
+		nextStmtToVisit = stmtSucc;
+	}
 }
 
 } // namespace llvmir2hll

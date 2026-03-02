@@ -29,7 +29,9 @@ void EmptyStmtOptimizer::visit(const ShPtr<EmptyStmt>& stmt) {
 	// Statement::removeStatement() resets it.
 	ShPtr<Statement> stmtSucc(stmt->getSuccessor());
 	Statement::removeStatement(stmt);
-	visitStmt(stmtSucc);
+	if (stmtSucc) {
+		nextStmtToVisit = stmtSucc;
+	}
 }
 
 } // namespace llvmir2hll

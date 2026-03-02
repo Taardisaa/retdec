@@ -118,7 +118,7 @@ ShPtr<VarUses> VarUsesVisitor::getUses(ShPtr<Variable> var,
 	this->var = var;
 	this->func = func;
 	restart(); // We have to clear accessedStmts().
-	visitStmt(this->func->getBody());
+	visitStmtChain(this->func->getBody());
 
 	// Should we cache the computed result?
 	if (cachingEnabled) {
@@ -377,7 +377,7 @@ void VarUsesVisitor::precomputeEverything(ShPtr<Module> module) {
 		}
 
 		restart();
-		visitStmt(func->getBody());
+		visitStmtChain(func->getBody());
 	}
 
 	precomputingHasBeenDone = true;

@@ -26,12 +26,15 @@ SelfAssignOptimizer::SelfAssignOptimizer(ShPtr<Module> module):
 	}
 
 void SelfAssignOptimizer::visit(const ShPtr<AssignStmt>& stmt) {
-	// First, visit the successor so that when there is a list of self
-	// assignments, they are all properly removed.
-	visitStmt(stmt->getSuccessor());
+	// Save successor before potential removal.
+	ShPtr<Statement> stmtSucc(stmt->getSuccessor());
 
 	if (stmt->getLhs()->isEqualTo(stmt->getRhs())) {
 		Statement::removeStatementButKeepDebugComment(stmt);
+	}
+
+	if (stmtSucc) {
+		nextStmtToVisit = stmtSucc;
 	}
 }
 

@@ -81,7 +81,7 @@ void SimpleAliasAnalysis::init(ShPtr<Module> module) {
 		// however, initialize funcAddressedVarsMap for the current function so
 		// that if no variables are found, the map will return the empty set.
 		funcAddressedVarsMap[func];
-		visitStmt(func->getBody());
+		visitStmtChain(func->getBody());
 	}
 }
 

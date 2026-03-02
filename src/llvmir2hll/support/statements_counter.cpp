@@ -72,7 +72,7 @@ unsigned StatementsCounter::countInternal(ShPtr<Statement> block, bool recursive
 	numOfStmts = 0;
 	recursive = recursive_;
 	includeEmptyStmts = includeEmptyStmts_;
-	OrderedAllVisitor::visitStmt(block);
+	OrderedAllVisitor::visitStmtChain(block);
 	return numOfStmts;
 }
 
@@ -176,29 +176,29 @@ void StatementsCounter::visit(const ShPtr<ConstSymbol>& constant) {}
 
 void StatementsCounter::visit(const ShPtr<AssignStmt>& stmt) {
 	numOfStmts++;
-	visitStmt(stmt->getSuccessor());
+	nextStmtToVisit = stmt->getSuccessor();
 }
 
 void StatementsCounter::visit(const ShPtr<VarDefStmt>& stmt) {
 	numOfStmts++;
-	visitStmt(stmt->getSuccessor());
+	nextStmtToVisit = stmt->getSuccessor();
 }
 
 void StatementsCounter::visit(const ShPtr<CallStmt>& stmt) {
 	numOfStmts++;
-	visitStmt(stmt->getSuccessor());
+	nextStmtToVisit = stmt->getSuccessor();
 }
 
 void StatementsCounter::visit(const ShPtr<ReturnStmt>& stmt) {
 	numOfStmts++;
-	visitStmt(stmt->getSuccessor());
+	nextStmtToVisit = stmt->getSuccessor();
 }
 
 void StatementsCounter::visit(const ShPtr<EmptyStmt>& stmt) {
 	if (includeEmptyStmts) {
 		numOfStmts++;
 	}
-	visitStmt(stmt->getSuccessor());
+	nextStmtToVisit = stmt->getSuccessor();
 }
 
 void StatementsCounter::visit(const ShPtr<IfStmt>& stmt) {
@@ -207,12 +207,12 @@ void StatementsCounter::visit(const ShPtr<IfStmt>& stmt) {
 	if (recursive) {
 		// For each clause...
 		for (auto i = stmt->clause_begin(), e = stmt->clause_end(); i != e; ++i) {
-			visitStmt(i->second);
+			visitStmtChain(i->second);
 		}
-		visitStmt(stmt->getElseClause());
+		visitStmtChain(stmt->getElseClause());
 	}
 
-	visitStmt(stmt->getSuccessor());
+	nextStmtToVisit = stmt->getSuccessor();
 }
 
 void StatementsCounter::visit(const ShPtr<SwitchStmt>& stmt) {
@@ -221,61 +221,61 @@ void StatementsCounter::visit(const ShPtr<SwitchStmt>& stmt) {
 	if (recursive) {
 		// For each clause...
 		for (auto i = stmt->clause_begin(), e = stmt->clause_end(); i != e; ++i) {
-			visitStmt(i->second);
+			visitStmtChain(i->second);
 		}
 	}
 
-	visitStmt(stmt->getSuccessor());
+	nextStmtToVisit = stmt->getSuccessor();
 }
 
 void StatementsCounter::visit(const ShPtr<WhileLoopStmt>& stmt) {
 	numOfStmts++;
 
 	if (recursive) {
-		visitStmt(stmt->getBody());
+		visitStmtChain(stmt->getBody());
 	}
 
-	visitStmt(stmt->getSuccessor());
+	nextStmtToVisit = stmt->getSuccessor();
 }
 
 void StatementsCounter::visit(const ShPtr<ForLoopStmt>& stmt) {
 	numOfStmts++;
 
 	if (recursive) {
-		visitStmt(stmt->getBody());
+		visitStmtChain(stmt->getBody());
 	}
 
-	visitStmt(stmt->getSuccessor());
+	nextStmtToVisit = stmt->getSuccessor();
 }
 
 void StatementsCounter::visit(const ShPtr<UForLoopStmt>& stmt) {
 	numOfStmts++;
 
 	if (recursive) {
-		visitStmt(stmt->getBody());
+		visitStmtChain(stmt->getBody());
 	}
 
-	visitStmt(stmt->getSuccessor());
+	nextStmtToVisit = stmt->getSuccessor();
 }
 
 void StatementsCounter::visit(const ShPtr<BreakStmt>& stmt) {
 	numOfStmts++;
-	visitStmt(stmt->getSuccessor());
+	nextStmtToVisit = stmt->getSuccessor();
 }
 
 void StatementsCounter::visit(const ShPtr<ContinueStmt>& stmt) {
 	numOfStmts++;
-	visitStmt(stmt->getSuccessor());
+	nextStmtToVisit = stmt->getSuccessor();
 }
 
 void StatementsCounter::visit(const ShPtr<GotoStmt>& stmt) {
 	numOfStmts++;
-	visitStmt(stmt->getSuccessor());
+	nextStmtToVisit = stmt->getSuccessor();
 }
 
 void StatementsCounter::visit(const ShPtr<UnreachableStmt>& stmt) {
 	numOfStmts++;
-	visitStmt(stmt->getSuccessor());
+	nextStmtToVisit = stmt->getSuccessor();
 }
 
 void StatementsCounter::visit(const ShPtr<FloatType>& type) {}

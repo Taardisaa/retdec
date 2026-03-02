@@ -439,7 +439,7 @@ void VarRenamer::renameVarsInFunc(ShPtr<Function> func) {
 
 	if (func->isDefinition()) {
 		// Rename local variables.
-		visitStmt(func->getBody());
+		visitStmtChain(func->getBody());
 	}
 }
 

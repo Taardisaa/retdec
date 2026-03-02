@@ -31,7 +31,7 @@ StmtSet GotoTargetAnalysis::getGotoTargets(ShPtr<Statement> stmt) {
 	PRECONDITION_NON_NULL(stmt);
 
 	ShPtr<GotoTargetAnalysis> analysis(new GotoTargetAnalysis());
-	analysis->visitStmt(stmt);
+	analysis->visitStmtChain(stmt);
 	return analysis->gotoTargets;
 }
 
@@ -48,7 +48,7 @@ bool GotoTargetAnalysis::hasGotoTargets(ShPtr<Statement> stmt) {
 	PRECONDITION_NON_NULL(stmt);
 
 	ShPtr<GotoTargetAnalysis> analysis(new GotoTargetAnalysis());
-	analysis->visitStmt(stmt);
+	analysis->visitStmtChain(stmt);
 	return !analysis->gotoTargets.empty();
 }
 
@@ -64,7 +64,7 @@ void GotoTargetAnalysis::putIntoGotoTargetsIfGotoTarget(ShPtr<Statement> stmt) {
 
 void GotoTargetAnalysis::visit(const ShPtr<GotoStmt>& stmt) {
 	// Do not visit the goto's target, just its successor (if any).
-	visitStmt(stmt->getSuccessor());
+	nextStmtToVisit = stmt->getSuccessor();
 }
 
 void GotoTargetAnalysis::visitStmt(ShPtr<Statement> stmt, bool visitSuccessors,

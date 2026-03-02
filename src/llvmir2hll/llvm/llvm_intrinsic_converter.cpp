@@ -92,7 +92,7 @@ void LLVMIntrinsicConverter::performConversion() {
 	// these intrinsic functions.
 	for (auto i = module->func_definition_begin(),
 			e = module->func_definition_end(); i != e; ++i) {
-		visitStmt((*i)->getBody());
+		visitStmtChain((*i)->getBody());
 	}
 }
 

@@ -91,7 +91,7 @@ void LLVMIntrinsicsOptimizer::visit(const ShPtr<CallStmt>& stmt) {
 	removedCalls.insert(calledFunc);
 	Statement::removeStatementButKeepDebugComment(stmt);
 	if (stmtSucc) {
-		FuncOptimizer::visitStmt(stmtSucc);
+		nextStmtToVisit = stmtSucc;
 	}
 }
 

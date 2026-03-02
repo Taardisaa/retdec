@@ -206,7 +206,7 @@ ShPtr<UsedVars> UsedVarsVisitor::getUsedVars_(ShPtr<Value> value) {
 
 	// Obtain read and written-into variables.
 	if (ShPtr<Statement> block = cast<Statement>(value)) {
-		visitStmt(block, visitSuccessors, visitNestedStmts);
+		visitStmtChain(block, visitSuccessors, visitNestedStmts);
 	} else {
 		value->accept(this);
 	}
@@ -267,7 +267,7 @@ ShPtr<UsedVars> UsedVarsVisitor::getUsedVars(ShPtr<Value> value,
 
 void UsedVarsVisitor::visit(const ShPtr<Function>& func) {
 	if (func->isDefinition()) {
-		visitStmt(func->getBody());
+		visitStmtChain(func->getBody());
 	}
 }
 
@@ -317,7 +317,7 @@ void UsedVarsVisitor::visit(const ShPtr<AssignStmt>& stmt) {
 	stmt->getRhs()->accept(this);
 
 	if (visitSuccessors) {
-		visitStmt(stmt->getSuccessor());
+		nextStmtToVisit = stmt->getSuccessor();
 	}
 }
 
@@ -330,7 +330,7 @@ void UsedVarsVisitor::visit(const ShPtr<VarDefStmt>& stmt) {
 	}
 
 	if (visitSuccessors) {
-		visitStmt(stmt->getSuccessor());
+		nextStmtToVisit = stmt->getSuccessor();
 	}
 }
 
@@ -342,10 +342,10 @@ void UsedVarsVisitor::visit(const ShPtr<ForLoopStmt>& stmt) {
 	stmt->getEndCond()->accept(this);
 	stmt->getStep()->accept(this);
 	if (visitNestedStmts) {
-		visitStmt(stmt->getBody());
+		visitStmtChain(stmt->getBody());
 	}
 	if (visitSuccessors) {
-		visitStmt(stmt->getSuccessor());
+		nextStmtToVisit = stmt->getSuccessor();
 	}
 }
 

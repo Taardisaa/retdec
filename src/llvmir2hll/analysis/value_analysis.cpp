@@ -824,7 +824,7 @@ void ValueAnalysis::visit(const ShPtr<Function>& func) {
 	}
 
 	if (func->isDefinition()) {
-		visitStmt(func->getBody());
+		visitStmtChain(func->getBody());
 	}
 }
 

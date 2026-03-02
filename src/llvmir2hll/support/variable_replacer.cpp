@@ -35,7 +35,7 @@ void VariableReplacer::replaceVariable(ShPtr<Variable> oldVar,
 * @brief Performs the replace in @a func.
 */
 void VariableReplacer::performReplace(ShPtr<Function> func) {
-	visitStmt(func->getBody());
+	visitStmtChain(func->getBody());
 }
 
 void VariableReplacer::visit(const ShPtr<Variable>& var) {

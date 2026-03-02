@@ -33,8 +33,11 @@ namespace llvmir2hll {
 *    over the same types. Also, when a type is accessed, it should
 *    check this set before accessing any of its "nested types".
 *  - remember that whenever you override some visit() function which takes a
-*    statement as its parameter, you have to manually call @code
-*    visitStmt(stmt->getSuccessor()) @endcode to visit its (possible) successor.
+*    statement as its parameter, you have to signal the successor by setting
+*    @code nextStmtToVisit = stmt->getSuccessor() @endcode instead of calling
+*    visitStmt() directly (the iterative loop in visitStmtChain() handles
+*    the rest). For nested bodies (e.g. if-body, loop-body), call
+*    visitStmtChain() instead.
 *
 * Instances of this class have reference object semantics.
 *
@@ -127,6 +130,9 @@ protected:
 	virtual void visitStmt(ShPtr<Statement> stmt, bool visitSuccessors = true,
 		bool visitNestedStmts = true);
 
+	void visitStmtChain(ShPtr<Statement> stmt, bool visitSuccessors = true,
+		bool visitNestedStmts = true);
+
 	void restart(bool visitSuccessors = true, bool visitNestedStmts = true);
 	bool makeAccessedAndCheckIfAccessed(ShPtr<Type> type);
 
@@ -145,6 +151,10 @@ protected:
 
 	/// Should nested statements be accessed?
 	bool visitNestedStmts;
+
+	/// Next statement to visit in the iterative successor chain.
+	/// Set by visit() methods instead of recursively calling visitStmt().
+	ShPtr<Statement> nextStmtToVisit;
 };
 
 } // namespace llvmir2hll

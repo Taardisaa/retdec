@@ -64,7 +64,7 @@ ShPtr<CG::CalledFuncs> CGBuilder::computeCGPartForFunction(ShPtr<Function> func)
 
 	// It is a definition, so obtain all the called functions.
 	restart(true, true);
-	visitStmt(func->getBody());
+	visitStmtChain(func->getBody());
 	return calledFuncs;
 }
 

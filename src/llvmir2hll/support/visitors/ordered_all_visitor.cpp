@@ -106,7 +106,7 @@ void OrderedAllVisitor::visit(const ShPtr<Function>& func) {
 	}
 
 	if (ShPtr<Statement> body = func->getBody()) {
-		visitStmt(body);
+		visitStmtChain(body);
 	}
 }
 
@@ -119,7 +119,7 @@ void OrderedAllVisitor::visit(const ShPtr<AssignStmt>& stmt) {
 	stmt->getLhs()->accept(this);
 	stmt->getRhs()->accept(this);
 	if (visitSuccessors && stmt->hasSuccessor()) {
-		visitStmt(stmt->getSuccessor());
+		nextStmtToVisit = stmt->getSuccessor();
 	}
 }
 
@@ -130,7 +130,7 @@ void OrderedAllVisitor::visit(const ShPtr<VarDefStmt>& stmt) {
 		init->accept(this);
 	}
 	if (visitSuccessors && stmt->hasSuccessor()) {
-		visitStmt(stmt->getSuccessor());
+		nextStmtToVisit = stmt->getSuccessor();
 	}
 }
 
@@ -138,7 +138,7 @@ void OrderedAllVisitor::visit(const ShPtr<CallStmt>& stmt) {
 	lastStmt = stmt;
 	stmt->getCall()->accept(this);
 	if (visitSuccessors && stmt->hasSuccessor()) {
-		visitStmt(stmt->getSuccessor());
+		nextStmtToVisit = stmt->getSuccessor();
 	}
 }
 
@@ -148,14 +148,14 @@ void OrderedAllVisitor::visit(const ShPtr<ReturnStmt>& stmt) {
 		retVal->accept(this);
 	}
 	if (visitSuccessors && stmt->hasSuccessor()) {
-		visitStmt(stmt->getSuccessor());
+		nextStmtToVisit = stmt->getSuccessor();
 	}
 }
 
 void OrderedAllVisitor::visit(const ShPtr<EmptyStmt>& stmt) {
 	lastStmt = stmt;
 	if (visitSuccessors && stmt->hasSuccessor()) {
-		visitStmt(stmt->getSuccessor());
+		nextStmtToVisit = stmt->getSuccessor();
 	}
 }
 
@@ -165,15 +165,15 @@ void OrderedAllVisitor::visit(const ShPtr<IfStmt>& stmt) {
 	for (auto i = stmt->clause_begin(), e = stmt->clause_end(); i != e; ++i) {
 		i->first->accept(this);
 		if (visitNestedStmts) {
-			visitStmt(i->second);
+			visitStmtChain(i->second);
 		}
 	}
 
 	if (visitNestedStmts && stmt->hasElseClause()) {
-		visitStmt(stmt->getElseClause());
+		visitStmtChain(stmt->getElseClause());
 	}
 	if (visitSuccessors && stmt->hasSuccessor()) {
-		visitStmt(stmt->getSuccessor());
+		nextStmtToVisit = stmt->getSuccessor();
 	}
 }
 
@@ -187,11 +187,11 @@ void OrderedAllVisitor::visit(const ShPtr<SwitchStmt>& stmt) {
 			i->first->accept(this);
 		}
 		if (visitNestedStmts && i->second) {
-			visitStmt(i->second);
+			visitStmtChain(i->second);
 		}
 	}
 	if (visitSuccessors && stmt->hasSuccessor()) {
-		visitStmt(stmt->getSuccessor());
+		nextStmtToVisit = stmt->getSuccessor();
 	}
 }
 
@@ -199,10 +199,10 @@ void OrderedAllVisitor::visit(const ShPtr<WhileLoopStmt>& stmt) {
 	lastStmt = stmt;
 	stmt->getCondition()->accept(this);
 	if (visitNestedStmts) {
-		visitStmt(stmt->getBody());
+		visitStmtChain(stmt->getBody());
 	}
 	if (visitSuccessors && stmt->hasSuccessor()) {
-		visitStmt(stmt->getSuccessor());
+		nextStmtToVisit = stmt->getSuccessor();
 	}
 }
 
@@ -213,10 +213,10 @@ void OrderedAllVisitor::visit(const ShPtr<ForLoopStmt>& stmt) {
 	stmt->getEndCond()->accept(this);
 	stmt->getStep()->accept(this);
 	if (visitNestedStmts) {
-		visitStmt(stmt->getBody());
+		visitStmtChain(stmt->getBody());
 	}
 	if (visitSuccessors && stmt->hasSuccessor()) {
-		visitStmt(stmt->getSuccessor());
+		nextStmtToVisit = stmt->getSuccessor();
 	}
 }
 
@@ -232,39 +232,39 @@ void OrderedAllVisitor::visit(const ShPtr<UForLoopStmt>& stmt) {
 		step->accept(this);
 	}
 	if (visitNestedStmts) {
-		visitStmt(stmt->getBody());
+		visitStmtChain(stmt->getBody());
 	}
 	if (visitSuccessors && stmt->hasSuccessor()) {
-		visitStmt(stmt->getSuccessor());
+		nextStmtToVisit = stmt->getSuccessor();
 	}
 }
 
 void OrderedAllVisitor::visit(const ShPtr<BreakStmt>& stmt) {
 	lastStmt = stmt;
 	if (visitSuccessors && stmt->hasSuccessor()) {
-		visitStmt(stmt->getSuccessor());
+		nextStmtToVisit = stmt->getSuccessor();
 	}
 }
 
 void OrderedAllVisitor::visit(const ShPtr<ContinueStmt>& stmt) {
 	lastStmt = stmt;
 	if (visitSuccessors && stmt->hasSuccessor()) {
-		visitStmt(stmt->getSuccessor());
+		nextStmtToVisit = stmt->getSuccessor();
 	}
 }
 
 void OrderedAllVisitor::visit(const ShPtr<GotoStmt>& stmt) {
 	lastStmt = stmt;
 	if (visitSuccessors && stmt->hasSuccessor()) {
-		visitStmt(stmt->getTarget());
-		visitStmt(stmt->getSuccessor());
+		visitStmtChain(stmt->getTarget());
+		nextStmtToVisit = stmt->getSuccessor();
 	}
 }
 
 void OrderedAllVisitor::visit(const ShPtr<UnreachableStmt>& stmt) {
 	lastStmt = stmt;
 	if (visitSuccessors && stmt->hasSuccessor()) {
-		visitStmt(stmt->getSuccessor());
+		nextStmtToVisit = stmt->getSuccessor();
 	}
 }
 
@@ -575,6 +575,24 @@ void OrderedAllVisitor::visitStmt(ShPtr<Statement> stmt, bool visitSuccessors,
 		this->visitNestedStmts = visitNestedStmts;
 		accessedStmts.insert(stmt);
 		stmt->accept(this);
+	}
+}
+
+/**
+* @brief Iteratively visits a chain of statements starting from @a stmt.
+*
+* This is the main driver for statement traversal. It calls the virtual
+* visitStmt() for each statement in the successor chain, so subclass
+* overrides of visitStmt() are preserved. The visit() methods signal the
+* next successor by setting nextStmtToVisit instead of recursing.
+*/
+void OrderedAllVisitor::visitStmtChain(ShPtr<Statement> stmt,
+		bool visitSuccessors, bool visitNestedStmts) {
+	while (stmt && !hasItem(accessedStmts, stmt)) {
+		nextStmtToVisit.reset();
+		visitStmt(stmt, visitSuccessors, visitNestedStmts);
+		if (!visitSuccessors) break;
+		stmt = nextStmtToVisit;
 	}
 }
 

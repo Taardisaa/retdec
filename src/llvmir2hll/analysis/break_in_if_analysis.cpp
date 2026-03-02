@@ -39,9 +39,9 @@ bool BreakInIfAnalysis::hasBreakStmt(ShPtr<IfStmt> stmt) {
 	// Can't be substituted this block to stmt->accept(analysis.get()) because
 	// we want to find break statements only in if statement body.
 	for (auto i = stmt->clause_begin(), e = stmt->clause_end(); i != e; ++i) {
-		analysis->visitStmt(i->second);
+		analysis->visitStmtChain(i->second);
 	}
-	analysis->visitStmt(stmt->getElseClause());
+	analysis->visitStmtChain(stmt->getElseClause());
 
 	return analysis->foundBreakStmt;
 }
@@ -53,7 +53,7 @@ void BreakInIfAnalysis::visit(const ShPtr<BreakStmt>& stmt) {
 void BreakInIfAnalysis::visit(const ShPtr<GotoStmt>& stmt) {
 	// Do not visit the goto's target, just its successor (if any).
 	// We don't want to find break statement that is out of if statement body.
-	OrderedAllVisitor::visitStmt(stmt->getSuccessor());
+	nextStmtToVisit = stmt->getSuccessor();
 }
 
 } // namespace llvmir2hll

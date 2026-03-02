@@ -422,7 +422,7 @@ void ReadableVarRenamer::visit(const ShPtr<ForLoopStmt>& stmt) {
 		indVarsNamesInCurrFunc.insert(indVar->getName());
 
 		// Visit nested loops (if any).
-		visitStmt(stmt->getBody());
+		visitStmtChain(stmt->getBody());
 
 		// Since the induction variable is local to the loop, we may reuse it
 		// after the loop. We add it back to localVarsNames later by using

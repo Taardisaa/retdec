@@ -73,62 +73,62 @@ void VoidReturnOptimizer::visit(const ShPtr<ReturnStmt>& stmt) {
 // TODO: Do this also with other optimizations?
 //
 void VoidReturnOptimizer::visit(const ShPtr<AssignStmt>& stmt) {
-	visitStmt(stmt->getSuccessor());
+	nextStmtToVisit = stmt->getSuccessor();
 }
 
 void VoidReturnOptimizer::visit(const ShPtr<VarDefStmt>& stmt) {
-	visitStmt(stmt->getSuccessor());
+	nextStmtToVisit = stmt->getSuccessor();
 }
 
 void VoidReturnOptimizer::visit(const ShPtr<CallStmt>& stmt) {
-	visitStmt(stmt->getSuccessor());
+	nextStmtToVisit = stmt->getSuccessor();
 }
 
 void VoidReturnOptimizer::visit(const ShPtr<IfStmt>& stmt) {
 	// For each clause...
 	++nestingLevel;
 	for (auto i = stmt->clause_begin(), e = stmt->clause_end(); i != e; ++i) {
-		visitStmt(i->second);
+		visitStmtChain(i->second);
 	}
-	visitStmt(stmt->getElseClause());
+	visitStmtChain(stmt->getElseClause());
 	--nestingLevel;
 
-	visitStmt(stmt->getSuccessor());
+	nextStmtToVisit = stmt->getSuccessor();
 }
 
 void VoidReturnOptimizer::visit(const ShPtr<SwitchStmt>& stmt) {
 	// For each clause...
 	++nestingLevel;
 	for (auto i = stmt->clause_begin(), e = stmt->clause_end(); i != e; ++i) {
-		visitStmt(i->second);
+		visitStmtChain(i->second);
 	}
 	--nestingLevel;
 
-	visitStmt(stmt->getSuccessor());
+	nextStmtToVisit = stmt->getSuccessor();
 }
 
 void VoidReturnOptimizer::visit(const ShPtr<WhileLoopStmt>& stmt) {
 	++nestingLevel;
-	visitStmt(stmt->getBody());
+	visitStmtChain(stmt->getBody());
 	--nestingLevel;
 
-	visitStmt(stmt->getSuccessor());
+	nextStmtToVisit = stmt->getSuccessor();
 }
 
 void VoidReturnOptimizer::visit(const ShPtr<ForLoopStmt>& stmt) {
 	++nestingLevel;
-	visitStmt(stmt->getBody());
+	visitStmtChain(stmt->getBody());
 	--nestingLevel;
 
-	visitStmt(stmt->getSuccessor());
+	nextStmtToVisit = stmt->getSuccessor();
 }
 
 void VoidReturnOptimizer::visit(const ShPtr<UForLoopStmt>& stmt) {
 	++nestingLevel;
-	visitStmt(stmt->getBody());
+	visitStmtChain(stmt->getBody());
 	--nestingLevel;
 
-	visitStmt(stmt->getSuccessor());
+	nextStmtToVisit = stmt->getSuccessor();
 }
 
 } // namespace llvmir2hll
