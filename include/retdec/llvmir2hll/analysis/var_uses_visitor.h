@@ -67,6 +67,8 @@ public:
 	void stmtHasBeenRemoved(ShPtr<Statement> stmt, ShPtr<Function> func);
 	/// @}
 
+	void precomputeForFunction(ShPtr<Function> func, ShPtr<Module> module);
+
 	static ShPtr<VarUsesVisitor> create(ShPtr<ValueAnalysis> va,
 		bool enableCaching = false, ShPtr<Module> module = nullptr);
 

@@ -139,6 +139,10 @@ public:
 	ShPtr<Statement> getParent() const;
 	Address getAddress() const;
 
+	/// Returns a monotonically increasing creation ID for cheap deterministic
+	/// ordering. Same input always produces same creation sequence.
+	uint64_t getCreationId() const { return creationId; }
+
 	/// @name Goto Targets
 	/// @{
 	bool isGotoTarget() const;
@@ -182,7 +186,12 @@ protected:
 	/// Address of ASM instruction from which this statement was created from.
 	Address address;
 
+	/// Monotonically increasing creation ID for deterministic ordering.
+	uint64_t creationId;
+
 private:
+	static uint64_t nextCreationId;
+
 	bool targetIsCurrentStatement(ShPtr<GotoStmt> gotoStmt) const;
 	bool containsJustGotosToCurrentStatement(const WeakStmtVec &stmts) const;
 };

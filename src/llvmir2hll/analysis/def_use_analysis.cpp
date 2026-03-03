@@ -39,32 +39,6 @@ using NodeOrder = std::vector<ShPtr<CFG::Node>>;
 void DefUseChains::debugPrint() {
 	llvm::errs() << "[DefUseChains] Debug info for function '" << func->getName() << "':\n";
 	llvm::errs() << "\n";
-	llvm::errs() << "Out, in, gen, and kill sets:\n";
-	llvm::errs() << "----------------------------\n";
-	for (auto i = cfg->node_begin(), e = cfg->node_end(); i != e; ++i) {
-		llvm::errs() << "  " << (*i)->getLabel() << ":\n";
-		llvm::errs() << "    kill: \n";
-		for (auto j = kill[*i].begin(), f = kill[*i].end(); j != f; ++j) {
-			llvm::errs() << "      (" << j->first << ", "
-				<< j->second->getName() << ")\n";
-		}
-		llvm::errs() << "\n    gen: \n";
-		for (auto j = gen[*i].begin(), f = gen[*i].end(); j != f; ++j) {
-			llvm::errs() << "      (" << j->first << ", "
-				<< j->second->getName() << ")\n";
-		}
-		llvm::errs() << "\n    in: \n";
-		for (auto j = in[*i].begin(), f = in[*i].end(); j != f; ++j) {
-			llvm::errs() << "      (" << j->first << ", "
-				<< j->second->getName() << ")\n";
-		}
-		llvm::errs() << "\n    out: \n";
-		for (auto j = out[*i].begin(), f = out[*i].end(); j != f; ++j) {
-			llvm::errs() << "      (" << j->first << ", "
-				<< j->second->getName() << ")\n";
-		}
-		llvm::errs() << "\n\n";
-	}
 	llvm::errs() << "Def-use chains:\n";
 	llvm::errs() << "---------------\n";
 	for (auto i = du.begin(), e = du.end(); i != e; ++i) {
@@ -110,7 +84,6 @@ ShPtr<DefUseChains> DefUseAnalysis::getDefUseChains(
 		std::function<bool (ShPtr<Variable>)> shouldBeIncluded) {
 	auto ducs = std::make_shared<DefUseChains>();
 	ducs->func = func;
-	ducs->shouldBeIncluded = shouldBeIncluded;
 
 	// If we don't have a CFG, generate it.
 	ducs->cfg = cfg;
@@ -118,9 +91,14 @@ ShPtr<DefUseChains> DefUseAnalysis::getDefUseChains(
 		ducs->cfg = cfgBuilder->getCFG(func);
 	}
 
-	computeGenAndKill(ducs);
-	computeInAndOut(ducs);
-	computeDefUseChains(ducs);
+	// Intermediate dataflow sets are scoped locally — automatically freed
+	// when this function returns, keeping only the final DU chains.
+	IntermediateData imd;
+	imd.shouldBeIncluded = shouldBeIncluded;
+
+	computeGenAndKill(ducs, imd);
+	computeInAndOut(ducs, imd);
+	computeDefUseChains(ducs, imd);
 
 	return ducs;
 }
@@ -151,11 +129,12 @@ ShPtr<DefUseAnalysis> DefUseAnalysis::create(ShPtr<Module> module,
 *
 * This function modifies @a ducs.
 */
-void DefUseAnalysis::computeGenAndKill(ShPtr<DefUseChains> ducs) {
+void DefUseAnalysis::computeGenAndKill(ShPtr<DefUseChains> ducs,
+		IntermediateData &imd) {
 	// For each node B...
 	for (auto i = ducs->cfg->node_begin(), e = ducs->cfg->node_end();
 			i != e; ++i) {
-		computeGenAndKillForNode(ducs, *i);
+		computeGenAndKillForNode(ducs, imd, *i);
 	}
 }
 
@@ -166,11 +145,11 @@ void DefUseAnalysis::computeGenAndKill(ShPtr<DefUseChains> ducs) {
 * This function modifies @a ducs.
 */
 void DefUseAnalysis::computeGenAndKillForNode(ShPtr<DefUseChains> ducs,
-	ShPtr<CFG::Node> node) {
+		IntermediateData &imd, ShPtr<CFG::Node> node) {
 
 	// Aliases to speed up the computation.
-	auto &gen = ducs->gen[node];
-	auto &kill = ducs->kill[node];
+	auto &gen = imd.gen[node];
+	auto &kill = imd.kill[node];
 
 	// Initialization.
 	gen.clear();
@@ -191,7 +170,7 @@ void DefUseAnalysis::computeGenAndKillForNode(ShPtr<DefUseChains> ducs,
 		// Compute GEN[node] for the current statement.
 		for (auto j = stmtData->dir_read_begin(), f = stmtData->dir_read_end();
 				j != f; ++j) {
-			if (!hasItem(defVars, *j) && ducs->shouldBeIncluded(*j)) {
+			if (!hasItem(defVars, *j) && imd.shouldBeIncluded(*j)) {
 				gen.emplace(*i, *j);
 			}
 		}
@@ -200,7 +179,7 @@ void DefUseAnalysis::computeGenAndKillForNode(ShPtr<DefUseChains> ducs,
 		// defines.
 		for (auto j = stmtData->dir_written_begin(), f = stmtData->dir_written_end();
 				j != f; ++j) {
-			if (ducs->shouldBeIncluded(*j)) {
+			if (imd.shouldBeIncluded(*j)) {
 				defVars.insert(*j);
 			}
 		}
@@ -235,7 +214,8 @@ void DefUseAnalysis::computeGenAndKillForNode(ShPtr<DefUseChains> ducs,
 * computeGenAndKill() has to be run before this function. This function modifies
 * @a ducs.
 */
-void DefUseAnalysis::computeInAndOut(ShPtr<DefUseChains> ducs) {
+void DefUseAnalysis::computeInAndOut(ShPtr<DefUseChains> ducs,
+		IntermediateData &imd) {
 	// The subsequent implementation is based on Section 6.3.6 in [ItC] (see
 	// the class description). The algorithm is the same as in the analysis of
 	// live variables (see page 112 in [ItC]).
@@ -284,8 +264,8 @@ void DefUseAnalysis::computeInAndOut(ShPtr<DefUseChains> ducs) {
 	//
 	// Initialize the analysis.
 	//
-	ducs->in.clear();
-	ducs->out.clear();
+	imd.in.clear();
+	imd.out.clear();
 	// Normally, we would have to set IN[B] = \emptyset for each node B.
 	// However, since ducs->in[B] gets initialized to an empty set
 	// automatically upon first access, we don't have to do it.
@@ -300,7 +280,7 @@ void DefUseAnalysis::computeInAndOut(ShPtr<DefUseChains> ducs) {
 		// Note: To use the order computed above, we have to traverse the
 		// vector in reverse, i.e. from its end towards its beginning.
 		for (auto i = order.rbegin(), e = order.rend(); i != e; ++i) {
-			setChanged |= computeInAndOutForNode(ducs, *i);
+			setChanged |= computeInAndOutForNode(ducs, imd, *i);
 		}
 	} while (setChanged);
 }
@@ -317,19 +297,19 @@ void DefUseAnalysis::computeInAndOut(ShPtr<DefUseChains> ducs) {
 *  - @a node is not the exit node of a CFG
 */
 bool DefUseAnalysis::computeInAndOutForNode(ShPtr<DefUseChains> ducs,
-		ShPtr<CFG::Node> node) {
+		IntermediateData &imd, ShPtr<CFG::Node> node) {
 	// See the implementation of computeInAndOut() for the description of the
 	// following algorithm.
 
 	// OUT[B] = \bigcup_{S \in succ(B)} IN[S]
 	DefUseChains::StmtVarPairSet newOut;
 	for (auto i = node->succ_begin(), e = node->succ_end(); i != e; ++i) {
-		addToSet(ducs->in[(*i)->getDst()], newOut);
+		addToSet(imd.in[(*i)->getDst()], newOut);
 	}
 
 	// Check whether OUT[B] has been changed.
-	auto &out = ducs->out[node];
-	auto &in = ducs->in[node];
+	auto &out = imd.out[node];
+	auto &in = imd.in[node];
 	if (out.size() != newOut.size()) {
 		// We no longer need newOut, so we can make a move instead of a copy.
 		out = std::move(newOut);
@@ -342,9 +322,9 @@ bool DefUseAnalysis::computeInAndOutForNode(ShPtr<DefUseChains> ducs,
 
 	// IN[B] = GEN[B] \cup (OUT[B] - KILL[B])
 	// The following code is faster than
-	// in = setUnion(ducs->gen[node], setDifference(out, ducs->kill[node]));
-	in = ducs->gen[node];
-	auto &kill = ducs->kill[node];
+	// in = setUnion(imd.gen[node], setDifference(out, imd.kill[node]));
+	in = imd.gen[node];
+	auto &kill = imd.kill[node];
 	for (auto &item : out) {
 		if (!hasItem(kill, item)) {
 			in.insert(item);
@@ -364,13 +344,14 @@ bool DefUseAnalysis::computeInAndOutForNode(ShPtr<DefUseChains> ducs,
 * computeGenAndKill() and computeInAndOut() have to be run before this
 * function. This function modifies @a ducs.
 */
-void DefUseAnalysis::computeDefUseChains(ShPtr<DefUseChains> ducs) {
+void DefUseAnalysis::computeDefUseChains(ShPtr<DefUseChains> ducs,
+		const IntermediateData &imd) {
 	ducs->du.clear();
 
 	// For each node...
 	for (auto i = ducs->cfg->node_begin(), e = ducs->cfg->node_end();
 			i != e; ++i) {
-		computeDefUseChainForNode(ducs, *i);
+		computeDefUseChainForNode(ducs, imd, *i);
 	}
 }
 
@@ -382,11 +363,11 @@ void DefUseAnalysis::computeDefUseChains(ShPtr<DefUseChains> ducs) {
 * @a ducs.
 */
 void DefUseAnalysis::computeDefUseChainForNode(ShPtr<DefUseChains> ducs,
-		ShPtr<CFG::Node> node) {
+		const IntermediateData &imd, ShPtr<CFG::Node> node) {
 	// For each statement in the node...
 	for (auto i = node->stmt_begin(), e = node->stmt_end(); i != e; ++i) {
 		if (const auto &defVar = getDefVarInStmt(*i)) {
-			computeDefUseChainForStmt(ducs, node, i, defVar);
+			computeDefUseChainForStmt(ducs, imd, node, i, defVar);
 		}
 	}
 }
@@ -403,8 +384,8 @@ void DefUseAnalysis::computeDefUseChainForNode(ShPtr<DefUseChains> ducs,
 * modifies @a ducs.
 */
 void DefUseAnalysis::computeDefUseChainForStmt(ShPtr<DefUseChains> ducs,
-		ShPtr<CFG::Node> node, CFG::stmt_iterator varDefStmtIter,
-		ShPtr<Variable> defVar) {
+		const IntermediateData &imd, ShPtr<CFG::Node> node,
+		CFG::stmt_iterator varDefStmtIter, ShPtr<Variable> defVar) {
 	// For brevity, create an alias for the def-use chain that is being computed.
 	ducs->du.emplace_back(std::make_pair(*varDefStmtIter, defVar), StmtSet());
 	auto &du = ducs->du.back().second;
@@ -440,7 +421,9 @@ void DefUseAnalysis::computeDefUseChainForStmt(ShPtr<DefUseChains> ducs,
 	// We have traversed all statements in the node without stopping the
 	// computation, so add also the relevant contents of OUT[node] to the
 	// def-use chain.
-	for (auto &item : ducs->out[node]) {
+	auto outIt = imd.out.find(node);
+	if (outIt == imd.out.end()) return;
+	for (auto &item : outIt->second) {
 		if (item.second == defVar) {
 			du.insert(item.first);
 		}

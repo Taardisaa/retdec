@@ -385,6 +385,48 @@ void VarUsesVisitor::precomputeEverything(ShPtr<Module> module) {
 }
 
 /**
+* @brief Pre-computes uses of variables in a single function.
+*
+* This is a memory-efficient alternative to precomputeEverything() that
+* processes one function at a time, keeping only that function's data in cache.
+* Call clearCache() before this to release the previous function's data.
+*
+* @param[in] func Function to precompute for.
+* @param[in] module Module containing global variable definitions.
+*
+* @par Preconditions
+*  - @a func and @a module are non-null
+*  - caching is enabled
+*/
+void VarUsesVisitor::precomputeForFunction(ShPtr<Function> func,
+		ShPtr<Module> module) {
+	PRECONDITION_NON_NULL(func);
+	PRECONDITION_NON_NULL(module);
+
+	this->func = func;
+	precomputing = true;
+
+	// Initialize empty VarUses for every global variable so that getUses()
+	// doesn't re-traverse when queried for globals not used in this function.
+	for (auto j = module->global_var_begin(), f = module->global_var_end();
+			j != f; ++j) {
+		cache[func][(*j)->getVar()] = ShPtr<VarUses>(
+			new VarUses((*j)->getVar(), func));
+	}
+
+	// Do the same for all function's arguments.
+	for (const auto &param : func->getParams()) {
+		cache[func][param] = ShPtr<VarUses>(new VarUses(param, func));
+	}
+
+	restart();
+	visitStmtChain(func->getBody());
+
+	precomputingHasBeenDone = true;
+	precomputing = false;
+}
+
+/**
 * @brief Finds uses of @c var in the given statement and stores them.
 *
 * It doesn't check nested statements or successors.

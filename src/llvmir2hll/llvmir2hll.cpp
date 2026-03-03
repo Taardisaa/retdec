@@ -4,6 +4,7 @@
 #include <memory>
 
 #include "retdec/llvmir2hll/llvmir2hll.h"
+#include "retdec/llvmir2hll/ir/statement.h"
 #include "retdec/utils/io/log.h"
 
 using namespace llvm;
@@ -694,12 +695,21 @@ void LlvmIr2Hll::finalize()
 */
 void LlvmIr2Hll::cleanup()
 {
-	// Nothing to do.
+	// Free function bodies — emission is complete, they are no longer needed.
+	// This reclaims the bulk of IR memory (statement trees, expression trees).
+	for (auto it = resModule->func_definition_begin(),
+			e = resModule->func_definition_end(); it != e; ++it) {
+		Statement::breakCycles((*it)->getBody());
+	}
+	resModule.reset();
 
-	// Note: Do not remove this phase, even if there is nothing to do. The
-	// presence of this phase is needed for the analyzing scripts in
-	// scripts/decompiler_tests (it marks the very last phase of a successful
-	// decompilation).
+	// Free analysis objects no longer needed.
+	aliasAnalysis.reset();
+	cio.reset();
+	arithmExprEvaluator.reset();
+	varNameGen.reset();
+	varRenamer.reset();
+	hllWriter.reset();
 }
 
 /**

@@ -58,41 +58,9 @@ public:
 	/// CFG of @c func.
 	ShPtr<CFG> cfg;
 
-	/// A function that returns whether the given variable should be included
-	/// in def-use chains.
-	std::function<bool (ShPtr<Variable>)> shouldBeIncluded;
-
 	/// Def-use chain for each statement @c s that defines a variable @c x (the
 	/// <tt>DU(s, x)</tt> set in [ItC]).
 	DefUseChain du;
-
-	/// Mapping of a CFG node @c B into the following set:
-	/// @code
-	/// {(s, x) | s \notin B uses x and B defines x}
-	/// @endcode
-	/// (The @c KILL[B] set from Definition 27 in [ItC].)
-	NodePairMap kill;
-
-	/// Mapping of a CFG node @c B into the following set:
-	/// @code
-	/// {(s, x) | s \in B uses x and x is not defined prior to s in B}
-	/// @endcode
-	/// (The @c GEN[B] set from Definition 27 in [ItC].)
-	NodePairMap gen;
-
-	/// Mapping of a CFG node @c B into the following set:
-	/// @code
-	/// {(s, x) | s uses x and s is reachable from the beginning of B}
-	/// @endcode
-	/// (The @c IN[B] set from Definition 27 in [ItC].)
-	NodePairMap in;
-
-	/// Mapping of a CFG node @c B into the following set:
-	/// @code
-	/// {(s, x) | s \notin B uses x and s is reachable from the end of B}
-	/// @endcode
-	/// (The @c OUT[B] set from Definition 27 in [ItC].)
-	NodePairMap out;
 };
 
 /**
@@ -122,21 +90,32 @@ public:
 		ShPtr<ValueAnalysis> va, ShPtr<VarUsesVisitor> vuv = nullptr);
 
 private:
+	/// Intermediate dataflow sets used only during chain construction.
+	/// Scoped locally in getDefUseChains() to ensure automatic cleanup.
+	struct IntermediateData {
+		DefUseChains::NodePairMap kill;
+		DefUseChains::NodePairMap gen;
+		DefUseChains::NodePairMap in;
+		DefUseChains::NodePairMap out;
+		std::function<bool (ShPtr<Variable>)> shouldBeIncluded;
+	};
+
 	DefUseAnalysis(ShPtr<Module> module,
 		ShPtr<ValueAnalysis> va, ShPtr<VarUsesVisitor> vuv = nullptr);
 
-	void computeGenAndKill(ShPtr<DefUseChains> ducs);
+	void computeGenAndKill(ShPtr<DefUseChains> ducs, IntermediateData &imd);
 	void computeGenAndKillForNode(ShPtr<DefUseChains> ducs,
-		ShPtr<CFG::Node> node);
-	void computeInAndOut(ShPtr<DefUseChains> ducs);
+		IntermediateData &imd, ShPtr<CFG::Node> node);
+	void computeInAndOut(ShPtr<DefUseChains> ducs, IntermediateData &imd);
 	bool computeInAndOutForNode(ShPtr<DefUseChains> ducs,
-		ShPtr<CFG::Node> node);
-	void computeDefUseChains(ShPtr<DefUseChains> ducs);
+		IntermediateData &imd, ShPtr<CFG::Node> node);
+	void computeDefUseChains(ShPtr<DefUseChains> ducs,
+		const IntermediateData &imd);
 	void computeDefUseChainForNode(ShPtr<DefUseChains> ducs,
-		ShPtr<CFG::Node> node);
+		const IntermediateData &imd, ShPtr<CFG::Node> node);
 	void computeDefUseChainForStmt(ShPtr<DefUseChains> ducs,
-		ShPtr<CFG::Node> node, CFG::stmt_iterator varDefStmtIter,
-		ShPtr<Variable> defVar);
+		const IntermediateData &imd, ShPtr<CFG::Node> node,
+		CFG::stmt_iterator varDefStmtIter, ShPtr<Variable> defVar);
 	ShPtr<Variable> getDefVarInStmt(ShPtr<Statement> stmt);
 
 private:

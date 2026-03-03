@@ -43,13 +43,19 @@ void DeadLocalAssignOptimizer::doOptimization() {
 	if (!va->isInValidState()) {
 		va->clearCache();
 	}
-	vuv = VarUsesVisitor::create(va, true, module);
+	vuv = VarUsesVisitor::create(va, true);
 
 	// Perform the optimization on all functions.
 	FuncOptimizer::doOptimization();
 }
 
 void DeadLocalAssignOptimizer::runOnFunction(ShPtr<Function> func) {
+	// Per-function precomputation: clear previous function's caches, then
+	// precompute VUV data for just this function.
+	vuv->clearCache();
+	va->clearCache();
+	vuv->precomputeForFunction(func, module);
+
 	// Keep optimizing until the code is left unchanged.
 	bool codeChanged = false;
 	do {

@@ -62,12 +62,18 @@ void SimpleCopyPropagationOptimizer::doOptimization() {
 	// surprisingly speeds up the optimization).
 	va->clearCache();
 	va->initAliasAnalysis(module);
-	vuv = VarUsesVisitor::create(va, true, module);
+	vuv = VarUsesVisitor::create(va, true);
 
 	FuncOptimizer::doOptimization();
 }
 
 void SimpleCopyPropagationOptimizer::runOnFunction(ShPtr<Function> func) {
+	// Per-function precomputation: clear previous function's caches, then
+	// precompute VUV data for just this function.
+	vuv->clearCache();
+	va->clearCache();
+	vuv->precomputeForFunction(func, module);
+
 	currCFG = cfgBuilder->getCFG(func);
 	triedVars.clear();
 

@@ -56,146 +56,68 @@ const unsigned MAX_STMT_LENGTH = 120;
 
 /**
 * @brief Returns an ordered version of the given statement set.
+*
+* Uses Statement creation IDs for cheap, deterministic ordering.
 */
 auto ordered(const StmtSet &stmts) {
 	StmtVector v(stmts.begin(), stmts.end());
 	std::sort(v.begin(), v.end(), [](const auto &s1, const auto &s2) {
-		// We have to use getTextRepr() because there is no other way of
-		// sorting the statements.
-		return s1->getTextRepr() < s2->getTextRepr();
+		return s1->getCreationId() < s2->getCreationId();
 	});
 	return v;
 }
 
 /**
-* @brief Returns text representations of statements in the given set.
+* @brief Returns sorted creation IDs for statements in the given set.
+*
+* Used as a cheap deterministic key for comparing two StmtSets.
 */
-auto textReprs(const StmtSet &stmts) {
-	StringSet reprs;
-	for (auto &stmt : stmts) {
-		reprs.insert(stmt->getTextRepr());
+auto stmtSetKey(const StmtSet &stmts) {
+	std::vector<uint64_t> ids;
+	ids.reserve(stmts.size());
+	for (auto &s : stmts) {
+		ids.push_back(s->getCreationId());
 	}
-	return reprs;
+	std::sort(ids.begin(), ids.end());
+	return ids;
 }
 
 /**
-* @brief Compares the given two statements from in DU chains.
+* @brief Sorts a DU chain in-place for deterministic processing order.
+*
+* Uses creation IDs instead of expensive getTextRepr() string comparisons.
 */
-int compareStmtsInDUChains(const ShPtr<Statement> &s1, const ShPtr<Statement> &s2) {
-	if (!s1 && !s2) {
-		return 0;
-	} else if (s1 && !s2) {
-		return 1;
-	} else if (!s1 && s2) {
-		return -1;
-	}
-
-	const auto &s1Repr = s1->getTextRepr();
-	const auto &s2Repr = s2->getTextRepr();
-	return s1Repr.compare(s2Repr);
-}
-
-/**
-* @brief Returns an ordered version of the given DU chain.
-*/
-auto ordered(const DefUseChains::DefUseChain &du) {
-	std::vector<std::pair<DefUseChains::StmtVarPair, StmtSet>> v(du.begin(), du.end());
-	std::sort(v.begin(), v.end(), [](const auto &p1, const auto &p2) {
+void sortDUChainInPlace(DefUseChains::DefUseChain &du) {
+	std::sort(du.begin(), du.end(), [](const auto &p1, const auto &p2) {
 		auto v1 = p1.first.second;
 		auto v2 = p2.first.second;
 		auto s1 = p1.first.first;
 		auto s2 = p2.first.first;
 
-		// We are comparing the same variable in the same statement.
+		// Same variable and same statement.
 		if (v1 == v2 && s1 == s2) {
 			return false;
 		}
 
-		// Begin by checking the sizes of the uses because it's faster than
-		// checking the statements and variables.
-		auto uses1Size = p1.second.size();
-		auto uses2Size = p2.second.size();
-		if (uses1Size != uses2Size) {
-			return uses1Size < uses2Size;
+		// Compare by uses set size first (fast).
+		if (p1.second.size() != p2.second.size()) {
+			return p1.second.size() < p2.second.size();
 		}
 
-		// The uses sets have the same size, so continue to variables.
-		const auto &v1Name = v1->getName();
-		const auto &v2Name = v2->getName();
-		auto cmpResult = v1Name.compare(v2Name);
-		if (cmpResult != 0) {
-			return cmpResult < 0;
+		// Compare by variable name.
+		int cmp = v1->getName().compare(v2->getName());
+		if (cmp != 0) {
+			return cmp < 0;
 		}
 
-		// Check the statements. We have to use getTextRepr() because
-		// there is no other way of comparing the statements.
-		cmpResult = compareStmtsInDUChains(s1, s2);
-		if (cmpResult != 0) {
-			return cmpResult < 0;
+		// Compare by statement creation ID.
+		if (s1->getCreationId() != s2->getCreationId()) {
+			return s1->getCreationId() < s2->getCreationId();
 		}
 
-		// Uses sizes, variables, and statements are equal, so we have to check
-		// text representations of uses. This is time-consuming, so we do this
-		// here, after previous checks were inconclusive.
-		cmpResult = textReprs(p1.second) < textReprs(p2.second);
-		if (cmpResult != 0) {
-			return cmpResult < 0;
-		}
-
-		// Everything so far was inconclusive, so as a last resort, compare
-		// parents, successors, and predecessors. This is also very time
-		// consuming, so we do this as the very last check.
-		//
-		// Parent:
-		cmpResult = compareStmtsInDUChains(s1->getParent(), s2->getParent());
-		if (cmpResult != 0) {
-			return cmpResult < 0;
-		}
-		// Successor:
-		cmpResult = compareStmtsInDUChains(s1->getSuccessor(), s2->getSuccessor());
-		if (cmpResult != 0) {
-			return cmpResult < 0;
-		}
-		// Predecessors:
-		std::set<ShPtr<Statement>> s1Seen;
-		std::set<ShPtr<Statement>> s2Seen;
-		while (true) {
-			const auto &s1PredSize = s1->getNumberOfPredecessors();
-			const auto &s2PredSize = s2->getNumberOfPredecessors();
-			if (s1PredSize != s2PredSize) {
-				return s1PredSize < s2PredSize;
-			} else if (s1PredSize > 0 && s2PredSize > 0) {
-				auto s1Pred = *s1->predecessor_begin();
-				auto s2Pred = *s2->predecessor_begin();
-				if (!s1Pred && !s2Pred) {
-					break;
-				}
-				if (!s1Pred || !s2Pred) {
-					return !s1Pred;
-				}
-				cmpResult = compareStmtsInDUChains(s1Pred, s2Pred);
-				if (cmpResult != 0) {
-					return cmpResult < 0;
-				}
-				s1Seen.insert(s1);
-				s2Seen.insert(s2);
-				if (s1Seen.count(s1Pred)) {
-					return false;
-				}
-				if (s2Seen.count(s2Pred)) {
-					return false;
-				}
-				s1 = s1Pred;
-				s2 = s2Pred;
-			} else {
-				break;
-			}
-		}
-
-		// The DU chains appear to be equal.
-		return false;
+		// Compare uses by sorted creation IDs.
+		return stmtSetKey(p1.second) < stmtSetKey(p2.second);
 	});
-	return v;
 }
 
 } // anonymous namespace
@@ -228,7 +150,7 @@ void CopyPropagationOptimizer::doOptimization() {
 	// surprisingly speeds up the optimization).
 	va->clearCache();
 	va->initAliasAnalysis(module);
-	vuv = VarUsesVisitor::create(va, true, module);
+	vuv = VarUsesVisitor::create(va, true);
 	dua = DefUseAnalysis::create(module, va, vuv);
 	uda = UseDefAnalysis::create(module);
 
@@ -236,6 +158,12 @@ void CopyPropagationOptimizer::doOptimization() {
 }
 
 void CopyPropagationOptimizer::runOnFunction(ShPtr<Function> func) {
+	// Per-function precomputation: clear previous function's caches, then
+	// precompute VUV data for just this function.
+	vuv->clearCache();
+	va->clearCache();
+	vuv->precomputeForFunction(func, module);
+
 	auto currCFG = cfgBuilder->getCFG(func);
 
 	// Keep optimizing until there are no changes.
@@ -249,6 +177,9 @@ void CopyPropagationOptimizer::runOnFunction(ShPtr<Function> func) {
 		);
 		udcs = uda->getUseDefChains(func, ducs);
 		codeChanged = false;
+
+		// Sort in-place for deterministic processing order.
+		sortDUChainInPlace(ducs->du);
 
 		def2uses.clear();
 		var2dus.clear();
@@ -272,9 +203,8 @@ void CopyPropagationOptimizer::performOptimization() {
 	modifiedStmts.clear();
 
 	// For each def-use chain...
-	// We have to iterate over an ordered DU chain to make the optimization
-	// deterministic.
-	for (const auto &du : ordered(ducs->du)) {
+	// The DU chain is sorted in-place by runOnFunction() for determinism.
+	for (const auto &du : ducs->du) {
 		const auto &uses = du.second;
 		const auto &stmt = du.first.first;
 

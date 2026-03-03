@@ -23,6 +23,9 @@
 
 namespace retdec {
 namespace llvmir2hll {
+
+uint64_t Statement::nextCreationId = 0;
+
 namespace {
 
 /**
@@ -65,7 +68,7 @@ StmtVector lockPreds(const std::vector<WkPtr<Statement>> &vec) {
 * @brief Constructs a new statement.
 */
 Statement::Statement(Address a):
-	succ(), preds(), address(a) {
+	succ(), preds(), address(a), creationId(nextCreationId++) {
 }
 
 /**

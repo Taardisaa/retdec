@@ -3,3 +3,6 @@
 examples/
 results/
 install/
+dataset/
+*.pyc
+__pycache__/
