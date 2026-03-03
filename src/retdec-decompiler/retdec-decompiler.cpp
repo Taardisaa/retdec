@@ -4,6 +4,7 @@
  * @copyright (c) 2020 Avast Software, licensed under the MIT license
  */
 
+#include <algorithm>
 #include <fstream>
 #include <future>
 #include <chrono>
@@ -73,6 +74,8 @@ class ProgramOptions
 		std::string arExtractPath;
 		std::string arName;
 		std::optional<uint64_t> arIdx;
+
+		std::string stopAfter;
 
 		bool cleanup = false;
 		std::set<std::string> toClean;
@@ -462,6 +465,10 @@ void ProgramOptions::loadOption(std::list<std::string>::iterator& i)
 	{
 		params.setIsBackendNoSymbolicNames(true);
 	}
+	else if (isParam(i, "", "--stop-after"))
+	{
+		stopAfter = getParamOrDie(i);
+	}
 	else if (isParam(i, "", "--ar-index"))
 	{
 		if (!arName.empty())
@@ -597,6 +604,20 @@ void ProgramOptions::afterLoad()
 			"INPUT_FILE not set"
 		);
 	}
+
+	// Truncate the pass pipeline if --stop-after was given.
+	if (!stopAfter.empty())
+	{
+		auto& passes = params.llvmPasses;
+		auto it = std::find(passes.begin(), passes.end(), stopAfter);
+		if (it == passes.end())
+		{
+			throw std::runtime_error(
+				"[--stop-after] pass not found in pipeline: " + stopAfter
+			);
+		}
+		passes.erase(std::next(it), passes.end());
+	}
 }
 
 std::string ProgramOptions::checkFile(
@@ -657,6 +678,7 @@ Backend arguments:
 	[--backend-no-compound-operators] Do not emit compound operators (like +=) instead of assignments.
 	[--backend-no-symbolic-names] Disables the conversion of constant arguments to their symbolic names.
 Decompilation process arguments:
+	[--stop-after PASS] Stop the pipeline after the given pass (e.g. retdec-write-bc to dump .bc only).
 	[--timeout SECONDS]
 	[--max-memory MAX_MEMORY] Limits the maximal memory used by the given number of bytes.
 	[--no-memory-limit] Disables the default memory limit (half of system RAM).
